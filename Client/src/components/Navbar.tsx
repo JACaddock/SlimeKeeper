@@ -7,15 +7,14 @@ const Navbar = () => {
         <nav>
             <div className="flex-column">
                 <Link to="/">
-                    <img src={SlimeLogo} />
+                    <img src={SlimeLogo} className="logo" />
                 </Link>
-                <div className="hidden font-bold lg:flex">
-                    <Link to="/forecast">Forecast</Link>
-                </div>
             </div>
 
             <div>
-                <h2>Slime Keeper Online</h2>
+                <Link to="/">
+                    <h2 className="title">Slime Keeper Online</h2>
+                </Link>
             </div>
 
             <div className="flex-column">

@@ -85,6 +85,22 @@ button:focus-visible {
 }
 
 
+.title {
+    color: white;
+}
+
+.title:hover {
+    color: dodgerblue;
+}
+
+.logo:hover {
+    opacity: 60%;
+}
+
+.logo:active {
+    transform: translateY(-5px);
+}
+
 .flex-column {
     display: flex;
     flex-direction: column;
