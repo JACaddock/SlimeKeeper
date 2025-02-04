@@ -50,6 +50,10 @@ export default defineConfig({
             '^/weatherforecast': {
                 target,
                 secure: false
+            },
+            '^/slime': {
+                target,
+                secure: false
             }
         },
         port: 55790,
