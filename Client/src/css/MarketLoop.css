@@ -1,0 +1,42 @@
+.market-container {
+    display: grid;
+    grid-template-columns: 75px 150px 150px 150px 150px 150px 150px 75px;
+    column-gap: 2em;
+    align-items: center;
+}
+
+.market-item {
+    user-select: none;
+    border: 3px solid black;
+    padding: 10px;
+}
+
+.market-item:hover {
+    cursor: pointer;
+    border-color: orange;
+    color: orange;
+    transform: translateY(-10px);
+}
+
+.market-item:active {
+    border-color: red;
+    color: red;
+    transform: translateY(-15px);
+}
+
+
+.market-button {
+    height: 50px;
+}
+
+.market-button:hover {
+    border-color: orange;
+    color: orange;
+    outline: none;
+}
+
+.market-button:active {
+    border-color: red;
+    color: red;
+    outline: none;
+}

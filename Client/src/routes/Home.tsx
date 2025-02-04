@@ -1,3 +1,8 @@
+import { Link } from "react-router-dom";
+import MarketLoop from "../components/MarketLoop";
+import demo from "../assets/demo.svg";
+
+
 const Home = () => {
 
     return (
@@ -8,6 +13,17 @@ const Home = () => {
                 <p><b>Splice</b> together slimes in order to create a whole new slime and diversify your collection.</p>
                 <p>Buy and Sell slimes on the <b>Market</b>, do all you can to become the greatest Slime Keeper of all time!</p>
             </div>
+            <div className="separator-1"></div>
+            <div className="grid-row">
+                <Link to="/register"><button>Register</button></Link>
+                <Link to="/login"><button>Login</button></Link>
+            </div>
+            <div className="separator-1"></div>
+            <MarketLoop />
+            <div className="separator-1"></div>
+            <img src={demo} />
+            <div className="separator-1"></div>
+            <div className="separator-1"></div>
         </main>
     );
 };
