@@ -75,6 +75,7 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+  width: 100%;
 }
 button:hover {
   border-color: #646cff;
@@ -85,14 +86,39 @@ button:focus-visible {
 }
 
 
+.title {
+    color: white;
+}
+
+.title:hover {
+    color: dodgerblue;
+}
+
+.logo:hover {
+    opacity: 60%;
+}
+
+.logo:active {
+    transform: translateY(-5px);
+}
+
 .flex-column {
     display: flex;
     flex-direction: column;
 }
 
+.grid-row {
+    display: grid;
+    grid-template-columns: 8em 8em;
+    column-gap: 2em;
+}
+
+.separator-1 {
+    height: 4em;
+}
 
 @media (prefers-color-scheme: light) {
-  :root {
+    : root {
     color: #213547;
     background-color: #ffffff;
   }
