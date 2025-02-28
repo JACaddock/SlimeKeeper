@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import MarketLoop from "../components/MarketLoop";
-import demo from "../assets/demo.svg";
 
 
 const Home = () => {
@@ -20,9 +19,6 @@ const Home = () => {
             </div>
             <div className="separator-1"></div>
             <MarketLoop />
-            <div className="separator-1"></div>
-            <img src={demo} />
-            <div className="separator-1"></div>
             <div className="separator-1"></div>
         </main>
     );
