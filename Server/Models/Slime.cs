@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Rewrite;
-using System.Drawing;
-
-namespace Server.Models
+﻿namespace Server.Models
 {
     enum SlimePart
     {
@@ -45,60 +42,10 @@ namespace Server.Models
             Age = age;
             
             Color = color;
-            Svg = PrepareSVG();
+            Svg = PrepareSvg();
         }
 
-        private string CalculatePartSize(SlimePart bodyPart)
-        {
-            switch (bodyPart)
-            {
-                case SlimePart.BODY:
-                    return "rx='" + (10 + Size) + "' ry='" + (8 + Size) + "'";
-
-                case SlimePart.MOUTH:
-                    if (Size < 3)
-                    {
-                        return "d='M 12 10 Q 15 10 15 15 Q 15 20 12 20 Q 15 15 12 10 Z'";
-                    }
-                    return "d='M 13 9 Q 17 9 17 15 Q 17 21 13 21 Q 15 15 13 9 Z'";
-
-                case SlimePart.EYE1:
-                    if (Size < 3)
-                    {
-                        return "cx='12' cy='8' r='1.8'";
-                    }
-                    return "cx='11' cy='8' r='2'";
-
-                case SlimePart.IRIS1:
-                    if (Size < 3)
-                    {
-                        return "cx='12' cy='8' r='0.9'";
-                    }
-                    return "cx='11' cy='8' r='1'";
-
-                case SlimePart.EYE2:
-                    if (Size < 3)
-                    {
-                        return "cx='18' cy='8' r='1.8'";
-                    }
-                    return "cx='19' cy='8' r='2'";
-
-                case SlimePart.IRIS2:
-                    if (Size < 3)
-                    {
-                        return "cx='18' cy='8' r='0.9'";
-                    }
-                    return "cx='19' cy='8' r='1'";
-
-                case SlimePart.CHILDBODY:
-                    return "cx='5' cy='5' r='" + (5 + (Size/2) ) + "'";
-
-                default:
-                    return "";
-            }
-        }
-
-        private string PrepareSVG()
+        private string PrepareSvg()
         {
             string workingSvg = @"
                 <?xml version='1.0' encoding='UTF-8'?>
@@ -158,7 +105,7 @@ namespace Server.Models
 
             return workingSvg;
         } 
-    
+
         private string PrepareChildSvg()
         {
             string workingSvg = "";
@@ -182,6 +129,56 @@ namespace Server.Models
                        + "' stroke='none' />";
 
             return workingSvg;
+        }
+
+        private string CalculatePartSize(SlimePart bodyPart)
+        {
+            switch (bodyPart)
+            {
+                case SlimePart.BODY:
+                    return "rx='" + (10 + Size) + "' ry='" + (8 + Size) + "'";
+
+                case SlimePart.MOUTH:
+                    if (Size < 3)
+                    {
+                        return "d='M 12 10 Q 15 10 15 15 Q 15 20 12 20 Q 15 15 12 10 Z'";
+                    }
+                    return "d='M 13 9 Q 17 9 17 15 Q 17 21 13 21 Q 15 15 13 9 Z'";
+
+                case SlimePart.EYE1:
+                    if (Size < 3)
+                    {
+                        return "cx='12' cy='8' r='1.8'";
+                    }
+                    return "cx='11' cy='8' r='2'";
+
+                case SlimePart.IRIS1:
+                    if (Size < 3)
+                    {
+                        return "cx='12' cy='8' r='0.9'";
+                    }
+                    return "cx='11' cy='8' r='1'";
+
+                case SlimePart.EYE2:
+                    if (Size < 3)
+                    {
+                        return "cx='18' cy='8' r='1.8'";
+                    }
+                    return "cx='19' cy='8' r='2'";
+
+                case SlimePart.IRIS2:
+                    if (Size < 3)
+                    {
+                        return "cx='18' cy='8' r='0.9'";
+                    }
+                    return "cx='19' cy='8' r='1'";
+
+                case SlimePart.CHILDBODY:
+                    return "cx='5' cy='5' r='" + (5 + (Size / 2)) + "'";
+
+                default:
+                    return "";
+            }
         }
     }
 }
