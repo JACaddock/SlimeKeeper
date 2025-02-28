@@ -1,20 +1,14 @@
 import { MarketSlime } from "../types/Slime";
-import Slime from "../assets/Slime.svg";
-import SlimeDrop from "../assets/SlimeDrop.svg";
+import parse from "html-react-parser";
 
 interface Props {
     slime: MarketSlime;
 }
 
 const MarketLoopItem = ({ slime }: Props) => {
-    let chosenSlime = <img src={Slime} alt="SVG of Slime" className="scale-up" />;
-    if (slime.name.startsWith('G')) {
-        chosenSlime = <img src={SlimeDrop} alt="SVG of SlimeDrop" className="scale-up" />;
-    }
-
     return (
         <div className="market-item">
-            { chosenSlime }
+             {parse(slime.svg)}
             <h2>{slime.name}</h2>
             <p>Price: ${slime.price}</p>
         </div>
