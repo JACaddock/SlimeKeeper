@@ -61,4 +61,5 @@ jobs:
           application_name: slimekeeper
           environment_name: slimekeeper-env
           region: ${{ secrets.AWS_REGION }}
+          version_label: 1
           deployment_package: deploy-files/${{github.run_id}}.zip
