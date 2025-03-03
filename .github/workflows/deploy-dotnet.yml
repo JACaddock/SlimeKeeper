@@ -53,6 +53,10 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4.1.7
 
+      - name: Create Version Date
+        run: |
+          echo "TIME=$(date +"%Y-%m-%d-%T")" >> $GITHUB_ENV
+
       - name: Deploy
         uses: einaregilsson/beanstalk-deploy@v22
         with:
@@ -61,5 +65,5 @@ jobs:
           application_name: slimekeeper
           environment_name: slimekeeper-env
           region: ${{ secrets.AWS_REGION }}
-          version_label: 1
+          version_label: ${{ env.TIME }}
           deployment_package: deploy-files/${{github.run_id}}.zip
