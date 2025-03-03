@@ -10,10 +10,6 @@ on:
 
 env:
   DIR: Server
-  S3BUCKET: slimekeeper-server
-  ELASTIC_BEANSTALK_NAME: slimekeeper
-  ELASTIC_BEANSTALK_ENV_NAME: slimekeeper-env
-
 
 jobs:
   build:
@@ -56,16 +52,13 @@ jobs:
     
     steps:
       - uses: actions/download-artifact@v4.1.7
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4.1.0
-        with:
-          aws-region: ${{ secrets.AWS_REGION }}
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    
+
       - name: Deploy
-        run: |
-          aws s3 cp "deploy-files/${{github.run_id}}.zip" s3://elasticbeanstalk-${{ secrets.AWS_REGION }}-${{ secrets.AWS_ACCOUNT_ID }}/artifact/SlimeKeeper/
-          aws elasticbeanstalk create-application-version --application-name $ELASTIC_BEANSTALK_NAME --version-label ${{github.run_id}} --description ${{github.run_id}} --source-bundle S3Bucket="elasticbeanstalk-${{ secrets.AWS_REGION }}-${{ secrets.AWS_ACCOUNT_ID }}",S3Key="artifact/SlimeKeeper/${{github.run_id}}.zip"
-          aws elasticbeanstalk update-environment --application-name $ELASTIC_BEANSTALK_NAME --environment-name $ELASTIC_BEANSTALK_ENV_NAME --version-label ${{github.run_id}}
-          aws elasticbeanstalk wait environment-updated --application-name $ELASTIC_BEANSTALK_NAME --environment-name $ELASTIC_BEANSTALK_ENV_NAME
+        uses: einaregilsson/beanstalk-deploy@v22
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: slimekeeper
+          environment_name: slimekeeper-env
+          region: ${{ secrets.AWS_REGION }}
+          deployment_package: deploy-files/${{github.run_id}}.zip
