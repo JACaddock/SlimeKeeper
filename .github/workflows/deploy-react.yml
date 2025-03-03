@@ -6,6 +6,7 @@ on:
         - main
     paths:
         - 'Client/**'
+        - '.github/workflows/deploy-react.yml'
 
 env:
   DIR: Client
