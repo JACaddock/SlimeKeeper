@@ -26,9 +26,11 @@ jobs:
           node-version: 20.13.1
 
       - name: Install dependencies
+        working-directory: ${{ env.applicationfolder }}/
         run: npm install
 
       - name: Build the project
+        working-directory: ${{ env.applicationfolder }}/
         run: npm run build
         
       - name: Configure AWS Credentials
