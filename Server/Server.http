@@ -9,3 +9,8 @@ GET {{Server_HostAddress}}/slime/
 Accept: application/json
 
 ###
+
+POST {{Server_HostAddress}}/postslime/
+ACCEPT: application/json
+
+###

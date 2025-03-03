@@ -28,5 +28,12 @@ namespace Server.Controllers
         {
             return Slimes;
         }
+
+
+        [HttpPost(Name = "PostSlime")]
+        public Slime PostSlime(int id)
+        {
+            return Slimes[id];
+        }
     }
 }
