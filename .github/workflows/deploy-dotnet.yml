@@ -4,6 +4,8 @@ on:
   push:
     branches:
         - main
+    paths:
+        - 'Server/**'
 
 env:
   applicationfolder: Server
@@ -18,18 +20,11 @@ jobs:
       id-token: write
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.2.2
         name: Checkout Repository
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4.1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4.3
+        uses: actions/setup-dotnet@v4.3.0
         with:
             dotnet-version: '9.0.x'
         
@@ -41,6 +36,13 @@ jobs:
         
       - name: Test
         run: dotnet test --no-build --verbosity normal
+      
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4.1.0
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Upload Artifact to s3
         working-directory: ${{ env.applicationfolder }}/target
