@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Server.Models;
-using System.Collections;
-using System.Drawing;
 
 namespace Server.Controllers
 {
