@@ -8,7 +8,7 @@ on:
         - 'Client/**'
 
 env:
-  applicationfolder: Client
+  DIR: Client
   S3BUCKET: slimekeeper-client
 
 
@@ -26,11 +26,11 @@ jobs:
           node-version: 20.13.1
 
       - name: Install dependencies
-        working-directory: ${{ env.applicationfolder }}/
+        working-directory: ${{ env.DIR }}/
         run: npm install
 
       - name: Build the project
-        working-directory: ${{ env.applicationfolder }}/
+        working-directory: ${{ env.DIR }}/
         run: npm run build
         
       - name: Configure AWS Credentials
@@ -41,5 +41,5 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
         
       - name: Upload to AWS S3
-        working-directory: ${{ env.applicationfolder }}/
+        working-directory: ${{ env.DIR }}/
         run: aws s3 sync dist s3://${{ env.S3BUCKET }}/
