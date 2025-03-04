@@ -8,7 +8,7 @@ export type User = {
     first_name: string;
     last_name: string;
     is_admin: boolean;
-    money: number;
+    gold: number;
     slimes: Slime[];
 };
 

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { MarketSlime } from "../types/Slime";
 import MarketLoopItem from "./MarketLoopItem";
+import Arrow from "../assets/arrow.svg";
 import "../css/MarketLoop.css";
 
 
@@ -24,9 +25,13 @@ const MarketLoop = () => {
 
     return (
         <div className="market-container">
-            <button className="market-button" onClick={decreaseIndex}>{'<='}</button>
+            <button className="market-button" onClick={decreaseIndex}>
+                <img src={Arrow} className="arrow left-arrow" alt="Left Arrow" />
+            </button>
             {marketslimes}
-            <button className="market-button" onClick={increaseIndex}>{'=>'}</button>
+            <button className="market-button" onClick={increaseIndex}>
+                <img src={Arrow} className="arrow" alt="Right Arrow" />
+            </button>
         </div>
     );
 
