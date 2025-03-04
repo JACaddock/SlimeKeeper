@@ -8,28 +8,33 @@ namespace Server.Controllers
     public class SlimeController : ControllerBase
     {
         private static readonly Slime[] Slimes = {
-            new Slime("Jeff", 200, 1, "red", 0),
-            new Slime("Bob", 150, 2, "Green"),
-            new Slime("Bill", 129, 0, "DarkCyan", 0),
-            new Slime("Slimey", 500, 5, "White"),
-            new Slime("Goop", 740, 3, "Gold"),
-            new Slime("Glub", 1200, 4, "Blue", 0),
-            new Slime("limey", 500, 1, "Yellow"),
-            new Slime("Slima", 500, 3, "Lime", 0),
-            new Slime("Slimy", 500, 5, "Orange"),
-            new Slime("Slimoo", 500, 2, "DarkGreen")
+            new("Jeff", 200, 1, "red", 0),
+            new("Bob", 150, 2, "Green"),
+            new("Bill", 129, 0, "DarkCyan", 0),
+            new("Slimey", 500, 5, "White"),
+            new("Goop", 740, 3, "Gold"),
+            new("Glub", 1200, 4, "Blue", 0),
+            new("limey", 500, 1, "Yellow"),
+            new("Slima", 500, 3, "Lime", 0),
+            new("Slimy", 500, 5, "Orange"),
+            new("Slimoo", 500, 2, "DarkGreen")
         };
 
-
-        [HttpGet(Name = "GetMarketSlimes")]
-        public Slime[] GetMarketSlimes()
+        [HttpGet]
+        public Slime[] GetSlimes()
         {
             return Slimes;
         }
 
+        [HttpGet("Market")]
+        public Slime[] GetMarketSlimes()
+        {
+            return Slimes.Where(i => i.IsOnMarket).ToArray();
+        }
 
-        [HttpPost(Name = "PostSlime")]
-        public Slime PostSlime(int id)
+
+        [HttpGet("{id}")]
+        public Slime GetSlimeById(int id)
         {
             return Slimes[id];
         }

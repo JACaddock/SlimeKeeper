@@ -180,5 +180,26 @@
                     return "";
             }
         }
+
+        public static Slime GenerateRandomSlime()
+        {
+            Random r = new();
+            int rPrice = r.Next(0, 5000);
+            int rSize = r.Next(0, 5);
+            int rAge = r.Next(0, 1);
+
+            int rColorIndex = r.Next(0, 10);
+            string[] rColor = {
+                "red", "green", "darkcyan", "white", "gold", "blue", "yellow", "lime", "orange", "darkgreen", "pink"
+            };
+
+            int rNameIndex = r.Next(0, 11);
+            string[] rName = {
+                "Jeff", "Bob", "Bill", "Slimey", "Goop", "Glub", "limey", "Slima", "Slimy", "Slimoo", "Tinsie", "Weenie"
+            };
+
+            Slime slime = new(rName[rNameIndex], rPrice, rSize, rColor[rColorIndex], rAge);
+            return slime;
+        }
     }
 }
