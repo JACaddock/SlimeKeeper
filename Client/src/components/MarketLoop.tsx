@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 import { MarketSlime } from "../types/Slime";
 import MarketLoopItem from "./MarketLoopItem";
 import "../css/MarketLoop.css";
@@ -29,12 +30,14 @@ const MarketLoop = () => {
         </div>
     );
 
-    async function getMarketSlimes() {
-        const response = await fetch('slime/market/');
-        if (response.ok) {
-            const data = await response.json();
-            setSlimes(data);
-        }
+    function getMarketSlimes() {
+        axios.get('/slime/market/')
+        .then((response) => {
+            setSlimes(response.data);
+        })
+        .catch((error) => {
+            console.log(error);
+        })
     }
 
     function getVisibleSlimes(max: number = 6) {
