@@ -54,6 +54,10 @@ export default defineConfig({
             '^/slime': {
                 target,
                 secure: false
+            },
+            '^/user': {
+                target,
+                secure: false
             }
         },
         port: 55790,
