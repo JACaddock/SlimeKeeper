@@ -40,7 +40,7 @@ namespace Server.Models
             rInt = r.Next(1, 4);
             for (int i = 0; i < rInt; i++)
             {
-                Slimes.Add(Slime.GenerateRandomSlime());
+                Slimes.Add(Slime.GenerateRandomSlime(Id));
             }
         }
     }

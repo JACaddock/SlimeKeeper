@@ -1,44 +1,36 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Server.Models;
-using System.Reflection.Metadata.Ecma335;
+using Server.Repositories;
 
 
 namespace Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class UserController : ControllerBase
+    public class UserController(IUserRepository userRepository) : ControllerBase
     {
-        private static readonly User[] Users = {
-            new("johnny151", "johnny151@gmail.com", "password123"),
-            new("janeDoe", "janedoe@gmail.com", "password123"),
-            new("jimmy", "jimmy@gmail.com", "password123"),
-            new("dantheman", "dantheman@gmail.com", "pass1234")
-        };
-
+        private IUserRepository UserRepository { get; set; } = userRepository;
 
         [HttpGet]
-        public User[] GetUsers()
+        public List<User> GetUsers()
         {
-            return Users;
+            return UserRepository.GetAll();
         }
 
         [HttpGet("{id}")]
-        public User GetUserById(int id)
+        public User? GetUserById(int id)
         {
-            return Users[id];
+            return UserRepository.GetById(id);
         }
 
 
         [HttpPost("Login")]
         public User? Login([FromBody] User userAttempt)
         {
-            foreach (User user in Users)
+            User? user = UserRepository.GetByUsername(userAttempt.Username);
+            if (user?.Username == userAttempt.Username && user?.Password == userAttempt.Password)
             {
-                if (user.Username == userAttempt.Username && user.Password == userAttempt.Password)
-                {
-                    return user;
-                }
+                return user;
             }
             return null;
         }
@@ -46,12 +38,10 @@ namespace Server.Controllers
         [HttpPost("LoginByUsername")]
         public User? LoginByUsername(string username, string password)
         {
-            foreach (User user in Users)
+            User? user = UserRepository.GetByUsername(username);
+            if (user?.Username == username && user?.Password == password)
             {
-                if (user.Username == username && user.Password == password)
-                {
-                    return user;
-                }
+                return user;
             }
             return null;
         }
@@ -60,12 +50,10 @@ namespace Server.Controllers
         [HttpPost("LoginByEmail")]
         public User? LoginByEmail(string email, string password)
         {
-            foreach (User user in Users)
+            User? user = UserRepository.GetByEmail(email);
+            if (user?.Email == email && user?.Password == password)
             {
-                if (user.Email == email && user.Password == password)
-                {
-                    return user;
-                }
+                return user;
             }
             return null;
         }

@@ -13,7 +13,8 @@
 
     public class Slime
     {
-        public static int Id { get; set; }
+        public static int Total { get; set; }
+        public int Id { get; set; }
         public string? Name { get; set; }
         public string? Svg { get; set; }
         public int Size { get; set; }
@@ -22,15 +23,19 @@
         public bool IsOnMarket { get; set; } = false;
         public int Price { get; set; }
 
+        public int? OwnerId { get; set; }
+
         public Slime(string name)
         {
-            Id++;
+            Id = Total;
+            Total++;
             Name = name;
         }
 
         public Slime(string name, int price, int size, string color, int age = 1)
         {
-            Id++;
+            Id = Total;
+            Total++;
             Name = name;
             Price = price;
             IsOnMarket = true;
@@ -181,12 +186,12 @@
             }
         }
 
-        public static Slime GenerateRandomSlime()
+        public static Slime GenerateRandomSlime(int? ownerid = null)
         {
             Random r = new();
             int rPrice = r.Next(0, 5000);
             int rSize = r.Next(0, 5);
-            int rAge = r.Next(0, 1);
+            int rAge = r.Next(0, 4);
 
             int rColorIndex = r.Next(0, 10);
             string[] rColor = {
@@ -199,6 +204,7 @@
             };
 
             Slime slime = new(rName[rNameIndex], rPrice, rSize, rColor[rColorIndex], rAge);
+            slime.OwnerId = ownerid;
             return slime;
         }
     }

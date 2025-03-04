@@ -16,8 +16,8 @@ const MarketLoop = () => {
 
     const marketslimes = slimes.length <= 0
         ? <p>Unable to load Market Loop</p>
-        : <>{getVisibleSlimes().map(slime =>
-            <MarketLoopItem key={slime.name} slime={slime} />
+        : <>{getVisibleSlimes().map((slime) =>
+                <MarketLoopItem key={slime.id} slime={slime} />
           )}
           </>
 
@@ -30,7 +30,7 @@ const MarketLoop = () => {
     );
 
     async function getMarketSlimes() {
-        const response = await fetch('slime');
+        const response = await fetch('slime/market/');
         if (response.ok) {
             const data = await response.json();
             setSlimes(data);
