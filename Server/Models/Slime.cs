@@ -188,21 +188,23 @@
         {
             Random r = new();
             int rPrice = r.Next(0, 5000);
-            int rSize = r.Next(0, 5);
+            int rSize = r.Next(0, 6);
             int rAge = r.Next(0, 4);
 
-            int rColorIndex = r.Next(0, 10);
+            int rColorIndex = r.Next(0, 11);
             string[] rColor = {
                 "red", "green", "darkcyan", "white", "gold", "blue", "yellow", "lime", "orange", "darkgreen", "pink"
             };
 
-            int rNameIndex = r.Next(0, 11);
+            int rNameIndex = r.Next(0, 12);
             string[] rName = {
                 "Jeff", "Bob", "Bill", "Slimey", "Goop", "Glub", "limey", "Slima", "Slimy", "Slimoo", "Tinsie", "Weenie"
             };
 
-            Slime slime = new(rName[rNameIndex], rPrice, rSize, rColor[rColorIndex], rAge);
-            slime.OwnerId = ownerid;
+            Slime slime = new(rName[rNameIndex], rPrice, rSize, rColor[rColorIndex], rAge)
+            {
+                OwnerId = ownerid
+            };
             return slime;
         }
     }
