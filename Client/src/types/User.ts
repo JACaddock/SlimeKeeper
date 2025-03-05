@@ -13,7 +13,14 @@ export type User = {
 };
 
 export type UserCredentials = {
+    id: number;
     username: string;
     email: string;
     password: string;
-}
+};
+
+export type UserUnique = {
+    id: number;
+    username: string;
+    email: string;
+};

@@ -12,9 +12,9 @@ namespace Server.Controllers
         private IUserRepository UserRepository { get; set; } = userRepository;
 
         [HttpGet]
-        public List<User> GetUsers()
+        public List<UserUnique> GetUsers()
         {
-            return UserRepository.GetAll();
+            return UserRepository.GetAllUnique();
         }
 
         [HttpGet("{id}")]

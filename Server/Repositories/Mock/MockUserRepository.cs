@@ -16,6 +16,16 @@ namespace Server.Repositories.Mock
             return Users;
         }
 
+        public List<UserUnique> GetAllUnique()
+        {
+            List<UserUnique> uniques = [];
+            foreach (var user in Users)
+            {
+                uniques.Add(new(user.Id, user.Username, user.Email));
+            }
+            return uniques;
+        }
+
         public User? GetById(int id)
         {
             return Users[id];

@@ -120,6 +120,12 @@ button:focus-visible {
     flex-direction: column;
 }
 
+.flex {
+    display: flex;
+    column-gap: 2em;
+    justify-content: space-between;
+}
+
 .grid-row {
     display: grid;
     grid-template-columns: 8em 8em;

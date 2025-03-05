@@ -6,6 +6,7 @@ namespace Server.Repositories
     {
         User? GetById(int id);
         List<User> GetAll();
+        List<UserUnique> GetAllUnique();
         User? GetByUsername(string username);
         User? GetByEmail(string email);
         bool AddUser(User user);

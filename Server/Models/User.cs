@@ -46,4 +46,34 @@ namespace Server.Models
             }
         }
     }
+
+
+    [method: SetsRequiredMembers]
+    public class UserUnique(int id, string username, string email)
+    {
+        public int Id { get; set; } = id;
+        public required string Username { get; set; } = username;
+        public required string Email { get; set; } = email;
+    }
+
+
+    [method: SetsRequiredMembers]
+    public class UserCredentials(int id, string username, string email, string password)
+    {
+        public int Id { get; set; } = id;
+        public required string Username { get; set; } = username;
+        public required string Email { get; set; } = email;
+        public required string Password { get; set; } = password;
+    }
+
+
+    public class UserAccount(int id, string username, bool is_admin, int gold, List<Slime> slimes, int[] friends)
+    {
+        public int Id { get; set; } = id;
+        public string Username { get; set; } = username;
+        public bool IsAdmin { get; set; } = is_admin;
+        public int Gold { get; set; } = gold;
+        public List<Slime> Slimes { get; set; } = slimes;
+        public int[] Friends { get; set; } = friends;
+    }
 }
