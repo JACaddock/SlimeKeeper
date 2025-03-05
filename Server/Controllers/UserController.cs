@@ -23,6 +23,28 @@ namespace Server.Controllers
             return UserRepository.GetById(id);
         }
 
+        [HttpPost("Register")]
+        public bool Register([FromBody] User userAttempt)
+        {
+            if (!CheckIfExists(userAttempt.Username, userAttempt.Email))
+            {
+                UserRepository.AddUser(userAttempt);
+                return true;
+            }
+            return false;
+        }
+
+        public bool CheckIfExists(string username, string email)
+        {
+            User? userByUsername = UserRepository.GetByUsername(username);
+            User? userByEmail = UserRepository.GetByEmail(email);
+            if (userByUsername != null || userByEmail != null)
+            {
+                return true;
+            }
+            return false;
+        }
+
 
         [HttpPost("Login")]
         public User? Login([FromBody] User userAttempt)

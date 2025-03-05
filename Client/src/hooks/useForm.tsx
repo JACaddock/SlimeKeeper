@@ -11,11 +11,11 @@ const useForm = () => {
         return (
             <form onSubmit={(e) => submitForm(e, "/user/login/")} >
                 <InputItem type="text" name="username" input={username}
-                    autoComplete="" required={true}
+                    autoComplete="username" required={true}
                     handleInputUpdate={handleInputUpdate} />
 
                 <InputItem type="password" name="password" input={password}
-                    autoComplete="current_password" required={true}
+                    autoComplete="current-password" required={true}
                     handleInputUpdate={handleInputUpdate} />
 
                 <div>
@@ -29,15 +29,15 @@ const useForm = () => {
         return (
             <form onSubmit={(e) => submitForm(e, "/user/register/")} >
                 <InputItem type="email" name="email" input={email}
-                    autoComplete="" required={true}
+                    autoComplete="email" required={true}
                     handleInputUpdate={handleInputUpdate} />
 
                 <InputItem type="text" name="username" input={username}
-                    autoComplete="" required={true}
+                    autoComplete="username" required={true}
                     handleInputUpdate={handleInputUpdate} />
 
                 <InputItem type="password" name="password" input={password}
-                    autoComplete="current_password" required={true}
+                    autoComplete="new-password" required={true}
                     handleInputUpdate={handleInputUpdate} />
 
                 <div>
