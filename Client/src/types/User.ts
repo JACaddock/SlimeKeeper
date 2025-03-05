@@ -24,3 +24,12 @@ export type UserUnique = {
     username: string;
     email: string;
 };
+
+export type UserAuth = {
+    user: UserUnique | null;
+    token: string | null;
+    registerUser: (email: string, username: string, password: string) => void;
+    loginUser: (username: string, password: string) => void;
+    logout: () => void;
+    isLoggedIn: () => boolean;
+};

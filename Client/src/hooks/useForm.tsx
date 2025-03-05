@@ -15,9 +15,9 @@ const useForm = () => {
 
     function getAllUsers() {
         axios.get("/user/")
-            .then((response) => {
-                setUsers(response.data)
-            })
+        .then((response) => {
+            setUsers(response.data)
+        })
     };
 
     const userdisplay = users.length <= 0
