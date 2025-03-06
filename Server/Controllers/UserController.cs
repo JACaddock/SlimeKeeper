@@ -24,14 +24,15 @@ namespace Server.Controllers
         }
 
         [HttpPost("Register")]
-        public bool Register([FromBody] User userAttempt)
+        public UserAuth? Register([FromBody] UserCredentials userAttempt)
         {
             if (!CheckIfExists(userAttempt.Username, userAttempt.Email))
             {
-                UserRepository.AddUser(userAttempt);
-                return true;
+                User user = new(userAttempt.Username, userAttempt.Email, userAttempt.Password);
+                UserRepository.AddUser(user);
+                return new(new(user.Id, user.Username, user.Email), "sdgsdsdgsg");
             }
-            return false;
+            return null;
         }
 
         public bool CheckIfExists(string username, string email)
@@ -47,12 +48,12 @@ namespace Server.Controllers
 
 
         [HttpPost("Login")]
-        public User? Login([FromBody] User userAttempt)
+        public UserAuth? Login([FromBody] UserCredentials userAttempt)
         {
             User? user = UserRepository.GetByUsername(userAttempt.Username);
             if (user?.Username == userAttempt.Username && user?.Password == userAttempt.Password)
             {
-                return user;
+                return new(new(user.Id, user.Username, user.Email), "byaugwuabib");
             }
             return null;
         }

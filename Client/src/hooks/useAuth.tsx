@@ -5,9 +5,7 @@ import axios from "axios";
 
 const UserContext = createContext<UserAuth>({} as UserAuth);
 
-type Props = { children: React.ReactNode };
-
-const UserProvider = ({ children }: Props) => {
+const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const navigate = useNavigate();
     const [token, setToken] = useState<string | null>(null);
     const [user, setUser] = useState<UserUnique | null>(null);
@@ -24,46 +22,45 @@ const UserProvider = ({ children }: Props) => {
         setIsReady(true);
     }, []);
 
-/*    const registerUser = async (
-        email: string,
-        username: string,
-        password: string
-    ) => {
-        await registerAPI(email, username, password)
-            .then((res) => {
-                if (res) {
-                    localStorage.setItem("token", res?.data.token);
-                    const userObj = {
-                        userName: res?.data.userName,
-                        email: res?.data.email,
-                    };
-                    localStorage.setItem("user", JSON.stringify(userObj));
-                    setToken(res?.data.token!);
-                    setUser(userObj!);
-                    navigate("/search");
+    function loginUser(username: string, password: string) {
+        axios.post("/user/login/", {
+            email: "",
+            username: username,
+            password: password
+        })
+            .then((response) => {
+                if (response) {
+                    localStorage.setItem("token", response?.data.token);
+                    const userUnique: UserUnique = response.data.unique;
+                    localStorage.setItem("user", JSON.stringify(userUnique));
+                    setToken(response.data.token!);
+                    setUser(userUnique);
+                    navigate("/");
                 }
             })
-            .catch((e) => alert("Server error occured"));
+            .catch((e) => alert("Server error occured: " + e));
     };
 
-    const loginUser = async (username: string, password: string) => {
-        await loginAPI(username, password)
-            .then((res) => {
-                if (res) {
-                    localStorage.setItem("token", res?.data.token);
-                    const userObj = {
-                        userName: res?.data.userName,
-                        email: res?.data.email,
-                    };
-                    localStorage.setItem("user", JSON.stringify(userObj));
-                    setToken(res?.data.token!);
-                    setUser(userObj!);
-                    toast.success("Login Success!");
-                    navigate("/search");
+    function registerUser(email: string, username: string, password: string) {
+        axios.post("/user/register/", {
+            email: email,
+            username: username,
+            password: password
+        })
+            .then((response) => {
+                if (response) {
+                    localStorage.setItem("token", response?.data.token);
+                    const userUnique: UserUnique = response.data.unique;
+                    localStorage.setItem("user", JSON.stringify(userUnique));
+                    setToken(response.data.token!);
+                    setUser(userUnique);
+                    navigate("/");
                 }
             })
-            .catch((e) => toast.warning("Server error occured"));
-    };*/
+            .catch((e) => alert("Server error occured: " + e));
+    };
+
+    
 
     const isLoggedIn = () => {
         return !!user;
@@ -77,13 +74,9 @@ const UserProvider = ({ children }: Props) => {
         navigate("/");
     };
 
-    const registerUser = () => { };
-
-    const loginUser = () => { };
-
     return (
         <UserContext.Provider
-            value={{ loginUser, user, token, logout, isLoggedIn, registerUser }}
+            value={{ user, token, logout, isLoggedIn, loginUser, registerUser }}
         >
             {isReady ? children : null}
         </UserContext.Provider>

@@ -61,11 +61,16 @@ namespace Server.Models
     public class UserCredentials(int id, string username, string email, string password)
     {
         public int Id { get; set; } = id;
-        public required string Username { get; set; } = username;
-        public required string Email { get; set; } = email;
+        public string Username { get; set; } = username;
+        public string Email { get; set; } = email;
         public required string Password { get; set; } = password;
     }
 
+    public class UserAuth(UserUnique unique, string token)
+    {
+        public UserUnique Unique { get; set; } = unique;
+        public string Token { get; set; } = token;
+    }
 
     public class UserAccount(int id, string username, bool is_admin, int gold, List<Slime> slimes, int[] friends)
     {

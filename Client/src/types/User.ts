@@ -13,9 +13,9 @@ export type User = {
 };
 
 export type UserCredentials = {
-    id: number;
-    username: string;
-    email: string;
+    id: number | null;
+    username: string | null;
+    email: string | null;
     password: string;
 };
 
