@@ -10,7 +10,6 @@ const useForm = () => {
     });
 
     function handleInputUpdate(type: string, value: string) {
-        console.log(type, ": ", value);
         const tempInputs = inputs;
 
         switch (type) {

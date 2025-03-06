@@ -29,13 +29,16 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
             password: password
         })
             .then((response) => {
-                if (response) {
+                if (response.data) {
                     localStorage.setItem("token", response?.data.token);
                     const userUnique: UserUnique = response.data.unique;
                     localStorage.setItem("user", JSON.stringify(userUnique));
                     setToken(response.data.token!);
                     setUser(userUnique);
                     navigate("/");
+                }
+                else {
+                    alert("Username/Password is incorrect")
                 }
             })
             .catch((e) => alert("Server error occured: " + e));
@@ -48,13 +51,16 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
             password: password
         })
             .then((response) => {
-                if (response) {
+                if (response.data) {
                     localStorage.setItem("token", response?.data.token);
                     const userUnique: UserUnique = response.data.unique;
                     localStorage.setItem("user", JSON.stringify(userUnique));
                     setToken(response.data.token!);
                     setUser(userUnique);
                     navigate("/");
+                }
+                else {
+                    alert("Email/Username is already in use")
                 }
             })
             .catch((e) => alert("Server error occured: " + e));
