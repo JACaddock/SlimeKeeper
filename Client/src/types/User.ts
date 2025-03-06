@@ -41,4 +41,5 @@ export type UserAuth = {
     loginUser: (username: string, password: string) => void;
     logout: () => void;
     isLoggedIn: () => boolean;
+    isUserValid: () => void;
 };

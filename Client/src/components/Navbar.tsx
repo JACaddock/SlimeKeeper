@@ -1,11 +1,16 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import SlimeLogo from '../assets/slime.png';
+import { useEffect } from 'react';
 
 
 
 const Navbar = () => {
-    const { isLoggedIn, user, logout } = useAuth();
+    const { isLoggedIn, user, logout, isUserValid } = useAuth();
+
+    useEffect(() => {
+        isUserValid();
+    }, [isUserValid])
 
     return (
         <nav>

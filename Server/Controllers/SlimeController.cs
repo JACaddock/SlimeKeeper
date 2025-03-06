@@ -25,7 +25,7 @@ namespace Server.Controllers
 
 
         [HttpGet("{id}")]
-        public Slime GetSlimeById(int id)
+        public Slime? GetSlimeById(int id)
         {
             return SlimeRepository.GetById(id);
         }

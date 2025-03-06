@@ -22,6 +22,15 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
         setIsReady(true);
     }, []);
 
+    function isUserValid() {
+        axios.get("/api/user/" + user?.id)
+            .then((response) => {
+                if (!response.data) {
+                    logout();
+                }
+            })
+    }
+
     function loginUser(username: string, password: string) {
         axios.post("/api/user/login/", {
             email: "",
@@ -66,8 +75,6 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
             .catch((e) => alert("Server error occured: " + e));
     };
 
-    
-
     const isLoggedIn = () => {
         return !!user;
     };
@@ -82,7 +89,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
     return (
         <UserContext.Provider
-            value={{ user, token, logout, isLoggedIn, loginUser, registerUser }}
+            value={{ user, token, logout, isLoggedIn, loginUser, registerUser, isUserValid }}
         >
             {isReady ? children : null}
         </UserContext.Provider>

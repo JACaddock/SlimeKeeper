@@ -16,9 +16,16 @@ namespace Server.Repositories.Mock
             return [.. Slimes.Where(i => i.IsOnMarket)];
         }
 
-        public Slime GetById(int id)
+        public Slime? GetById(int id)
         {
-            return Slimes[id];
+            try
+            {
+                return Slimes[id];
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public Slime GetByUser(int id)
