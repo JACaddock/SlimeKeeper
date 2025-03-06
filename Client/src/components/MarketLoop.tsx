@@ -26,7 +26,7 @@ const MarketLoop = () => {
           </>
 
     function getMarketSlimes() {
-        axios.get('/slime/market/')
+        axios.get('/api/slime/market/')
         .then((response) => {
             setSlimes(response.data);
         })

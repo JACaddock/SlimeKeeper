@@ -3,12 +3,12 @@ import { useAuth } from "../hooks/useAuth";
 import { UserAccount } from "../types/User";
 import axios from "axios";
 
-const Play = () => {
+const PlayPage = () => {
     const [userAccount, setUserAccount] = useState<UserAccount>();
     const { user } = useAuth();
 
     useEffect(() => {
-        axios.get("/user/account/" + user?.id)
+        axios.get("/api/user/account/" + user?.id)
             .then((response) => {
                 setUserAccount(response.data);
             })
@@ -37,4 +37,4 @@ const Play = () => {
   );
 }
 
-export default Play;
+export default PlayPage;

@@ -6,7 +6,7 @@ using Server.Repositories;
 namespace Server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class UserController(IUserRepository userRepository) : ControllerBase
     {
         private IUserRepository UserRepository { get; set; } = userRepository;

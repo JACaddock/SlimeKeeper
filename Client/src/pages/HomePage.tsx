@@ -3,7 +3,7 @@ import { useAuth } from '../hooks/useAuth';
 import MarketLoop from '../components/MarketLoop';
 
 
-const Home = () => {
+const HomePage = () => {
     const { user, isLoggedIn } = useAuth();
 
     return (
@@ -36,4 +36,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default HomePage;

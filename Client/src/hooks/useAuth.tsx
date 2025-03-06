@@ -23,7 +23,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
     }, []);
 
     function loginUser(username: string, password: string) {
-        axios.post("/user/login/", {
+        axios.post("/api/user/login/", {
             email: "",
             username: username,
             password: password
@@ -45,7 +45,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     function registerUser(email: string, username: string, password: string) {
-        axios.post("/user/register/", {
+        axios.post("/api/user/register/", {
             email: email,
             username: username,
             password: password

@@ -5,7 +5,7 @@ using Server.Repositories;
 namespace Server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class SlimeController(ISlimeRepository slimeRepository) : ControllerBase
     {
         private ISlimeRepository SlimeRepository { get; set; } = slimeRepository;

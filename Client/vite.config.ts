@@ -47,11 +47,7 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '^/slime': {
-                target,
-                secure: false
-            },
-            '^/user': {
+            '^/api': {
                 target,
                 secure: false
             }
