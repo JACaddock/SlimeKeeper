@@ -7,12 +7,6 @@ on:
     paths:
       - 'Server/**'
       - '.github/workflows/deploy-dotnet.yml'
-  
-  pull_request:
-    types:
-      - closed
-    branches:
-      - main
 
 
 env:
