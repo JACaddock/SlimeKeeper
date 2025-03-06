@@ -3,10 +3,15 @@ name: Build and Deploy .NET
 on:
   push:
     branches:
-        - main
+      - main
     paths:
-        - 'Server/**'
-        - '.github/workflows/deploy-dotnet.yml'
+      - 'Server/**'
+      - '.github/workflows/deploy-dotnet.yml'
+  
+  pull_request:
+    branches:
+      - main
+
 
 env:
   DIR: Server
