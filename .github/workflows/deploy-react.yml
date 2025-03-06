@@ -9,6 +9,8 @@ on:
       - '.github/workflows/deploy-react.yml'
   
   pull_request:
+    types:
+      - closed
     branches:
       - main
 
