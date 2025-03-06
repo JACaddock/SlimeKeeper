@@ -2,8 +2,9 @@ import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
-import WeatherForecast from "../components/WeatherForecast";
+import Play from "../pages/Play";
 import Home from "../pages/Home";
+import ProtectedRoute from "./ProtectedRoute";
 import GuestRoute from "./GuestRoute";
 
 export const routes = createBrowserRouter([
@@ -16,8 +17,12 @@ export const routes = createBrowserRouter([
                 element: <Home />
             },
             {
-                path: "/forecast",
-                element: <WeatherForecast />
+                path: "/play",
+                element: (
+                    <ProtectedRoute>
+                        <Play />
+                    </ProtectedRoute>
+                )
             },
             {
                 path: "/login",

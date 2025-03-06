@@ -23,6 +23,19 @@ namespace Server.Controllers
             return UserRepository.GetById(id);
         }
 
+
+        [HttpGet("Account/{id}")]
+        public UserAccount? GetUserAccount(int id)
+        {
+            User? user = UserRepository.GetById(id);
+            if (user != null)
+            {
+                return new(id, user.Username, user.IsAdmin, user.Gold, user.Slimes, user.Friends);
+            }
+            return null;
+        }
+
+
         [HttpPost("Register")]
         public UserAuth? Register([FromBody] UserCredentials userAttempt)
         {

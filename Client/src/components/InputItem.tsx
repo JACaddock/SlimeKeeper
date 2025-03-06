@@ -9,7 +9,7 @@ interface InputType {
 const InputItem = ({ type, name, autoComplete, required, handleInputUpdate }: InputType) => {
 
   return (
-      <div>
+      <div className="input-container">
           <label htmlFor={name}>{name[0].toUpperCase() + name.slice(1)}:</label>
           <input type={type} id={name}
               name={name} placeholder={`Enter ${name}...`}

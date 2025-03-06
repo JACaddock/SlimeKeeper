@@ -20,6 +20,7 @@ const Home = () => {
                 <div>
                     <h2>Hello {user?.username}</h2>
                     <h3>How are you today?</h3>
+                    <Link to="/play">Play!</Link>
                 </div>
             ): (
                 <div className="grid-row">

@@ -9,7 +9,7 @@ const Navbar = () => {
 
     return (
         <nav>
-            <div className="flex-column">
+            <div className="nav-column nav-logo">
                 <Link to="/">
                     <img src={SlimeLogo} alt="Logo of Slime" className="logo" />
                 </Link>
@@ -22,13 +22,13 @@ const Navbar = () => {
             </div>
 
             {isLoggedIn() ? (
-                <div className="flex-column">
+                <div className="nav-column">
                     <button>{user?.username}</button>
                     <a onClick={logout}>Logout</a>
                 </div>
             ): (
 
-                <div className="flex-column">
+                <div className="nav-column">
                     <Link to="/login">Login</Link>
                     <Link to="/register">Register</Link>
                 </div>
