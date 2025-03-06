@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Server.Controllers.Listener;
 using Server.Models;
 using Server.Repositories;
 
@@ -7,9 +8,11 @@ namespace Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController(IUserRepository userRepository) : ControllerBase
+    public class UserController(IUserRepository userRepository, IEnumerable<IUserListener> listeners) : ControllerBase
     {
         private IUserRepository UserRepository { get; set; } = userRepository;
+        private IEnumerable<IUserListener> Listeners { get; set; } = listeners;
+
 
         [HttpGet]
         public List<UserUnique> GetUsers()
@@ -43,6 +46,12 @@ namespace Server.Controllers
             {
                 User user = new(userAttempt.Username, userAttempt.Email, userAttempt.Password);
                 UserRepository.AddUser(user);
+
+                foreach (var listener in Listeners)
+                {
+                    listener.OnUserRegistered(user);
+                }
+
                 return new(new(user.Id, user.Username, user.Email), "sdgsdsdgsg");
             }
             return null;

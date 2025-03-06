@@ -39,7 +39,7 @@ namespace Server.Models
             int rInt = r.Next(0, 5000);
             Gold = rInt;
 
-            rInt = r.Next(1, 4);
+            rInt = r.Next(1, 6);
             for (int i = 0; i < rInt; i++)
             {
                 Slimes.Add(Slime.GenerateRandomSlime(Id));
