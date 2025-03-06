@@ -1,8 +1,10 @@
-import { Link } from "react-router-dom";
-import MarketLoop from "../components/MarketLoop";
+import { Link } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
+import MarketLoop from '../components/MarketLoop';
 
 
 const Home = () => {
+    const { user, isLoggedIn } = useAuth();
 
     return (
         <main>
@@ -13,10 +15,19 @@ const Home = () => {
                 <p>Buy and Sell slimes on the <b>Market</b>, do all you can to become the greatest Slime Keeper of all time!</p>
             </div>
             <div className="separator-1" />
-            <div className="grid-row">
-                <Link to="/register"><button>Register</button></Link>
-                <Link to="/login"><button>Login</button></Link>
-            </div>
+
+            {isLoggedIn() ? (
+                <div>
+                    <h2>Hello {user?.username}</h2>
+                    <h3>How are you today?</h3>
+                </div>
+            ): (
+                <div className="grid-row">
+                    <Link to="/register"><button>Register</button></Link>
+                    <Link to="/login"><button>Login</button></Link>
+                </div>
+            )}
+
             <div className="separator-1" />
             <MarketLoop />
             <div className="separator-1" />
