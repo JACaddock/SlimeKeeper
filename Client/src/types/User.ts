@@ -12,6 +12,15 @@ export type User = {
     slimes: Slime[];
 };
 
+export type UserAccount = {
+    id: number;
+    username: string;
+    is_admin: boolean;
+    gold: number;
+    slimes: Slime[];
+    friends: number[];
+}
+
 export type UserCredentials = {
     id: number | null;
     username: string | null;
@@ -32,4 +41,5 @@ export type UserAuth = {
     loginUser: (username: string, password: string) => void;
     logout: () => void;
     isLoggedIn: () => boolean;
+    isUserValid: () => void;
 };

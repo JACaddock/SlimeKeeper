@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Server.Controllers.Listener;
 using Server.Models;
 using Server.Repositories;
 
 namespace Server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class SlimeController(ISlimeRepository slimeRepository) : ControllerBase
+    [Route("api/[controller]")]
+    public class SlimeController(ISlimeRepository slimeRepository) : ControllerBase, IUserListener
     {
         private ISlimeRepository SlimeRepository { get; set; } = slimeRepository;
 
@@ -24,7 +25,7 @@ namespace Server.Controllers
 
 
         [HttpGet("{id}")]
-        public Slime GetSlimeById(int id)
+        public Slime? GetSlimeById(int id)
         {
             return SlimeRepository.GetById(id);
         }
@@ -33,6 +34,14 @@ namespace Server.Controllers
         public void AddSlime(Slime slime)
         {
             SlimeRepository.AddSlime(slime);
+        }
+
+        public void OnUserRegistered(User user)
+        {
+            foreach (var slime in user.Slimes)
+            {
+                AddSlime(slime);
+            }
         }
     }
 }

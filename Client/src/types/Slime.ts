@@ -12,7 +12,7 @@ export type Slime = {
     size: number;
     colour: string;
     age: number;
-    is_on_market: boolean;
+    isOnMarket: boolean;
     price: number;
-    owner_id: number;
+    ownerId: number;
 };

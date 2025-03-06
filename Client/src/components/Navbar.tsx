@@ -1,15 +1,20 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import SlimeLogo from '../assets/slime.png';
+import { useEffect } from 'react';
 
 
 
 const Navbar = () => {
-    const { isLoggedIn, user, logout } = useAuth();
+    const { isLoggedIn, user, logout, isUserValid } = useAuth();
+
+    useEffect(() => {
+        isUserValid();
+    }, [isUserValid])
 
     return (
         <nav>
-            <div className="flex-column">
+            <div className="nav-column nav-logo">
                 <Link to="/">
                     <img src={SlimeLogo} alt="Logo of Slime" className="logo" />
                 </Link>
@@ -22,13 +27,13 @@ const Navbar = () => {
             </div>
 
             {isLoggedIn() ? (
-                <div className="flex-column">
-                    <button>{user?.username}</button>
+                <div className="nav-column">
+                    <Link to={"/user/" + user?.id}><button>{user?.username}</button></Link>
                     <a onClick={logout}>Logout</a>
                 </div>
             ): (
 
-                <div className="flex-column">
+                <div className="nav-column">
                     <Link to="/login">Login</Link>
                     <Link to="/register">Register</Link>
                 </div>

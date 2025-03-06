@@ -47,15 +47,7 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '^/weatherforecast': {
-                target,
-                secure: false
-            },
-            '^/slime': {
-                target,
-                secure: false
-            },
-            '^/user': {
+            '^/api': {
                 target,
                 secure: false
             }

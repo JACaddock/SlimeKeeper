@@ -4,7 +4,7 @@ namespace Server.Repositories
 {
     public interface ISlimeRepository
     {
-        Slime GetById(int id);
+        Slime? GetById(int id);
         Slime GetByUser(int id);
         List<Slime> GetAll();
         List<Slime> GetAllMarket();

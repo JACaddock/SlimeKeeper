@@ -5,7 +5,7 @@ import useForm from '../hooks/useForm';
 import { UserCredentials, UserUnique } from '../types/User';
 import { useAuth } from '../hooks/useAuth';
 
-const Register = () => {
+const RegisterPage = () => {
     const { registerUser } = useAuth();
     const { handleInputUpdate, handleSubmit } = useForm();
     const [users, setUsers] = useState([]);
@@ -15,7 +15,7 @@ const Register = () => {
     }, []);
 
     function getAllUsers() {
-        axios.get("/user/")
+        axios.get("/api/user/")
             .then((response) => {
                 setUsers(response.data)
             })
@@ -62,4 +62,4 @@ const Register = () => {
     );
 };
 
-export default Register;
+export default RegisterPage;

@@ -4,12 +4,14 @@ import { MarketSlime } from "../types/Slime";
 import MarketLoopItem from "./MarketLoopItem";
 import Arrow from "../assets/arrow.svg";
 import "../css/MarketLoop.css";
+import useDetectDevice from "../hooks/useDetectDevice";
 
 
 
 const MarketLoop = () => {
     const [slimes, setSlimes] = useState<MarketSlime[]>([]);
     const [index, setIndex] = useState<number>(0);
+    const { isMiniture, isMobile, isTablet } = useDetectDevice();
 
 
     useEffect(() => {
@@ -18,25 +20,13 @@ const MarketLoop = () => {
 
     const marketslimes = slimes.length <= 0
         ? <p>Unable to load Market Loop</p>
-        : <>{getVisibleSlimes().map((slime) =>
+        : <>{getVisibleSlimes(isMiniture ? 1: isMobile ? 2: isTablet ? 4: 6).map((slime) =>
                 <MarketLoopItem key={slime.id} slime={slime} />
           )}
           </>
 
-    return (
-        <div className="market-container">
-            <button className="market-button" onClick={decreaseIndex}>
-                <img src={Arrow} className="arrow left-arrow" alt="Left Arrow" />
-            </button>
-            {marketslimes}
-            <button className="market-button" onClick={increaseIndex}>
-                <img src={Arrow} className="arrow" alt="Right Arrow" />
-            </button>
-        </div>
-    );
-
     function getMarketSlimes() {
-        axios.get('/slime/market/')
+        axios.get('/api/slime/market/')
         .then((response) => {
             setSlimes(response.data);
         })
@@ -77,6 +67,18 @@ const MarketLoop = () => {
             setIndex(index - 1);
         }
     }
+
+    return (
+        <div className="market-container">
+            <button className="market-button market-button-left" onClick={decreaseIndex}>
+                <img src={Arrow} className="arrow left-arrow" alt="Left Arrow" />
+            </button>
+            {marketslimes}
+            <button className="market-button" onClick={increaseIndex}>
+                <img src={Arrow} className="arrow" alt="Right Arrow" />
+            </button>
+        </div>
+    );
 };
 
 export default MarketLoop;

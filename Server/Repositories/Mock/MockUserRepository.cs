@@ -28,7 +28,14 @@ namespace Server.Repositories.Mock
 
         public User? GetById(int id)
         {
-            return Users[id];
+            try
+            {
+                return Users[id];
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public User? GetByEmail(string email)

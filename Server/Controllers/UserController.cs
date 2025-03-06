@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Server.Controllers.Listener;
 using Server.Models;
 using Server.Repositories;
 
@@ -6,10 +7,12 @@ using Server.Repositories;
 namespace Server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class UserController(IUserRepository userRepository) : ControllerBase
+    [Route("api/[controller]")]
+    public class UserController(IUserRepository userRepository, IEnumerable<IUserListener> listeners) : ControllerBase
     {
         private IUserRepository UserRepository { get; set; } = userRepository;
+        private IEnumerable<IUserListener> Listeners { get; set; } = listeners;
+
 
         [HttpGet]
         public List<UserUnique> GetUsers()
@@ -23,6 +26,19 @@ namespace Server.Controllers
             return UserRepository.GetById(id);
         }
 
+
+        [HttpGet("Account/{id}")]
+        public UserAccount? GetUserAccount(int id)
+        {
+            User? user = UserRepository.GetById(id);
+            if (user != null)
+            {
+                return new(id, user.Username, user.IsAdmin, user.Gold, user.Slimes, user.Friends);
+            }
+            return null;
+        }
+
+
         [HttpPost("Register")]
         public UserAuth? Register([FromBody] UserCredentials userAttempt)
         {
@@ -30,6 +46,12 @@ namespace Server.Controllers
             {
                 User user = new(userAttempt.Username, userAttempt.Email, userAttempt.Password);
                 UserRepository.AddUser(user);
+
+                foreach (var listener in Listeners)
+                {
+                    listener.OnUserRegistered(user);
+                }
+
                 return new(new(user.Id, user.Username, user.Email), "sdgsdsdgsg");
             }
             return null;

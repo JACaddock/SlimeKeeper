@@ -1,10 +1,13 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
-import Login from "../pages/Login";
-import Register from "../pages/Register";
-import WeatherForecast from "../components/WeatherForecast";
-import Home from "../pages/Home";
+import LoginPage from "../pages/LoginPage";
+import RegisterPage from "../pages/RegisterPage";
+import PlayPage from "../pages/PlayPage";
+import HomePage from "../pages/HomePage";
+import ProtectedRoute from "./ProtectedRoute";
 import GuestRoute from "./GuestRoute";
+import SlimePage from "../pages/SlimePage";
+import UserPage from "../pages/UserPage";
 
 export const routes = createBrowserRouter([
     {
@@ -13,17 +16,29 @@ export const routes = createBrowserRouter([
         children: [
             {
                 path: "",
-                element: <Home />
+                element: <HomePage />
             },
             {
-                path: "/forecast",
-                element: <WeatherForecast />
+                path: "/play",
+                element: (
+                    <ProtectedRoute>
+                        <PlayPage />
+                    </ProtectedRoute>
+                )
+            },
+            {
+                path: "user/:id",
+                element: <UserPage />
+            },
+            {
+                path: "/slime/:id",
+                element: <SlimePage />
             },
             {
                 path: "/login",
                 element: (
                     <GuestRoute>
-                        <Login />
+                        <LoginPage />
                     </GuestRoute>
                 )
             },
@@ -31,7 +46,7 @@ export const routes = createBrowserRouter([
                 path: "/register",
                 element: (
                     <GuestRoute>
-                        <Register />
+                        <RegisterPage />
                     </GuestRoute>
                 )
             }

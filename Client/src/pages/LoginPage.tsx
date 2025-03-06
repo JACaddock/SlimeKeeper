@@ -3,7 +3,7 @@ import useForm from '../hooks/useForm';
 import { useAuth } from '../hooks/useAuth';
 import { UserCredentials } from '../types/User';
 
-const Login = () => {
+const LoginPage = () => {
     const { loginUser } = useAuth();
     const { handleInputUpdate, handleSubmit } = useForm();
 
@@ -31,4 +31,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default LoginPage;
