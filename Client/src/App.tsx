@@ -1,12 +1,15 @@
 import { Outlet } from "react-router";
 import Navbar from "./components/Navbar";
+import UserProvider from "./hooks/useAuth";
 
 
 const App = () => {
     return (
         <>
-            <Navbar />
-            <Outlet />
+            <UserProvider>
+                <Navbar />
+                <Outlet />
+            </UserProvider>
         </>
     )
 };

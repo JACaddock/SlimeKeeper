@@ -43,6 +43,7 @@ a {
   font-weight: 500;
   color: #646cff;
   text-decoration: inherit;
+  cursor: pointer;
 }
 
 a:hover {
@@ -120,6 +121,12 @@ button:focus-visible {
     flex-direction: column;
 }
 
+.flex {
+    display: flex;
+    column-gap: 2em;
+    justify-content: space-between;
+}
+
 .grid-row {
     display: grid;
     grid-template-columns: 8em 8em;
@@ -129,6 +136,12 @@ button:focus-visible {
 .separator-1 {
     height: 4em;
 }
+
+
+.left-arrow {
+    transform: rotate(180deg);
+}
+
 
 @media (prefers-color-scheme: light) {
   :root {

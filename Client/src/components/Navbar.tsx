@@ -1,8 +1,12 @@
-import { Link } from "react-router-dom";
-import SlimeLogo from "../assets/slime.png";
+import { Link } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
+import SlimeLogo from '../assets/slime.png';
+
 
 
 const Navbar = () => {
+    const { isLoggedIn, user, logout } = useAuth();
+
     return (
         <nav>
             <div className="flex-column">
@@ -17,10 +21,18 @@ const Navbar = () => {
                 </Link>
             </div>
 
-            <div className="flex-column">
-                <Link to="/login">Login</Link>
-                <Link to="/register">Register</Link>
-            </div>
+            {isLoggedIn() ? (
+                <div className="flex-column">
+                    <button>{user?.username}</button>
+                    <a onClick={logout}>Logout</a>
+                </div>
+            ): (
+
+                <div className="flex-column">
+                    <Link to="/login">Login</Link>
+                    <Link to="/register">Register</Link>
+                </div>
+            )}
         </nav>
     );
 };

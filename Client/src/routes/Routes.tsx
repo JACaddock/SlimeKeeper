@@ -1,9 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
-import Login from "./Login";
-import Register from "./Register";
+import Login from "../pages/Login";
+import Register from "../pages/Register";
 import WeatherForecast from "../components/WeatherForecast";
-import Home from "./Home";
+import Home from "../pages/Home";
+import GuestRoute from "./GuestRoute";
 
 export const routes = createBrowserRouter([
     {
@@ -20,11 +21,19 @@ export const routes = createBrowserRouter([
             },
             {
                 path: "/login",
-                element: <Login />
+                element: (
+                    <GuestRoute>
+                        <Login />
+                    </GuestRoute>
+                )
             },
             {
                 path: "/register",
-                element: <Register />
+                element: (
+                    <GuestRoute>
+                        <Register />
+                    </GuestRoute>
+                )
             }
         ],
     },

@@ -13,7 +13,8 @@
 
     public class Slime
     {
-        public static int Id { get; set; }
+        public static int Total { get; set; }
+        public int Id { get; set; }
         public string? Name { get; set; }
         public string? Svg { get; set; }
         public int Size { get; set; }
@@ -22,15 +23,19 @@
         public bool IsOnMarket { get; set; } = false;
         public int Price { get; set; }
 
+        public int? OwnerId { get; set; }
+
         public Slime(string name)
         {
-            Id++;
+            Id = Total;
+            Total++;
             Name = name;
         }
 
         public Slime(string name, int price, int size, string color, int age = 1)
         {
-            Id++;
+            Id = Total;
+            Total++;
             Name = name;
             Price = price;
             IsOnMarket = true;
@@ -48,8 +53,6 @@
         private string PrepareSvg()
         {
             string workingSvg = @"
-                <?xml version='1.0' encoding='UTF-8'?>
-                <!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
                 <svg xmlns='http://www.w3.org/2000/svg' 
                     style='background: transparent; background-color: transparent; color-scheme: light dark;'
                     version='1.1' width='100px' height='100px'";
@@ -179,6 +182,30 @@
                 default:
                     return "";
             }
+        }
+
+        public static Slime GenerateRandomSlime(int? ownerid = null)
+        {
+            Random r = new();
+            int rPrice = r.Next(0, 5000);
+            int rSize = r.Next(0, 6);
+            int rAge = r.Next(0, 4);
+
+            int rColorIndex = r.Next(0, 11);
+            string[] rColor = {
+                "red", "green", "darkcyan", "white", "gold", "blue", "yellow", "lime", "orange", "darkgreen", "pink"
+            };
+
+            int rNameIndex = r.Next(0, 12);
+            string[] rName = {
+                "Jeff", "Bob", "Bill", "Slimey", "Goop", "Glub", "limey", "Slima", "Slimy", "Slimoo", "Tinsie", "Weenie"
+            };
+
+            Slime slime = new(rName[rNameIndex], rPrice, rSize, rColor[rColorIndex], rAge)
+            {
+                OwnerId = ownerid
+            };
+            return slime;
         }
     }
 }

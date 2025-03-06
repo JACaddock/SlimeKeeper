@@ -1,6 +1,11 @@
+using Server.Repositories;
+using Server.Repositories.Mock;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSingleton<IUserRepository, MockUserRepository>();
+builder.Services.AddSingleton<ISlimeRepository, MockSlimeRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

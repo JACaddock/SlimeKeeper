@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 import { MarketSlime } from "../types/Slime";
 import MarketLoopItem from "./MarketLoopItem";
+import Arrow from "../assets/arrow.svg";
 import "../css/MarketLoop.css";
 
 
@@ -16,25 +18,31 @@ const MarketLoop = () => {
 
     const marketslimes = slimes.length <= 0
         ? <p>Unable to load Market Loop</p>
-        : <>{getVisibleSlimes().map(slime =>
-            <MarketLoopItem key={slime.name} slime={slime} />
+        : <>{getVisibleSlimes().map((slime) =>
+                <MarketLoopItem key={slime.id} slime={slime} />
           )}
           </>
 
     return (
         <div className="market-container">
-            <button className="market-button" onClick={decreaseIndex}>{'<='}</button>
+            <button className="market-button" onClick={decreaseIndex}>
+                <img src={Arrow} className="arrow left-arrow" alt="Left Arrow" />
+            </button>
             {marketslimes}
-            <button className="market-button" onClick={increaseIndex}>{'=>'}</button>
+            <button className="market-button" onClick={increaseIndex}>
+                <img src={Arrow} className="arrow" alt="Right Arrow" />
+            </button>
         </div>
     );
 
-    async function getMarketSlimes() {
-        const response = await fetch('slime');
-        if (response.ok) {
-            const data = await response.json();
-            setSlimes(data);
-        }
+    function getMarketSlimes() {
+        axios.get('/slime/market/')
+        .then((response) => {
+            setSlimes(response.data);
+        })
+        .catch((error) => {
+            console.log(error);
+        })
     }
 
     function getVisibleSlimes(max: number = 6) {

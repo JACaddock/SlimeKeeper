@@ -3,10 +3,17 @@ name: Build and Deploy React
 on:
   push:
     branches:
-        - main
+      - main
     paths:
-        - 'Client/**'
-        - '.github/workflows/deploy-react.yml'
+      - 'Client/**'
+      - '.github/workflows/deploy-react.yml'
+  
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+
 
 env:
   DIR: Client

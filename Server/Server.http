@@ -1,16 +1,31 @@
 @Server_HostAddress = http://localhost:5172
 
-GET {{Server_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
 
 GET {{Server_HostAddress}}/slime/
 Accept: application/json
 
 ###
 
-POST {{Server_HostAddress}}/postslime/
+GET {{Server_HostAddress}}/slime/market/
+Accept: application/json
+
+###
+
+
+GET {{Server_HostAddress}}/user/
 ACCEPT: application/json
+
+###
+
+
+POST {{Server_HostAddress}}/user/login/
+ACCEPT: application/json
+Content-Type: application/json
+
+{
+  "Username": "johnny151",
+  "Password": "password123",
+  "Email": ""
+}
 
 ###
