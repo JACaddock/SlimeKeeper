@@ -10,7 +10,7 @@ const MarketLoopItem = ({ slime }: Props) => {
     const navigate = useNavigate();
 
     return (
-        <div onClick={() => { navigate("/play/slime/" + slime.id) }} className="market-item">
+        <div onClick={() => { navigate("/slime/" + slime.id) }} className="market-item">
             {parse(slime.svg)}
             <h2>{slime.name}</h2>
             <p>Price: ${slime.price}</p>

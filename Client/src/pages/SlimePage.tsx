@@ -39,7 +39,7 @@ const SlimePage = () => {
                         {parse(slime.svg)}
                     </div>
                     <p>{slime.name} is a {slime.age} year old {slime.colour} coloured slime with a size of {slime.size}</p>
-                    <p>{slime.name} is owned by user <Link to={"/play/user/" + slime.ownerId}>{username}</Link> and is worth {slime.price}</p>
+                    <p>{slime.name} is owned by user <Link to={"/user/" + slime.ownerId}>{username}</Link> and is worth {slime.price}</p>
                     <p>{slime.isOnMarket ? slime.name + " is for sale" : slime.name + " is not for sale"}</p>
                 </div>
             ):

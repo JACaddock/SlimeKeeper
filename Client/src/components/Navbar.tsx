@@ -23,7 +23,7 @@ const Navbar = () => {
 
             {isLoggedIn() ? (
                 <div className="nav-column">
-                    <button>{user?.username}</button>
+                    <Link to={"/user/" + user?.id}><button>{user?.username}</button></Link>
                     <a onClick={logout}>Logout</a>
                 </div>
             ): (

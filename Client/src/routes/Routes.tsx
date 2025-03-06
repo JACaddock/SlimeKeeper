@@ -7,6 +7,7 @@ import HomePage from "../pages/HomePage";
 import ProtectedRoute from "./ProtectedRoute";
 import GuestRoute from "./GuestRoute";
 import SlimePage from "../pages/SlimePage";
+import UserPage from "../pages/UserPage";
 
 export const routes = createBrowserRouter([
     {
@@ -26,7 +27,11 @@ export const routes = createBrowserRouter([
                 )
             },
             {
-                path: "/play/slime/:id",
+                path: "user/:id",
+                element: <UserPage />
+            },
+            {
+                path: "/slime/:id",
                 element: <SlimePage />
             },
             {

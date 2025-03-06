@@ -143,13 +143,17 @@ input {
 .flex {
     display: flex;
     column-gap: 2em;
-    justify-content: space-between;
+    justify-content: center;
+    flex-wrap: wrap;
+    row-gap: 2em;
+    align-items: center;
 }
 
 .grid-row {
     display: grid;
     grid-template-columns: 8em 8em;
     column-gap: 2em;
+    justify-content: center;
 }
 
 .separator-1 {
