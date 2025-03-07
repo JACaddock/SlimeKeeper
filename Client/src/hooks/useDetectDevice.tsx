@@ -6,6 +6,7 @@ function useDetectDevice() {
     function handleWindowSizeChange() {
         setWidth(window.innerWidth);
     }
+
     useEffect(() => {
         window.addEventListener('resize', handleWindowSizeChange);
         return () => {

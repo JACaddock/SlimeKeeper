@@ -39,7 +39,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }, [user]);
 
-    function loginUser(username: string, password: string) {
+    const loginUser = (username: string, password: string) => {
         axios.post("/api/user/login/", {
             email: "",
             username: username,
@@ -61,7 +61,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
             .catch((e) => alert("Server error occured: " + e));
     };
 
-    function registerUser(email: string, username: string, password: string) {
+    const registerUser = (email: string, username: string, password: string) => {
         axios.post("/api/user/register/", {
             email: email,
             username: username,
