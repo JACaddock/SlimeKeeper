@@ -12,6 +12,28 @@ Accept: application/json
 ###
 
 
+POST {{Server_HostAddress}}/api/slime/update/
+Accept: application/json
+Content-Type: application/json
+
+{
+  "slime": [
+
+    id: 0,
+    name: "Gloob",
+    svg: "",
+    size: 3,
+    colour: "blue",
+    age: 2,
+    isOnMarket: true,
+    price: 3000,
+    ownerId: 0
+  ]
+}
+
+
+###
+
 GET {{Server_HostAddress}}/user/
 ACCEPT: application/json
 

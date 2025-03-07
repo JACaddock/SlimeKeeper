@@ -31,9 +31,26 @@ namespace Server.Controllers
         }
 
         [HttpPost("Add")]
-        public void AddSlime(Slime slime)
+        public bool AddSlime([FromBody] Slime slime)
         {
-            SlimeRepository.AddSlime(slime);
+            return SlimeRepository.Add(slime);
+        }
+
+        [HttpPost("Update")]
+        public Slime? UpdateSlime([FromBody] EditableSlime slime)
+        {
+            Console.WriteLine(slime);
+            Slime? oldSlime = SlimeRepository.GetById(slime.Id);
+            if (oldSlime != null) {
+                if (oldSlime.OwnerId == slime.OwnerId)
+                {
+                    oldSlime.Name = slime.Name;
+                    oldSlime.IsOnMarket = slime.IsOnMarket;
+                    SlimeRepository.Update(oldSlime);
+                }
+                return oldSlime; 
+            }
+            return null;
         }
 
         public void OnUserRegistered(User user)

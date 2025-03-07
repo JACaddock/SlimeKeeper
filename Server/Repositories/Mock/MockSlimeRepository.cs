@@ -33,13 +33,26 @@ namespace Server.Repositories.Mock
             throw new NotImplementedException();
         }
 
-        public bool AddSlime(Slime slime)
+        public bool Add(Slime slime)
         {
             Slimes.Add(slime);
             return true;
         }
 
-        public bool DeleteSlime(Slime slime)
+        public bool Update(Slime slime)
+        {
+            try
+            {
+                Slimes[slime.Id] = slime;
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool Delete(Slime slime)
         {
             return Slimes.Remove(slime);
         }

@@ -1,4 +1,7 @@
-﻿namespace Server.Models
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
+
+namespace Server.Models
 {
     enum SlimePart
     {
@@ -25,6 +28,8 @@
 
         public int? OwnerId { get; set; }
 
+        public Slime() { }
+
         public Slime(string name)
         {
             Id = Total;
@@ -32,13 +37,13 @@
             Name = name;
         }
 
-        public Slime(string name, int price, int size, string color, int age = 1)
+        public Slime(string name, int price, int size, string color, bool isonmarket, int age = 1)
         {
             Id = Total;
             Total++;
             Name = name;
             Price = price;
-            IsOnMarket = true;
+            IsOnMarket = isonmarket;
 
             if (size < 0) Size = 0;
             else if (size > 5) Size = 5;
@@ -201,11 +206,23 @@
                 "Jeff", "Bob", "Bill", "Slimey", "Goop", "Glub", "limey", "Slima", "Slimy", "Slimoo", "Tinsie", "Weenie"
             };
 
-            Slime slime = new(rName[rNameIndex], rPrice, rSize, rColor[rColorIndex], rAge)
+            bool isonmarket = ownerid > 0 && ownerid <= 3 ? true : false;
+
+            Slime slime = new(rName[rNameIndex], rPrice, rSize, rColor[rColorIndex], isonmarket, rAge)
             {
                 OwnerId = ownerid
             };
             return slime;
         }
+    }
+
+
+    public class EditableSlime(int id, string name, bool isonmarket, int ownerid)
+    {
+        public int Id { get; set; } = id;
+        public string Name { get; set; } = name;
+        public bool IsOnMarket { get; set; } = isonmarket;
+        public int OwnerId { get; set; } = ownerid;
+
     }
 }
