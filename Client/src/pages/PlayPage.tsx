@@ -31,7 +31,7 @@ const PlayPage = () => {
                     <div className="flex">
                         {userAccount.slimes.map((slime) => {
                             return (
-                                <div>
+                                <div key={slime.id}>
                                     <div onClick={() => { navigate("/slime/" + slime.id) }} key={slime.id} className="market-item image-wrapper">
                                         {parse(slime.svg)}
                                     </div>

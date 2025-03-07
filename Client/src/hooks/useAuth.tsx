@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserAuth, UserUnique } from '../types/User';
 import axios from "axios";
@@ -22,14 +22,22 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
         setIsReady(true);
     }, []);
 
-    function isUserValid() {
-        axios.get("/api/user/" + user?.id)
-            .then((response) => {
-                if (!response.data) {
-                    logout();
-                }
-            })
-    }
+    const isUserValid = useCallback(() => {
+        if (user != null) {
+            axios.get("/api/user/" + user?.id)
+                .then((response) => {
+                    if (!response.data) {
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("user");
+                        setUser(null);
+                        setToken("");
+                    }
+                })
+                .catch((e) => {
+                    console.log("Could not find User... Error: " + e);
+                })
+        }
+    }, [user]);
 
     function loginUser(username: string, password: string) {
         axios.post("/api/user/login/", {
