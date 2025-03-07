@@ -8,7 +8,8 @@ namespace Server.Repositories
         Slime GetByUser(int id);
         List<Slime> GetAll();
         List<Slime> GetAllMarket();
-        bool AddSlime(Slime slime);
-        bool DeleteSlime(Slime slime);
+        bool Add(Slime slime);
+        bool Update(Slime slime);
+        bool Delete(Slime slime);
     }
 }

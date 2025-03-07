@@ -16,3 +16,22 @@ export type Slime = {
     price: number;
     ownerId: number;
 };
+
+export type EditableSlime = {
+    id: number;
+    name: string;
+    isOnMarket: boolean;
+    ownerId: number;
+}
+
+export const UndefinedSlime: Slime = {
+    id: -1,
+    name: "",
+    svg: "",
+    size: -1,
+    colour: "",
+    age: -1,
+    isOnMarket: false,
+    price: -1,
+    ownerId: -1
+}

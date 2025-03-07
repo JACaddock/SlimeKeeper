@@ -20,6 +20,7 @@
 
 
 main {
+    margin-top: 10px;
     display: flex;
     flex-direction: column;
     place-items: center;
@@ -77,6 +78,10 @@ h2 {
     font-size: 2em;
 }
 
+p {
+    margin: 0;
+}
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -102,6 +107,18 @@ input {
     width: 180px;
     height: 30px;
     text-align: center;
+}
+
+input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    
+    
+}
+
+.absolute-input {
+    position: absolute;
+    margin-left: 15em;
 }
 
 .input-container {
@@ -147,6 +164,57 @@ input {
     flex-wrap: wrap;
     row-gap: 2em;
     align-items: center;
+    margin: 2em 0;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.clickable {
+    cursor: pointer;
+    user-select: none;
+}
+
+.clickable > svg {
+    width: 30px;
+    height: 30px;
+    fill: navajowhite;
+}
+
+.clickable > svg:hover {
+    fill: orange;
+}
+
+
+.h2-input {
+    margin: 0;
+    font-size: 2em;
+    color: white;
+    border: none;
+    outline: none;
+    display: block;
+    font-weight: bold;
+    unicode-bidi: isolate;
+    border-radius: 0;
+    height: 48px;
+    min-width: 100px;
+    padding: 0 5px;
+}
+
+.min-width {
+    width: min-content;
+}
+
+.salebox-container {
+    column-gap: 0.5em;
+    margin: 0;
+}
+
+.salebox-container > p {
+    margin: 0;
 }
 
 .grid-row {
