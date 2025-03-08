@@ -17,12 +17,12 @@ const UsersPage = () => {
         <main>
             <h2>Users</h2>
             {userAccounts ?
-                (<div className="flex">
+                (<div className="list-container">
                     {userAccounts.map((userAccount) => 
                             <ListItem
                                 key={userAccount.id} id={userAccount.id}
                             path="/user/" name={userAccount.username}
-                            body={userAccount.gold + "G | " + userAccount.slimes.length + " Slimes | " + userAccount.friends + " Friends"}
+                            body={userAccount.gold + "G | " + userAccount.slimes.length + " Slimes | " + userAccount.friends.length + " Friends"}
                             />
                     )}
                 </div>)
