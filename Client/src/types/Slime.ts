@@ -32,7 +32,7 @@ export type SlimeStats = {
     rarity: Rarity;
 };
 
-enum Rarity {
+export enum Rarity {
     COMMON,     // White
     UNCOMMON,   // Grey
     SPECIAL,    // Blue

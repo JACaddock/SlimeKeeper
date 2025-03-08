@@ -56,7 +56,6 @@
 
             Random r = new();
             Size = r.Next(0, 2);
-            Price = r.Next(0, 5000);
 
             int rNameIndex = r.Next(0, 9);
             string[] rName = [
@@ -64,14 +63,15 @@
             ];
             Name = rName[rNameIndex];
 
-            Rarity rRarity = (Rarity)r.Next(0, 3);
+            int rRarity = r.Next(0, 3);
+            Price = r.Next(100*(rRarity + 1), 1000*(rRarity + 1));
 
             string[] rColor = ["#30aa49", "#006e51", "#92b6d5"];
-            Color = rColor[(int)rRarity];
+            Color = rColor[rRarity];
 
             Svg = PrepareSvg();
 
-            SlimeStats = new(Id, rRarity);
+            SlimeStats = new(Id, (Rarity)rRarity);
         }
 
         public Slime(string name, int price, int size, string color, bool isonmarket, int age = 1)
