@@ -18,7 +18,10 @@ const UsersPage = () => {
             <h2>Users</h2>
             {userAccounts ?
                 (<div className="list-container">
-                    {userAccounts.map((userAccount) => 
+                    {userAccounts
+                        .slice()
+                        .sort((a, b) => b.gold - a.gold)
+                        .map((userAccount) => 
                             <ListItem
                                 key={userAccount.id} id={userAccount.id}
                             path="/user/" name={userAccount.username}
