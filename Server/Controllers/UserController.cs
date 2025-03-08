@@ -102,5 +102,36 @@ namespace Server.Controllers
             }
             return null;
         }
+
+        [HttpPost("Purchase")]
+        public bool PurchaseSlime([FromBody] int buyerid, int sellerid, int slimeid)
+        {
+            User? buyer = UserRepository.GetById(buyerid);
+            User? seller = UserRepository.GetById(sellerid);
+            if (buyer != null && seller != null)
+            {
+                foreach (var slime in seller.Slimes)
+                {
+                    if (slime.Id == slimeid)
+                    {
+                        if (buyer.Gold >= slime.Price && slime.IsOnMarket)
+                        {
+                            buyer.Slimes.Add(slime);
+                            seller.Slimes.Remove(slime);
+                            buyer.Gold -= slime.Price;
+                            slime.OwnerId = buyer.Id;
+
+                            foreach (var listener in Listeners)
+                            {
+                                listener.OnSlimePurchased(buyerid, slimeid);
+                            }
+                            return true;
+                        }
+                        break;
+                    }
+                }
+            }
+            return false;            
+        }
     }
 }

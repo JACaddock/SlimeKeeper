@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Slime, EditableSlime, UndefinedSlime } from "../types/Slime";
 import parse from "html-react-parser";
 import { Link, useParams } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../hooks/useAuth.tsx";
 import {Quill} from "../assets/Quill.tsx";
 import {Tick} from "../assets/Tick.tsx";
 
@@ -15,7 +15,7 @@ const SlimePage = () => {
     const [username, setUsername] = useState("");
     const [isEditingName, setIsEditingName] = useState(false);
     const [nameWidth, setNameWidth] = useState(0);
-    const { user } = useAuth();
+    const { user, isLoggedIn } = useAuth();
 
     useEffect(() => {
         getSlime(id);
@@ -78,6 +78,11 @@ const SlimePage = () => {
     }
 
 
+    function handlePurchaseSlime() {
+        
+    }
+
+
     const addressUser = username == user?.username
         ? <><Link to={"/user/" + slime?.ownerId}>you</Link></>
         : <>user <Link to={"/user/" + slime?.ownerId}>{username}</Link></>
@@ -123,7 +128,11 @@ const SlimePage = () => {
                         <p>{slime.isOnMarket ? slime.name + " is for sale" : slime.name + " is not for sale"}</p>
                         {slime.ownerId == user?.id ? (
                             <input type="checkbox" id="isOnMarket" name="isOnMarket" checked={slime.isOnMarket} onChange={handleIsOnMarketChange} />
-                        ) : (
+                        ) : isLoggedIn() ?
+                        (
+                            <button onClick={handlePurchaseSlime}>Buy</button>
+                        ) :
+                        (
                             <></>
                         )
                         }

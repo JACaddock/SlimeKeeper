@@ -19,7 +19,13 @@ export type UserAccount = {
     gold: number;
     slimes: Slime[];
     friends: number[];
-}
+};
+
+export type UserAccountContext = {
+    userAccount: UserAccount | undefined;
+    hasEnoughGold: (amount: number) => boolean;
+    isAFriend: (id: number) => boolean;
+};
 
 export type UserCredentials = {
     id: number | null;
@@ -43,3 +49,4 @@ export type UserAuth = {
     isLoggedIn: () => boolean;
     isUserValid: () => void;
 };
+
