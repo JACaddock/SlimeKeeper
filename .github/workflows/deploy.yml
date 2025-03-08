@@ -1,4 +1,4 @@
-name: Build and Deploy .NET
+name: Build and Deploy
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - 'Server/**'
-      - '.github/workflows/deploy-dotnet.yml'
+      - '.github/workflows/deploy.yml'
 
 
 env:
