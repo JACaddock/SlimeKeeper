@@ -4,6 +4,7 @@ import { Slime, EditableSlime, UndefinedSlime } from "../types/Slime";
 import parse from "html-react-parser";
 import { Link, useParams } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.tsx";
+import { useAccount } from "../hooks/useAccount.tsx";
 import {Quill} from "../assets/Quill.tsx";
 import {Tick} from "../assets/Tick.tsx";
 
@@ -16,6 +17,7 @@ const SlimePage = () => {
     const [isEditingName, setIsEditingName] = useState(false);
     const [nameWidth, setNameWidth] = useState(0);
     const { user, isLoggedIn } = useAuth();
+    const { hasEnoughGold } = useAccount();
 
     useEffect(() => {
         getSlime(id);
@@ -79,7 +81,25 @@ const SlimePage = () => {
 
 
     function handlePurchaseSlime() {
-        
+        if (user != null && slime != null) {
+            axios.post("/api/user/purchase", {
+                buyerid: user.id,
+                sellerid: slime.ownerId,
+                slimeid: slime.id
+            })
+            .then((response) => {
+                if (response.data) {
+                    console.log("Purchase Success!");
+                    getSlime(id);
+                }
+                else {
+                    console.log("Purchase Failure!");
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        }
     }
 
 
@@ -130,7 +150,7 @@ const SlimePage = () => {
                             <input type="checkbox" id="isOnMarket" name="isOnMarket" checked={slime.isOnMarket} onChange={handleIsOnMarketChange} />
                         ) : isLoggedIn() ?
                         (
-                            <button onClick={handlePurchaseSlime}>Buy</button>
+                            <button disabled={!hasEnoughGold(slime.price)} onClick={handlePurchaseSlime}>Buy</button>
                         ) :
                         (
                             <></>

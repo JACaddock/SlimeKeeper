@@ -81,4 +81,11 @@ namespace Server.Models
         public List<Slime> Slimes { get; set; } = slimes;
         public int[] Friends { get; set; } = friends;
     }
+
+    public class UserTransaction(int sellerid, int buyerid, int slimeid)
+    {
+        public int SellerId { get; set; } = sellerid;
+        public int BuyerId { get; set; } = buyerid;
+        public int SlimeId { get; set; } = slimeid;
+    }
 }
