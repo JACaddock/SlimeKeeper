@@ -28,11 +28,20 @@ main {
 
 nav {
     display: flex;
-    flex-direction: row;
-    place-items: center;
+    flex-direction: column;
     justify-content: space-between;
-    padding: 0.5rem 2rem;
+    padding: 0 2rem;
     background-color: black;
+}
+
+.nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.link-row {
+    justify-content: space-around;
 }
 
 .nav-column {
@@ -43,6 +52,13 @@ nav {
 
 .nav-logo {
     align-items: flex-start;
+}
+
+.justify-end { 
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100%;
 }
 
 th, td {
@@ -175,6 +191,7 @@ input[type="checkbox"] {
 
 .clickable {
     cursor: pointer;
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -200,7 +217,7 @@ input[type="checkbox"] {
     unicode-bidi: isolate;
     border-radius: 0;
     height: 48px;
-    min-width: 100px;
+    min-width: 150px;
     padding: 0 5px;
 }
 
@@ -228,6 +245,10 @@ input[type="checkbox"] {
     height: 4em;
 }
 
+.arrow {
+    fill: white;
+    stroke: white;
+}
 
 .left-arrow {
     transform: rotate(180deg);
@@ -235,14 +256,38 @@ input[type="checkbox"] {
 
 
 @media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+    :root {
+        color: #213547;
+        background-color: #ffffff;
+    }
+
+    a:hover {
+        color: #747bff;
+    }
+
+    button {
+        background-color: #f9f9f9;
+    }
+
+    .clickable > svg {
+        fill: black;
+    }
+
+    .title {
+        color: black;
+    }
+
+    .h2-input {
+        color: black;
+        background-color: antiquewhite;
+    }
+
+    nav {
+        background-color: lightgrey;
+    }
+
+    .arrow {
+        fill: black;
+        stroke: black;
+    }
 }

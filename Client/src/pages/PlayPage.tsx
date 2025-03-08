@@ -22,6 +22,20 @@ const PlayPage = () => {
     }, [user]);
 
 
+    function handleEarnGold() {
+        if (user != null) {
+            axios.post("/api/user/earn/", { id: user.id })
+                .then((response) => {
+                    if (response.data) {
+                        if (userAccount) {
+                            setUserAccount({ ...userAccount, gold: userAccount.gold + 1000 });
+                        }
+                    }
+                })
+        }
+    }
+
+
     return (
         <main>
             {userAccount? (
@@ -40,6 +54,7 @@ const PlayPage = () => {
                             )
                         })}
                     </div>
+                    <button onClick={handleEarnGold}>Click to Earn Gold!</button>
                 </div>
             ):
             (

@@ -45,7 +45,7 @@ namespace Server.Controllers
             if (!CheckIfExists(userAttempt.Username, userAttempt.Email))
             {
                 User user = new(userAttempt.Username, userAttempt.Email, userAttempt.Password);
-                UserRepository.AddUser(user);
+                UserRepository.Add(user);
 
                 foreach (var listener in Listeners)
                 {
@@ -101,6 +101,55 @@ namespace Server.Controllers
                 return user;
             }
             return null;
+        }
+
+        [HttpPost("Earn")]
+        public bool EarnGold([FromBody] UserId userid)
+        {
+            User? user = UserRepository.GetById(userid.Id);
+            if (user != null)
+            {
+                user.Gold += 1000;
+                UserRepository.Update(user);
+                return true;
+            }
+            return false;
+        }
+
+        [HttpPost("Purchase")]
+        public bool PurchaseSlime([FromBody] UserTransaction userTransaction)
+        {
+            User? buyer = UserRepository.GetById(userTransaction.BuyerId);
+            User? seller = UserRepository.GetById(userTransaction.SellerId);
+            if (buyer != null && seller != null)
+            {
+                foreach (var slime in seller.Slimes)
+                {
+                    if (slime.Id == userTransaction.SlimeId)
+                    {
+                        if (buyer.Gold >= slime.Price && slime.IsOnMarket)
+                        {
+                            buyer.Slimes.Add(slime);
+                            seller.Slimes.Remove(slime);
+                            buyer.Gold -= slime.Price;
+                            seller.Gold += slime.Price;
+
+                            slime.OwnerId = buyer.Id; // Harmless but becomes deprecated when database used
+
+                            UserRepository.Update(buyer);
+                            UserRepository.Update(seller);
+
+                            foreach (var listener in Listeners)
+                            {
+                                listener.OnSlimePurchased(buyer.Id, slime.Id);
+                            }
+                            return true;
+                        }
+                        break;
+                    }
+                }
+            }
+            return false;            
         }
     }
 }

@@ -19,6 +19,7 @@ namespace Server.Models
         public int Gold { get; set; } = 0;
         public List<Slime> Slimes { get; set; } = [];
         public int[] Friends { get; set; } = [];
+        public bool ClaimedDaily { get; set; } = false;
 
 
         [SetsRequiredMembers]
@@ -45,6 +46,11 @@ namespace Server.Models
                 Slimes.Add(Slime.GenerateRandomSlime(Id));
             }
         }
+    }
+
+    public class UserId(int id)
+    {
+        public int Id { get; set; } = id;
     }
 
 
@@ -80,5 +86,12 @@ namespace Server.Models
         public int Gold { get; set; } = gold;
         public List<Slime> Slimes { get; set; } = slimes;
         public int[] Friends { get; set; } = friends;
+    }
+
+    public class UserTransaction(int sellerid, int buyerid, int slimeid)
+    {
+        public int SellerId { get; set; } = sellerid;
+        public int BuyerId { get; set; } = buyerid;
+        public int SlimeId { get; set; } = slimeid;
     }
 }

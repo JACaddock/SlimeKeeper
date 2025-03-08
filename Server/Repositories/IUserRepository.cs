@@ -9,7 +9,8 @@ namespace Server.Repositories
         List<UserUnique> GetAllUnique();
         User? GetByUsername(string username);
         User? GetByEmail(string email);
-        bool AddUser(User user);
-        bool DeleteUser(User user);
+        bool Add(User user);
+        bool Update(User user);
+        bool Delete(User user);
     }
 }

@@ -1,14 +1,17 @@
 import { Outlet } from "react-router";
 import Navbar from "./components/Navbar";
-import UserProvider from "./hooks/useAuth";
+import UserProvider from "./context/AuthProvider";
+import AccountProvider from "./context/AccountProvider";
 
 
 const App = () => {
     return (
         <>
             <UserProvider>
-                <Navbar />
-                <Outlet />
+                <AccountProvider>
+                    <Navbar />
+                    <Outlet />
+                </AccountProvider>
             </UserProvider>
         </>
     )

@@ -1,4 +1,5 @@
 ﻿using Server.Models;
+using System.Drawing;
 
 namespace Server.Repositories.Mock
 {
@@ -62,13 +63,26 @@ namespace Server.Repositories.Mock
             return null;
         }
 
-        public bool AddUser(User user)
+        public bool Add(User user)
         {
             Users.Add(user);
             return true;
         }
 
-        public bool DeleteUser(User user)
+        public bool Update(User user)
+        {
+            try
+            {
+                Users[user.Id] = user;
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool Delete(User user)
         {
             return Users.Remove(user);
         }

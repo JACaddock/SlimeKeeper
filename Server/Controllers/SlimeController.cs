@@ -60,5 +60,15 @@ namespace Server.Controllers
                 AddSlime(slime);
             }
         }
+
+        public void OnSlimePurchased(int userid, int slimeid)
+        {
+            Slime? slime = GetSlimeById(slimeid);
+            if (slime != null)
+            {
+                slime.OwnerId = userid;
+                slime.IsOnMarket = false;
+            }
+        }
     }
 }
