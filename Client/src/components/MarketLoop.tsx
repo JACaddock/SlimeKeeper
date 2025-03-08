@@ -69,14 +69,23 @@ const MarketLoop = () => {
     }
 
     return (
-        <div className="market-container">
-            <button className="market-button market-button-left" title="Left Arrow" onClick={decreaseIndex}>
-                <Arrow className="arrow left-arrow" />
-            </button>
-            {marketslimes}
-            <button className="market-button" title="Right Arrow" onClick={increaseIndex}>
-                <Arrow className="arrow" />
-            </button>
+        <div>
+            {
+                slimes.length <= 0 ? (
+                    <p>Currently there are no available slimes for purchase :(</p>              
+                ) :
+                    (
+                    <div className="market-container">
+                        <button className="market-button market-button-left" title="Left Arrow" onClick={decreaseIndex}>
+                            <Arrow className="arrow left-arrow" />
+                        </button>
+                        { marketslimes }
+                        <button className="market-button" title="Right Arrow" onClick={increaseIndex}>
+                            <Arrow className="arrow" />
+                        </button>
+                    </div>
+                )  
+            }
         </div>
     );
 };
