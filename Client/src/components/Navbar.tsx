@@ -39,7 +39,7 @@ const Navbar = () => {
                 {isLoggedIn() ? (
                     <div className="nav-column">
                         <Link to={"/user/" + user?.id}>{user?.username}</Link>
-                        <p>Gold: {getGold()}</p>
+                        <p>{getGold()}G</p>
                         <a onClick={logout}>Logout</a>
                     </div>
                 ) : (

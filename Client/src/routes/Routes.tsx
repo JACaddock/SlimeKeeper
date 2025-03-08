@@ -9,6 +9,8 @@ import GuestRoute from "./GuestRoute";
 import SlimePage from "../pages/SlimePage";
 import UserPage from "../pages/UserPage";
 import ErrorPage from "../pages/ErrorPage";
+import UsersPage from "../pages/UsersPage";
+import MarketPage from "../pages/MarketPage";
 
 export const routes = createBrowserRouter([
     {
@@ -28,12 +30,20 @@ export const routes = createBrowserRouter([
                 )
             },
             {
-                path: "user/:id",
+                path: "/user/:id",
                 element: <UserPage />
+            },
+            {
+                path: "/users",
+                element: <UsersPage />
             },
             {
                 path: "/slime/:id",
                 element: <SlimePage />
+            },
+            {
+                path: "/market",
+                element: <MarketPage />
             },
             {
                 path: "/login",

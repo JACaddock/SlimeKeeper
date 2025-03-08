@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { MarketSlime } from "../types/Slime";
-import MarketLoopItem from "./MarketLoopItem";
+import ListItem from "./ListItem";
 import { Arrow } from "../assets/Arrow.tsx";
 import "../css/MarketLoop.css";
 import useDetectDevice from "../hooks/useDetectDevice";
@@ -21,7 +21,12 @@ const MarketLoop = () => {
     const marketslimes = slimes.length <= 0
         ? <p>Unable to load Market Loop</p>
         : <>{getVisibleSlimes(isMiniture ? 1: isMobile ? 2: isTablet ? 4: 6).map((slime) =>
-                <MarketLoopItem key={slime.id} slime={slime} />
+            <ListItem
+                key={slime.id} id={slime.id}
+                path="/slime/" name={slime.name}
+                body={slime.price + "G"}
+                svg={slime.svg}
+            />
           )}
           </>
 
