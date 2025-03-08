@@ -20,10 +20,10 @@
 
 
 main {
-    margin-top: 10px;
     display: flex;
     flex-direction: column;
     place-items: center;
+    margin: 10px 2em 0;
 }
 
 nav {
@@ -239,6 +239,15 @@ input[type="checkbox"] {
     grid-template-columns: 8em 8em;
     column-gap: 2em;
     justify-content: center;
+}
+
+.list-container {
+    margin: 2em 0;
+    display: grid;
+    grid-template-columns: 250px 250px 250px 250px 250px;
+    column-gap: 2em;
+    row-gap: 2em;
+    align-items: center;
 }
 
 .separator-1 {

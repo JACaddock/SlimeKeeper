@@ -39,6 +39,19 @@ namespace Server.Controllers
         }
 
 
+        [HttpGet("Account")]
+        public List<UserAccount> GetUserAccounts()
+        {
+            List<UserAccount> userAccounts = [];
+            List<User> users = UserRepository.GetAll();
+            foreach (var user in users)
+            {
+                userAccounts.Add(new(user.Id, user.Username, user.IsAdmin, user.Gold, user.Slimes, user.Friends));
+            }
+            return userAccounts;
+        }
+
+
         [HttpPost("Register")]
         public UserAuth? Register([FromBody] UserCredentials userAttempt)
         {

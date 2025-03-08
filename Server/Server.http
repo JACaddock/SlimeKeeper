@@ -43,7 +43,7 @@ Content-Type: application/json
 
 ###
 
-GET {{Server_HostAddress}}/user/
+GET {{Server_HostAddress}}/api/user/
 ACCEPT: application/json
 
 ###

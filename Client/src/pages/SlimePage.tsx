@@ -162,7 +162,7 @@ const SlimePage = () => {
                         <p>{slime.isOnMarket ? slime.name + " is for sale" : slime.name + " is not for sale"}</p>
                         {slime.ownerId == user?.id ? (
                             <input type="checkbox" id="isOnMarket" name="isOnMarket" checked={slime.isOnMarket} onChange={handleIsOnMarketChange} />
-                        ) : isLoggedIn() ?
+                        ) : isLoggedIn() && slime.isOnMarket ?
                         (
                             <button disabled={!hasEnoughGold(slime.price)} onClick={handlePurchaseSlime}>Buy</button>
                         ) :
