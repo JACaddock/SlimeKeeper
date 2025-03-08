@@ -11,6 +11,15 @@ Accept: application/json
 
 ###
 
+POST {{Server_HostAddress}}/api/user/earn/
+Accept: application/json
+Content-Type: application/json
+
+{
+  "userid": 0
+}
+###
+
 
 POST {{Server_HostAddress}}/api/slime/update/
 Accept: application/json

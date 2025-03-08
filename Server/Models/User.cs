@@ -48,6 +48,11 @@ namespace Server.Models
         }
     }
 
+    public class UserId(int id)
+    {
+        public int Id { get; set; } = id;
+    }
+
 
     [method: SetsRequiredMembers]
     public class UserUnique(int id, string username, string email)

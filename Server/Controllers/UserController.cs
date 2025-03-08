@@ -103,6 +103,19 @@ namespace Server.Controllers
             return null;
         }
 
+        [HttpPost("Earn")]
+        public bool EarnGold([FromBody] UserId userid)
+        {
+            User? user = UserRepository.GetById(userid.Id);
+            if (user != null)
+            {
+                user.Gold += 1000;
+                UserRepository.Update(user);
+                return true;
+            }
+            return false;
+        }
+
         [HttpPost("Purchase")]
         public bool PurchaseSlime([FromBody] UserTransaction userTransaction)
         {
