@@ -15,6 +15,32 @@ export type Slime = {
     isOnMarket: boolean;
     price: number;
     ownerId: number;
+    slimeStats: SlimeStats | undefined;
+};
+
+
+export type SlimeStats = {
+    id: number;
+    health: number;
+    maxHealth: number;
+    stamina: number;
+    maxStamina: number;
+    hunger: number;
+    maxHunger: number;
+    strength: number;
+    speed: number;
+    rarity: Rarity;
+};
+
+export enum Rarity {
+    COMMON,     // White
+    UNCOMMON,   // Grey
+    SPECIAL,    // Blue
+    RARE,       // Green
+    EXOTIC,     // Purple
+    LEGENDARY,  // Yellow
+    MYTHIC,     // Orange
+    GODLIKE     // Red
 };
 
 export type EditableSlime = {
@@ -33,5 +59,6 @@ export const UndefinedSlime: Slime = {
     age: -1,
     isOnMarket: false,
     price: -1,
-    ownerId: -1
+    ownerId: -1,
+    slimeStats: undefined
 }

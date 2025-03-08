@@ -1,7 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Text.Json.Serialization;
-
-namespace Server.Models
+﻿namespace Server.Models
 {
     enum SlimePart
     {
@@ -12,6 +9,18 @@ namespace Server.Models
         EYE2,
         IRIS2,
         CHILDBODY
+    }
+
+    public enum Rarity
+    {
+        COMMON,     // White
+        UNCOMMON,   // Grey
+        SPECIAL,    // Blue
+        RARE,       // Green
+        EXOTIC,     // Purple
+        LEGENDARY,  // Yellow
+        MYTHIC,     // Orange
+        GODLIKE     // Red
     }
 
     public class Slime
@@ -28,13 +37,41 @@ namespace Server.Models
 
         public int? OwnerId { get; set; }
 
-        public Slime() { }
+        //public Rarity Rarity { get; set; } = Rarity.COMMON;
 
-        public Slime(string name)
+        // Stats
+        public SlimeStats? SlimeStats { get; set; }
+
+
+        // Slime Constructor that takes a list of slimes
+        //public Slime(List<Slime> slimes) {}
+
+        public Slime(int? ownerid = null)
         {
             Id = Total;
             Total++;
-            Name = name;
+            OwnerId = ownerid;
+            Age = 0;
+            IsOnMarket = ownerid > 0 && ownerid <= 3;
+
+            Random r = new();
+            Size = r.Next(0, 2);
+
+            int rNameIndex = r.Next(0, 9);
+            string[] rName = [
+                "Slime", "Oozy", "Blip", "Slimo", "Goop", "Glub", "Goony", "Slemon", "Slimy"
+            ];
+            Name = rName[rNameIndex];
+
+            int rRarity = r.Next(0, 3);
+            Price = r.Next(100*(rRarity + 1), 1000*(rRarity + 1));
+
+            string[] rColor = ["#30aa49", "#006e51", "#92b6d5"];
+            Color = rColor[rRarity];
+
+            Svg = PrepareSvg();
+
+            SlimeStats = new(Id, (Rarity)rRarity);
         }
 
         public Slime(string name, int price, int size, string color, bool isonmarket, int age = 1)
@@ -188,31 +225,124 @@ namespace Server.Models
                     return "";
             }
         }
+    }
 
-        public static Slime GenerateRandomSlime(int? ownerid = null)
+
+    public class SlimeStats
+    {
+        public int Id { get; set; }
+        public int Health { get; set; }
+        public int MaxHealth { get; set; } 
+        public int Stamina { get; set; } 
+        public int MaxStamina { get; set; }
+        public int Hunger { get; set; } 
+        public int MaxHunger { get; set; } 
+        public int Strength { get; set; } 
+        public int Speed { get; set; }
+        public Rarity Rarity { get; set; }
+
+        public SlimeStats(int id, Rarity rarity = Rarity.COMMON)
         {
-            Random r = new();
-            int rPrice = r.Next(0, 5000);
-            int rSize = r.Next(0, 6);
-            int rAge = r.Next(0, 4);
+            Id = id;
+            Rarity = rarity;
 
-            int rColorIndex = r.Next(0, 11);
-            string[] rColor = {
-                "red", "green", "darkcyan", "white", "gold", "blue", "yellow", "lime", "orange", "darkgreen", "pink"
-            };
+            StatRolls healthRolls = new();
+            StatRolls staminaRolls = new();
+            StatRolls hungerRolls = new();
+            StatRolls strengthRolls = new();
+            StatRolls speedRolls = new();
 
-            int rNameIndex = r.Next(0, 12);
-            string[] rName = {
-                "Jeff", "Bob", "Bill", "Slimey", "Goop", "Glub", "limey", "Slima", "Slimy", "Slimoo", "Tinsie", "Weenie"
-            };
-
-            bool isonmarket = ownerid > 0 && ownerid <= 3 ? true : false;
-
-            Slime slime = new(rName[rNameIndex], rPrice, rSize, rColor[rColorIndex], isonmarket, rAge)
+            switch (rarity)
             {
-                OwnerId = ownerid
-            };
-            return slime;
+                case Rarity.COMMON:
+                    healthRolls.AddRolls([8, 9, 10, 11], [0.4, 0.7, 0.9, 1]);
+                    staminaRolls.AddRolls([1, 2, 3], [0.8, 0.95, 1]);
+                    hungerRolls.AddRolls([7, 8, 9, 10, 11], [0.3, 0.5, 0.7, 0.9, 1]);
+                    strengthRolls.AddRolls([1, 2], [0.9, 1]);
+                    speedRolls.AddRolls([1, 2], [0.9, 1]);
+                    break;
+
+                case Rarity.UNCOMMON:
+                    healthRolls.AddRolls([9, 10, 11, 12], [0.3, 0.6, 0.9, 1]);
+                    staminaRolls.AddRolls([1, 2, 3], [0.75, 0.9, 1]);
+                    hungerRolls.AddRolls([8, 9, 10, 11, 12], [0.3, 0.5, 0.7, 0.9, 1]);
+                    strengthRolls.AddRolls([1, 2, 3], [0.85, 0.95, 1]);
+                    speedRolls.AddRolls([1, 2, 3], [0.85, 0.95, 1]);
+                    break;
+
+                case Rarity.SPECIAL:
+                    healthRolls.AddRolls([10, 11, 12, 13, 14, 15], [0.1, 0.2, 0.4, 0.6, 0.8, 1]);
+                    staminaRolls.AddRolls([1, 2, 3], [0.7, 0.85, 1]);
+                    hungerRolls.AddRolls([10, 11, 12, 13, 14, 15], [0.1, 0.2, 0.4, 0.7, 0.9, 1]);
+                    strengthRolls.AddRolls([1, 2, 3], [0.8, 0.92, 1]);
+                    speedRolls.AddRolls([1, 2, 3], [0.8, 0.92, 1]);
+                    break;
+
+                case Rarity.RARE:
+                    healthRolls.AddRolls([12, 13, 14, 15, 16, 17], [0.1, 0.2, 0.4, 0.6, 0.8, 1]);
+                    staminaRolls.AddRolls([1, 2, 3, 4], [0.3, 0.65, 0.98, 1]);
+                    hungerRolls.AddRolls([12, 13, 14, 15, 16, 17], [0.1, 0.2, 0.4, 0.7, 0.9, 1]);
+                    strengthRolls.AddRolls([1, 2, 3], [0.7, 0.9, 1]);
+                    speedRolls.AddRolls([1, 2, 3], [0.7, 0.9, 1]);
+                    break;
+
+                case Rarity.EXOTIC:
+                    healthRolls.AddRolls([14, 15, 16, 17, 18, 19, 20], [0.1, 0.2, 0.4, 0.6, 0.8, 0.9, 1]);
+                    staminaRolls.AddRolls([1, 2, 3, 4], [0.3, 0.65, 0.98, 1]);
+                    hungerRolls.AddRolls([14, 15, 16, 17, 18, 19, 20], [0.1, 0.2, 0.4, 0.7, 0.9, 0.95, 1]);
+                    strengthRolls.AddRolls([1, 2, 3], [0.6, 0.8, 1]);
+                    speedRolls.AddRolls([1, 2, 3], [0.6, 0.8, 1]);
+                    break;
+
+                case Rarity.LEGENDARY:
+                    healthRolls.AddRolls([19, 20, 21, 22, 23, 24, 25], [0.1, 0.3, 0.5, 0.7, 0.9, 0.95, 1]);
+                    staminaRolls.AddRolls([1, 2, 3, 4], [0.3, 0.65, 0.98, 1]);
+                    hungerRolls.AddRolls([19, 20, 21, 22, 23, 24, 25], [0.1, 0.4, 0.6, 0.8, 0.92, 0.97, 1]);
+                    strengthRolls.AddRolls([2, 3, 4], [0.6, 0.9, 1]);
+                    speedRolls.AddRolls([2, 3, 4], [0.6, 0.9, 1]);
+                    break;
+
+                case Rarity.MYTHIC:
+                    healthRolls.AddRolls([25, 26, 27, 28, 29, 30], [0.1, 0.3, 0.5, 0.7, 0.9, 1]);
+                    staminaRolls.AddRolls([2, 3, 4], [0.5, 0.9, 1]);
+                    hungerRolls.AddRolls([25, 26, 27, 28, 29, 30], [0.1, 0.4, 0.6, 0.8, 0.92, 1]);
+                    strengthRolls.AddRolls([2, 3, 4], [0.4, 0.8, 1]);
+                    speedRolls.AddRolls([2, 3, 4], [0.4, 0.8, 1]);
+                    break;
+
+                case Rarity.GODLIKE:
+                    healthRolls.AddRolls([35, 36, 37, 38, 39, 40], [0.15, 0.35, 0.55, 0.75, 0.95, 1]);
+                    staminaRolls.AddRolls([2, 3, 4, 5], [0.3, 0.6, 0.9, 1]);
+                    hungerRolls.AddRolls([35, 36, 37, 38, 39, 40], [0.15, 0.45, 0.65, 0.85, 0.97, 1]);
+                    strengthRolls.AddRolls([2, 3, 4, 5], [0.4, 0.7, 0.97, 1]);
+                    speedRolls.AddRolls([2, 3, 4, 5], [0.4, 0.7, 0.97, 1]);
+                    break;
+
+                default:
+                    healthRolls.AddRolls([10, 11, 12, 13, 14, 15], [0.1, 0.2, 0.4, 0.6, 0.8, 1]);
+                    staminaRolls.AddRolls([1, 2, 3], [0.7, 0.85, 1]);
+                    hungerRolls.AddRolls([10, 11, 12, 13, 14, 15], [0.1, 0.2, 0.4, 0.7, 0.9, 1]);
+                    strengthRolls.AddRolls([1, 2, 3], [0.8, 0.92, 1]);
+                    speedRolls.AddRolls([1, 2, 3], [0.8, 0.92, 1]);
+                    break;
+            }
+
+
+            Random r = new();
+            double healthRoll = r.NextDouble();
+            double staminaRoll = r.NextDouble();
+            double hungerRoll = r.NextDouble();
+            double strengthRoll = r.NextDouble();
+            double speedRoll = r.NextDouble();
+
+            Health = healthRolls.CalculateStat(healthRoll);
+            MaxHealth = Health;
+            Stamina = staminaRolls.CalculateStat(staminaRoll);
+            MaxStamina = Stamina;
+            MaxHunger = hungerRolls.CalculateStat(hungerRoll);
+            Hunger = MaxHunger / 2;
+            Strength = strengthRolls.CalculateStat(strengthRoll);
+            Speed = speedRolls.CalculateStat(speedRoll);
         }
     }
 
@@ -224,5 +354,42 @@ namespace Server.Models
         public bool IsOnMarket { get; set; } = isonmarket;
         public int OwnerId { get; set; } = ownerid;
 
+    }
+
+
+    public class StatRolls()
+    {
+        private List<int> Stats { get; set; } = [];
+        private List<double> Rolls { get; set; } = [];
+
+
+        public void AddRoll(int stat, double roll)
+        {
+            Stats.Add(stat);
+            Rolls.Add(roll);
+        }
+
+        public void AddRolls(List<int> stats, List<double> rolls)
+        {
+            if (stats.Count == rolls.Count)
+            {
+                for (int i = 0; i < stats.Count; i++)
+                {
+                    AddRoll(stats[i], rolls[i]);
+                }
+            }
+        }
+
+        public int CalculateStat(double roll)
+        {
+            for (int i = 0; i < Rolls.Count; i++)
+            {
+                if (roll <= Rolls[i])
+                {
+                    return Stats[i];
+                }
+            }
+            return Stats[-1];
+        }
     }
 }

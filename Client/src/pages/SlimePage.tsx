@@ -1,12 +1,43 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Slime, EditableSlime, UndefinedSlime } from "../types/Slime";
+import { Slime, EditableSlime, UndefinedSlime, Rarity } from "../types/Slime";
 import parse from "html-react-parser";
 import { Link, useParams } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.tsx";
 import { useAccount } from "../hooks/useAccount.tsx";
 import {Quill} from "../assets/Quill.tsx";
 import {Tick} from "../assets/Tick.tsx";
+
+
+function getRarity(rarity: Rarity) {
+    switch (rarity) {
+        case Rarity.COMMON:
+            return "Common";
+
+        case Rarity.UNCOMMON:
+            return "Uncommon";
+
+        case Rarity.SPECIAL:
+            return "Special";
+
+        case Rarity.RARE:
+            return "Rare";
+
+        case Rarity.EXOTIC:
+            return "Exotic";
+
+        case Rarity.LEGENDARY:
+            return "Legendary";
+
+        case Rarity.MYTHIC:
+            return "Mythic";
+
+        case Rarity.GODLIKE:
+            return "Godlike";
+        default:
+            return "Common";
+    }
+}
 
 
 const SlimePage = () => {
@@ -171,6 +202,19 @@ const SlimePage = () => {
                         )
                         }
                     </div>
+                    {slime.slimeStats
+                        ?
+                        (<div className="flex-column margin-top-2em">
+                            <p>Health: {slime.slimeStats.health} / {slime.slimeStats.maxHealth}</p>
+                            <p>Stamina: {slime.slimeStats.stamina} / {slime.slimeStats.maxStamina}</p>
+                            <p>Hunger: {slime.slimeStats.hunger} / {slime.slimeStats.maxHunger}</p>
+                            <p>Strength: {slime.slimeStats.strength} | Speed: {slime.slimeStats.speed}</p>
+                            <p>{getRarity(slime.slimeStats.rarity)}</p>
+                        </div>)
+                        :
+                        (<>
+                        </>)
+                    }
                     {invalidInput ? <p style={{ color: "red", fontStyle: "italic" }}>One or more of your inputs are invalid!</p> : <></>}
                 </div>
             ):
