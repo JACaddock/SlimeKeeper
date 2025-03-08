@@ -248,7 +248,7 @@ input[type="checkbox"] {
     grid-auto-rows: 1fr;
     column-gap: 2em;
     row-gap: 2em;
-    align-items: center;
+    align-items: stretch;
 }
 
 .separator-1 {
