@@ -8,6 +8,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import GuestRoute from "./GuestRoute";
 import SlimePage from "../pages/SlimePage";
 import UserPage from "../pages/UserPage";
+import ErrorPage from "../pages/ErrorPage";
 
 export const routes = createBrowserRouter([
     {
@@ -49,6 +50,10 @@ export const routes = createBrowserRouter([
                         <RegisterPage />
                     </GuestRoute>
                 )
+            },
+            {
+                path: "*",
+                element: <ErrorPage />
             }
         ],
     },

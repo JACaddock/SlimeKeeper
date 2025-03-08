@@ -19,6 +19,7 @@ namespace Server.Models
         public int Gold { get; set; } = 0;
         public List<Slime> Slimes { get; set; } = [];
         public int[] Friends { get; set; } = [];
+        public bool ClaimedDaily { get; set; } = false;
 
 
         [SetsRequiredMembers]

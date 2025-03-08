@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { MarketSlime } from "../types/Slime";
 import MarketLoopItem from "./MarketLoopItem";
-import Arrow from "../assets/arrow.svg";
+import { Arrow } from "../assets/Arrow.tsx";
 import "../css/MarketLoop.css";
 import useDetectDevice from "../hooks/useDetectDevice";
 
@@ -70,12 +70,12 @@ const MarketLoop = () => {
 
     return (
         <div className="market-container">
-            <button className="market-button market-button-left" onClick={decreaseIndex}>
-                <img src={Arrow} className="arrow left-arrow" alt="Left Arrow" />
+            <button className="market-button market-button-left" title="Left Arrow" onClick={decreaseIndex}>
+                <Arrow className="arrow left-arrow" />
             </button>
             {marketslimes}
-            <button className="market-button" onClick={increaseIndex}>
-                <img src={Arrow} className="arrow" alt="Right Arrow" />
+            <button className="market-button" title="Right Arrow" onClick={increaseIndex}>
+                <Arrow className="arrow" />
             </button>
         </div>
     );

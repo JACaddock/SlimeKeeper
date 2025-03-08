@@ -18,6 +18,7 @@ const SlimePage = () => {
     const [nameWidth, setNameWidth] = useState(0);
     const { user, isLoggedIn } = useAuth();
     const { hasEnoughGold } = useAccount();
+    const [invalidInput, setInvalidInput] = useState(false);
 
     useEffect(() => {
         getSlime(id);
@@ -42,7 +43,7 @@ const SlimePage = () => {
     }
 
     function handleUpdateSlime(isOnMarket: boolean | undefined = undefined) {
-        if (user?.id == slime.ownerId) {
+        if (user?.id == slime.ownerId && !invalidInput) {
             if (isOnMarket != undefined && isOnMarket != slime.isOnMarket || slime.name != slimeName) {
                 const editableSlime: EditableSlime = {
                     id: id ? parseInt(id) : slime.id,
@@ -76,7 +77,13 @@ const SlimePage = () => {
     function handleNameChange(event: React.ChangeEvent<HTMLInputElement>) {
         console.log(event.target);
         setSlimeName(event.target.value);
-        setNameWidth(event.target.value.length + 0.2);
+        setNameWidth(event.target.value.length + 2);
+        if (event.target.value.includes(" ")) {
+            setInvalidInput(true);
+        }
+        else {
+            setInvalidInput(false);
+        }
     }
 
 
@@ -111,8 +118,11 @@ const SlimePage = () => {
     const editableName = isEditingName
         ?
         <div className="flex salebox-container">
-            <input className="h2-input" style={{ width: nameWidth + 'ch' }} type="text" value={slimeName} onChange={handleNameChange} autoFocus />
-            <span className="clickable min-width" onClick={() => {
+            <input
+                maxLength={16}
+                className="h2-input" style={{ width: nameWidth + 'ch' }}
+                type="text" value={slimeName} onChange={handleNameChange} autoFocus />
+            <span style={{ pointerEvents: invalidInput ? "none": "initial" }} className="clickable min-width" onClick={() => {
                 setIsEditingName(false);
                 handleUpdateSlime();
             }
@@ -125,7 +135,11 @@ const SlimePage = () => {
         ?
         <div className="flex salebox-container">
                 <h2>{slime?.name}</h2>
-                <span className="clickable min-width" onClick={() => setIsEditingName(true)}>
+                <span className="clickable min-width" onClick={() => {
+                    setIsEditingName(true);
+                    setNameWidth(slimeName.length + 2);
+                }
+                }>
                     <Quill />
                 </span>
         </div>
@@ -157,6 +171,7 @@ const SlimePage = () => {
                         )
                         }
                     </div>
+                    {invalidInput ? <p style={{ color: "red", fontStyle: "italic" }}>One or more of your inputs are invalid!</p> : <></>}
                 </div>
             ):
             (
