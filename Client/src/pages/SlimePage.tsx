@@ -171,6 +171,19 @@ const SlimePage = () => {
                         )
                         }
                     </div>
+                    {slime.slimeStats
+                        ?
+                        (<div>
+                            <p>Health: {slime.slimeStats.health} / {slime.slimeStats.maxHealth}</p>
+                            <p>Stamina: {slime.slimeStats.stamina} / {slime.slimeStats.maxStamina}</p>
+                            <p>Hunger: {slime.slimeStats.hunger} / {slime.slimeStats.maxHunger}</p>
+                            <p>Strength: {slime.slimeStats.strength} | Speed: {slime.slimeStats.speed}</p>
+                            <p>Rarity: {slime.slimeStats.rarity}</p>
+                        </div>)
+                        :
+                        (<>
+                        </>)
+                    }
                     {invalidInput ? <p style={{ color: "red", fontStyle: "italic" }}>One or more of your inputs are invalid!</p> : <></>}
                 </div>
             ):
