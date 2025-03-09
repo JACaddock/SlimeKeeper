@@ -27,7 +27,7 @@ namespace Server.Services
             Slime? slime = SlimeRepository.GetById(id);
             if (slime != null)
             {
-                UpdateSlimeStatus(slime);
+                UpdateStatus(slime);
             }
             return slime;
         }
@@ -44,10 +44,86 @@ namespace Server.Services
                     slimes.Add(slime);
                 }
             }
-
             return slimes;
         }
 
+        public SlimeStats? TrainSlime(int id, Training training, int intensity = 1)
+        {
+            Slime? slime = SlimeRepository.GetById(id);
+            if (slime == null) return null;
+
+            SlimeStats stats = slime.SlimeStats;
+            if (stats.Stamina <= 0) return stats;
+
+            stats.Stamina -= 1;
+            switch (training)
+            {
+                case Training.HEALTH:
+                    stats.HealthTraining += (2.0 * intensity);
+                    if (stats.HealthTraining >= 1.0)
+                    {
+                        int healthIncrease = (int)(stats.HealthTraining);
+                        stats.MaxHealth += healthIncrease;
+                        stats.Health += healthIncrease;
+                        stats.HealthTraining -= healthIncrease;
+                    }
+                    break;
+                case Training.STAMINA:
+                    stats.StaminaTraining += (0.1 * intensity);
+                    if (stats.StaminaTraining >= 1.0)
+                    {
+                        int staminaIncrease = (int)(stats.StaminaTraining);
+                        stats.MaxStamina += staminaIncrease;
+                        stats.Stamina += staminaIncrease;
+                        stats.StaminaTraining -= staminaIncrease;
+                    }
+                    break;
+                case Training.HUNGER:
+                    stats.HungerTraining += (2.0 * intensity);
+                    if (stats.HungerTraining >= 1.0)
+                    {
+                        int hungerIncrease = (int)(stats.HungerTraining);
+                        stats.MaxHunger += hungerIncrease;
+                        stats.Hunger += (hungerIncrease/2);
+                        stats.HungerTraining -= hungerIncrease;
+                    }
+                    break;
+                case Training.STRENGTH:
+                    stats.StrengthTraining += (0.2 * intensity);
+                    if (stats.StrengthTraining >= 1.0)
+                    {
+                        int strengthIncrease = (int)(stats.StrengthTraining);
+                        stats.Strength += strengthIncrease;
+                        stats.StrengthTraining -= strengthIncrease;
+                    }
+                    break;
+                case Training.SPEED:
+                    stats.SpeedTraining += (0.2 * intensity);
+                    if (stats.SpeedTraining >= 1.0)
+                    {
+                        int speedIncrease = (int)(stats.SpeedTraining);
+                        stats.Speed += speedIncrease;
+                        stats.SpeedTraining -= speedIncrease;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            slime.SlimeStats = stats;
+            return UpdateStatus(slime).SlimeStats;
+        }
+
+        public int FeedSlime(int id, int food)
+        {
+            Slime? slime = SlimeRepository.GetById(id);
+            if (slime == null) return -1;
+
+            SlimeStats stats = slime.SlimeStats;
+            stats.Hunger = Math.Min(stats.MaxHunger, stats.Hunger + food);
+            slime.SlimeStats = stats;
+
+            return UpdateStatus(slime).SlimeStats.Hunger;
+        }
 
         public Slime? UpdateSlime(EditableSlime updatedSlime)
         {
@@ -58,8 +134,7 @@ namespace Server.Services
             slime.IsOnMarket = updatedSlime.IsOnMarket;
             slime.OwnerId = updatedSlime.OwnerId;
 
-            SlimeRepository.Update(slime);
-            return slime;
+            return UpdateStatus(slime);
         }
 
 
@@ -95,7 +170,8 @@ namespace Server.Services
 
         //public Slime CreateGeneticSlime(List<Slime> slimes) { }
 
-        private void UpdateSlimeStatus(Slime slime)
+
+        private Slime UpdateStatus(Slime slime)
         {
             DateTime now = DateTime.UtcNow;
             TimeSpan timeElapsed = now - slime.LastUpdated;
@@ -111,6 +187,7 @@ namespace Server.Services
             slime.LastUpdated = now;
 
             SlimeRepository.Update(slime);
+            return slime;
         }
 
         private static SlimeStats GenerateStats(int id, Rarity rarity = Rarity.COMMON)
