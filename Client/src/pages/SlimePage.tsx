@@ -126,13 +126,8 @@ const SlimePage = () => {
                 slimeid: slime.id
             })
             .then((response) => {
-                if (response.data) {
-                    console.log("Purchase Success!");
-                    getSlime(id);
-                }
-                else {
-                    console.log("Purchase Failure!");
-                }
+                console.log(response.status + ": Purchase Success!");
+                getSlime(id);
             })
             .catch((error) => {
                 console.log(error);

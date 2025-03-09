@@ -49,17 +49,17 @@ namespace Server.Services
         }
 
 
-        public bool UpdateSlime(EditableSlime updatedSlime)
+        public Slime? UpdateSlime(EditableSlime updatedSlime)
         {
             Slime? slime = SlimeRepository.GetById(updatedSlime.Id);
-            if (slime == null) return false;
+            if (slime == null) return null;
 
             slime.Name = updatedSlime.Name;
             slime.IsOnMarket = updatedSlime.IsOnMarket;
             slime.OwnerId = updatedSlime.OwnerId;
 
             SlimeRepository.Update(slime);
-            return true;
+            return slime;
         }
 
 

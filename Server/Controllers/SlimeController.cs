@@ -44,12 +44,12 @@ namespace Server.Controllers
         [HttpPost("Update")]
         public IActionResult UpdateSlime([FromBody] EditableSlime updatedSlime)
         {
-            bool result = SlimeService.UpdateSlime(updatedSlime);
-            if (!result)
+            Slime? slime = SlimeService.UpdateSlime(updatedSlime);
+            if (slime != null)
             {
-                return NotFound("Slime not found or update failed");
+                return Ok(slime);   
             }
-            return Ok("Slime updated successfully");
+            return NotFound("Slime not found or update failed");
         }
     }
 }
