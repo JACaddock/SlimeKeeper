@@ -34,7 +34,18 @@ namespace Server.Services
 
         public List<Slime> GetSlimesByOwner(User owner)
         {
-            return SlimeRepository.GetByOwner(owner.Id);
+            List<Slime> slimes = SlimeRepository.GetByOwner(owner.Id);
+            if (slimes.Count == 0 && owner.OwnedSlimes.Count > 0)
+            {
+                for (int i = 0; i < owner.OwnedSlimes.Count; i++)
+                {
+                    Slime slime = CreateRandomSlime(owner.Id);
+                    owner.OwnedSlimes[i] = slime.Id;
+                    slimes.Add(slime);
+                }
+            }
+
+            return slimes;
         }
 
 
