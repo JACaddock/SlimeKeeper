@@ -1,6 +1,6 @@
 ﻿namespace Server.Enums
 {
-    public enum Training
+    public enum TrainingType
     {
         HEALTH,
         STAMINA,

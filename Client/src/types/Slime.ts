@@ -32,6 +32,31 @@ export type SlimeStats = {
     rarity: Rarity;
 };
 
+export type SlimeFeeder = {
+    food: number;
+    cost: number;
+    slimeid: number;
+    ownerid: number;
+};
+
+
+export type SlimeTrainer = {
+    training: TrainingType;
+    intensity: number;
+    cost: number;
+    slimeid: number;
+    ownerid: number;
+};
+
+
+export enum TrainingType {
+    HEALTH,
+    STAMINA,
+    HUNGER,
+    STRENGTH,
+    SPEED
+};
+
 export enum Rarity {
     COMMON,     // White
     UNCOMMON,   // Grey

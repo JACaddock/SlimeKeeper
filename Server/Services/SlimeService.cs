@@ -47,18 +47,22 @@ namespace Server.Services
             return slimes;
         }
 
-        public SlimeStats? TrainSlime(int id, Training training, int intensity = 1)
+        public Tuple<Status, SlimeStats?> TrainSlime(SlimeTrainer slimeTrainer)
         {
-            Slime? slime = SlimeRepository.GetById(id);
-            if (slime == null) return null;
+            Slime? slime = SlimeRepository.GetById(slimeTrainer.SlimeId);
+            if (slime == null) return new(Status.SLIMENOTFOUND, null);
+
+            if (slimeTrainer.OwnerId != slime.OwnerId) return new(Status.NOTOWN, null);
 
             SlimeStats stats = slime.SlimeStats;
-            if (stats.Stamina <= 0) return stats;
+            if (stats.Stamina <= 0) return new(Status.NOSTAMINA, stats);
+
+            int intensity = slimeTrainer.Intensity;
 
             stats.Stamina -= 1;
-            switch (training)
+            switch (slimeTrainer.Training)
             {
-                case Training.HEALTH:
+                case TrainingType.HEALTH:
                     stats.HealthTraining += (2.0 * intensity);
                     if (stats.HealthTraining >= 1.0)
                     {
@@ -68,7 +72,7 @@ namespace Server.Services
                         stats.HealthTraining -= healthIncrease;
                     }
                     break;
-                case Training.STAMINA:
+                case TrainingType.STAMINA:
                     stats.StaminaTraining += (0.1 * intensity);
                     if (stats.StaminaTraining >= 1.0)
                     {
@@ -78,7 +82,7 @@ namespace Server.Services
                         stats.StaminaTraining -= staminaIncrease;
                     }
                     break;
-                case Training.HUNGER:
+                case TrainingType.HUNGER:
                     stats.HungerTraining += (2.0 * intensity);
                     if (stats.HungerTraining >= 1.0)
                     {
@@ -88,7 +92,7 @@ namespace Server.Services
                         stats.HungerTraining -= hungerIncrease;
                     }
                     break;
-                case Training.STRENGTH:
+                case TrainingType.STRENGTH:
                     stats.StrengthTraining += (0.2 * intensity);
                     if (stats.StrengthTraining >= 1.0)
                     {
@@ -97,7 +101,7 @@ namespace Server.Services
                         stats.StrengthTraining -= strengthIncrease;
                     }
                     break;
-                case Training.SPEED:
+                case TrainingType.SPEED:
                     stats.SpeedTraining += (0.2 * intensity);
                     if (stats.SpeedTraining >= 1.0)
                     {
@@ -110,22 +114,24 @@ namespace Server.Services
                     break;
             }
             slime.SlimeStats = stats;
-            return UpdateStatus(slime).SlimeStats;
+            return new(Status.SUCCESS, UpdateStatus(slime).SlimeStats);
         }
 
-        public int FeedSlime(int id, int food)
+        public Tuple<Status, int> FeedSlime(SlimeFeeder slimeFeeder)
         {
-            Slime? slime = SlimeRepository.GetById(id);
-            if (slime == null) return -1;
+            Slime? slime = SlimeRepository.GetById(slimeFeeder.SlimeId);
+            if (slime == null) return new(Status.SLIMENOTFOUND, -1);
+
+            if (slimeFeeder.OwnerId != slime.OwnerId) return new(Status.NOTOWN, -1);
 
             SlimeStats stats = slime.SlimeStats;
-            stats.Hunger = Math.Min(stats.MaxHunger, stats.Hunger + food);
+            stats.Hunger = Math.Min(stats.MaxHunger, stats.Hunger + slimeFeeder.Food);
             slime.SlimeStats = stats;
 
-            return UpdateStatus(slime).SlimeStats.Hunger;
+            return new(Status.SUCCESS, UpdateStatus(slime).SlimeStats.Hunger);
         }
 
-        public Slime? UpdateSlime(EditableSlime updatedSlime)
+        public Slime? UpdateSlime(SlimeEditable updatedSlime)
         {
             Slime? slime = SlimeRepository.GetById(updatedSlime.Id);
             if (slime == null) return null;

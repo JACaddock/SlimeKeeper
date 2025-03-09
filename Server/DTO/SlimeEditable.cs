@@ -1,6 +1,6 @@
 ﻿namespace Server.DTO
 {
-    public class EditableSlime(int id, string name, bool isonmarket, int ownerid)
+    public class SlimeEditable(int id, string name, bool isonmarket, int ownerid)
     {
         public int Id { get; set; } = id;
         public string Name { get; set; } = name;
