@@ -25,17 +25,17 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const isUserValid = useCallback(() => {
         if (user != null) {
-            axios.get("/api/user/" + user?.id)
-                .then((response) => {
-                    if (!response.data) {
-                        localStorage.removeItem("token");
-                        localStorage.removeItem("user");
-                        setUser(null);
-                        setToken("");
-                    }
+            axios.post("/api/user/validate/",
+                {
+                    id: user?.id,
+                    username: user?.username,
+                    email: user?.email
                 })
-                .catch((e) => {
-                    console.log("Could not find User... Error: " + e);
+                .catch(() => {
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("user");
+                    setUser(null);
+                    setToken("");
                 })
         }
     }, [user]);

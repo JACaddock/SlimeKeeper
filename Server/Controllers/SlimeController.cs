@@ -1,74 +1,55 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Server.Controllers.Listener;
+using Server.DTO;
 using Server.Models;
-using Server.Repositories;
+using Server.Services;
 
 namespace Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class SlimeController(ISlimeRepository slimeRepository) : ControllerBase, IUserListener
+    public class SlimeController(SlimeService slimeService) : ControllerBase
     {
-        private ISlimeRepository SlimeRepository { get; set; } = slimeRepository;
+        private SlimeService SlimeService { get; set; } = slimeService;
 
         [HttpGet]
-        public List<Slime> GetSlimes()
+        public IActionResult GetSlimes()
         {
-            return SlimeRepository.GetAll();
+            return Ok(SlimeService.GetAll());
         }
 
         [HttpGet("Market")]
-        public List<Slime> GetMarketSlimes()
+        public IActionResult GetMarketSlimes()
         {
-            return SlimeRepository.GetAllMarket();
+            return Ok(SlimeService.GetAllMarket());
         }
 
 
         [HttpGet("{id}")]
-        public Slime? GetSlimeById(int id)
+        public IActionResult GetSlimeById(int id)
         {
-            return SlimeRepository.GetById(id);
+            Slime? slime = SlimeService.GetSlimeById(id);
+            if (slime == null)
+            {
+                return NotFound("Slime not found");
+            }
+            return Ok(slime);
         }
 
-        [HttpPost("Add")]
-        public bool AddSlime([FromBody] Slime slime)
+        /*[HttpPost("Create")]
+        public IActionResult CreateSlime([FromBody] Slime slime)
         {
-            return SlimeRepository.Add(slime);
-        }
+            return Ok(SlimeService.AddSlime(slime));
+        }*/
 
         [HttpPost("Update")]
-        public Slime? UpdateSlime([FromBody] EditableSlime slime)
+        public IActionResult UpdateSlime([FromBody] EditableSlime updatedSlime)
         {
-            Console.WriteLine(slime);
-            Slime? oldSlime = SlimeRepository.GetById(slime.Id);
-            if (oldSlime != null) {
-                if (oldSlime.OwnerId == slime.OwnerId)
-                {
-                    oldSlime.Name = slime.Name;
-                    oldSlime.IsOnMarket = slime.IsOnMarket;
-                    SlimeRepository.Update(oldSlime);
-                }
-                return oldSlime; 
-            }
-            return null;
-        }
-
-        public void OnUserRegistered(User user)
-        {
-            foreach (var slime in user.Slimes)
+            bool result = SlimeService.UpdateSlime(updatedSlime);
+            if (!result)
             {
-                AddSlime(slime);
+                return NotFound("Slime not found or update failed");
             }
-        }
-
-        public void OnSlimePurchased(int userid, int slimeid)
-        {
-            Slime? slime = GetSlimeById(slimeid);
-            if (slime != null)
-            {
-                slime.OwnerId = userid;
-                slime.IsOnMarket = false;
-            }
+            return Ok("Slime updated successfully");
         }
     }
 }

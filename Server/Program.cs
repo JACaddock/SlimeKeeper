@@ -1,14 +1,14 @@
-using Server.Controllers;
-using Server.Controllers.Listener;
 using Server.Repositories;
 using Server.Repositories.Mock;
+using Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddSingleton<IUserRepository, MockUserRepository>();
 builder.Services.AddSingleton<ISlimeRepository, MockSlimeRepository>();
-builder.Services.AddSingleton<IUserListener, SlimeController>();
+builder.Services.AddTransient<SlimeService>();
+builder.Services.AddTransient<UserService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

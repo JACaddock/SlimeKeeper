@@ -1,168 +1,111 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Server.Controllers.Listener;
+using Server.DTO;
 using Server.Models;
-using Server.Repositories;
+using Server.Services;
 
 
 namespace Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController(IUserRepository userRepository, IEnumerable<IUserListener> listeners) : ControllerBase
+    public class UserController(UserService userService) : ControllerBase
     {
-        private IUserRepository UserRepository { get; set; } = userRepository;
-        private IEnumerable<IUserListener> Listeners { get; set; } = listeners;
-
+        private UserService UserService { get; set; } = userService;
 
         [HttpGet]
-        public List<UserUnique> GetUsers()
+        public IActionResult GetUsers()
         {
-            return UserRepository.GetAllUnique();
+            return Ok(UserService.GetUsers());
         }
 
+
         [HttpGet("{id}")]
-        public User? GetUserById(int id)
+        public IActionResult GetUserById(int id)
         {
-            return UserRepository.GetById(id);
+            User? user = UserService.GetUserById(id);
+            if (user != null)
+            {
+                return Ok(user);
+            }
+            return NotFound("Could not find this user");
         }
 
 
         [HttpGet("Account/{id}")]
-        public UserAccount? GetUserAccount(int id)
+        public IActionResult GetUserAccountById(int id)
         {
-            User? user = UserRepository.GetById(id);
-            if (user != null)
+            UserAccount? userAccount = UserService.GetUserAccountById(id);
+            if (userAccount != null)
             {
-                return new(id, user.Username, user.IsAdmin, user.Gold, user.Slimes, user.Friends);
+                return Ok(userAccount);
             }
-            return null;
+            return NotFound("Could not find this user's account");
         }
 
 
         [HttpGet("Account")]
-        public List<UserAccount> GetUserAccounts()
+        public IActionResult GetUserAccounts()
         {
-            List<UserAccount> userAccounts = [];
-            List<User> users = UserRepository.GetAll();
-            foreach (var user in users)
+            return Ok(UserService.GetUserAccounts());
+        }
+
+        [HttpPost("Validate")]
+        public IActionResult IsUserValid([FromBody] UserUnique userUnique)
+        {
+            User? user = UserService.GetUserById(userUnique.Id);
+            if (user != null)
             {
-                userAccounts.Add(new(user.Id, user.Username, user.IsAdmin, user.Gold, user.Slimes, user.Friends));
+                if (userUnique.Username == user.Username && userUnique.Email == user.Email)
+                {
+                    return Ok("Successfully validated user");
+                }
+                return BadRequest("This is not the same user");
             }
-            return userAccounts;
+            return NotFound("Could not find this user");
         }
 
 
         [HttpPost("Register")]
-        public UserAuth? Register([FromBody] UserCredentials userAttempt)
+        public IActionResult Register([FromBody] UserCredentials userAttempt)
         {
-            if (!CheckIfExists(userAttempt.Username, userAttempt.Email))
+            UserAuth? auth = UserService.RegisterUser(userAttempt);
+            if (auth != null)
             {
-                User user = new(userAttempt.Username, userAttempt.Email, userAttempt.Password);
-                UserRepository.Add(user);
-
-                foreach (var listener in Listeners)
-                {
-                    listener.OnUserRegistered(user);
-                }
-
-                return new(new(user.Id, user.Username, user.Email), "sdgsdsdgsg");
+                return Ok(auth);
             }
-            return null;
-        }
-
-        public bool CheckIfExists(string username, string email)
-        {
-            User? userByUsername = UserRepository.GetByUsername(username);
-            User? userByEmail = UserRepository.GetByEmail(email);
-            if (userByUsername != null || userByEmail != null)
-            {
-                return true;
-            }
-            return false;
+            return BadRequest("Username/Email already exists");
         }
 
 
         [HttpPost("Login")]
-        public UserAuth? Login([FromBody] UserCredentials userAttempt)
+        public IActionResult Login([FromBody] UserCredentials userAttempt)
         {
-            User? user = UserRepository.GetByUsername(userAttempt.Username);
-            if (user?.Username == userAttempt.Username && user?.Password == userAttempt.Password)
+            UserAuth? auth = UserService.LoginUser(userAttempt);
+            if (auth != null)
             {
-                return new(new(user.Id, user.Username, user.Email), "byaugwuabib");
+                return Ok(auth);
             }
-            return null;
-        }
-
-        [HttpPost("LoginByUsername")]
-        public User? LoginByUsername(string username, string password)
-        {
-            User? user = UserRepository.GetByUsername(username);
-            if (user?.Username == username && user?.Password == password)
-            {
-                return user;
-            }
-            return null;
-        }
-
-
-        [HttpPost("LoginByEmail")]
-        public User? LoginByEmail(string email, string password)
-        {
-            User? user = UserRepository.GetByEmail(email);
-            if (user?.Email == email && user?.Password == password)
-            {
-                return user;
-            }
-            return null;
+            return BadRequest("Username/Password is incorrect");
         }
 
         [HttpPost("Earn")]
-        public bool EarnGold([FromBody] UserId userid)
+        public IActionResult EarnGold([FromQuery] int id)
         {
-            User? user = UserRepository.GetById(userid.Id);
-            if (user != null)
+            if (UserService.EarnGold(id))
             {
-                user.Gold += 1000;
-                UserRepository.Update(user);
-                return true;
+                return Ok("Successfully earnt 1000 gold");
             }
-            return false;
+            return BadRequest("Failed to earn gold...");
         }
 
         [HttpPost("Purchase")]
-        public bool PurchaseSlime([FromBody] UserTransaction userTransaction)
+        public IActionResult PurchaseSlime([FromBody] UserTransaction userTransaction)
         {
-            User? buyer = UserRepository.GetById(userTransaction.BuyerId);
-            User? seller = UserRepository.GetById(userTransaction.SellerId);
-            if (buyer != null && seller != null)
+            if (UserService.PurchaseSlime(userTransaction))
             {
-                foreach (var slime in seller.Slimes)
-                {
-                    if (slime.Id == userTransaction.SlimeId)
-                    {
-                        if (buyer.Gold >= slime.Price && slime.IsOnMarket)
-                        {
-                            buyer.Slimes.Add(slime);
-                            seller.Slimes.Remove(slime);
-                            buyer.Gold -= slime.Price;
-                            seller.Gold += slime.Price;
-
-                            slime.OwnerId = buyer.Id; // Harmless but becomes deprecated when database used
-
-                            UserRepository.Update(buyer);
-                            UserRepository.Update(seller);
-
-                            foreach (var listener in Listeners)
-                            {
-                                listener.OnSlimePurchased(buyer.Id, slime.Id);
-                            }
-                            return true;
-                        }
-                        break;
-                    }
-                }
+                Ok("Slime purchase succeeded");
             }
-            return false;            
+            return BadRequest("Slime purchase failed");            
         }
     }
 }
