@@ -1,15 +1,15 @@
-﻿using Server.Models;
-using System.Drawing;
+﻿using Server.DTO;
+using Server.Models;
 
 namespace Server.Repositories.Mock
 {
     public class MockUserRepository : IUserRepository
     {
         private readonly List<User> Users = [
-            new("johnny151", "johnny151@gmail.com", "password123"),
-            new("janeDoe", "janedoe@gmail.com", "password123"),
-            new("jimmy", "jimmy@gmail.com", "password123"),
-            new("dantheman", "dantheman@gmail.com", "pass1234")
+            new(0, "johnny151", "johnny151@gmail.com", "password123", [0, 1, 2, 3]),
+            new(1, "janeDoe", "janedoe@gmail.com", "password123", [4, 5, 6, 7, 8, 9]),
+            new(2, "jimmy", "jimmy@gmail.com", "password123", [10, 11, 12, 13]),
+            new(3, "dantheman", "dantheman@gmail.com", "pass1234", [14, 15, 16, 17])
         ];
 
         public List<User> GetAll()
@@ -66,6 +66,7 @@ namespace Server.Repositories.Mock
         public bool Add(User user)
         {
             Users.Add(user);
+            Console.WriteLine(user.Username);
             return true;
         }
 

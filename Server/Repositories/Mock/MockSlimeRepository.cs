@@ -2,9 +2,9 @@
 
 namespace Server.Repositories.Mock
 {
-    public class MockSlimeRepository(IUserRepository userRepository) : ISlimeRepository
+    public class MockSlimeRepository : ISlimeRepository
     {
-        private readonly List<Slime> Slimes = [.. userRepository.GetAll().SelectMany(user => user.Slimes)];
+        private readonly List<Slime> Slimes = [];
 
         public List<Slime> GetAll()
         {
@@ -28,13 +28,16 @@ namespace Server.Repositories.Mock
             }
         }
 
-        public Slime GetByUser(int id)
+        public List<Slime> GetByOwner(int id)
         {
-            throw new NotImplementedException();
+            return [.. Slimes.Where(i => i.OwnerId == id)];
         }
 
         public bool Add(Slime slime)
         {
+            List<Slime> slimes = [.. Slimes.Where(i => i.Id == slime.Id)];
+            if (Slimes.Count > slime.Id || slimes.Count > 0) return false;
+
             Slimes.Add(slime);
             return true;
         }
