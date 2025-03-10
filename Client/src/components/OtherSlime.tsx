@@ -22,12 +22,12 @@ const OtherSlime = ({ slime, username, getSlime, userid }: Props) => {
                 sellerid: slime.ownerId,
                 slimeid: slime.id
             })
-                .then((response) => {
-                    console.log(response.status + ": Purchase Success!");
+                .then(() => {
+                    //console.log(response.status + ": Purchase Success!");
                     getSlime(String(slime.id));
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+                    //console.log(error);
                 })
         }
     }

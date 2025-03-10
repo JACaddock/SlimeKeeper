@@ -35,8 +35,8 @@ const MarketLoop = () => {
         .then((response) => {
             setSlimes(response.data);
         })
-        .catch((error) => {
-            console.log(error);
+        .catch(() => {
+            //console.log(error);
         })
     }
 

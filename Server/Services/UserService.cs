@@ -117,14 +117,14 @@ namespace Server.Services
         }
 
 
-        public Tuple<Status, int> FeedSlime(SlimeFeeder slimeFeeder)
+        public Tuple<Status, SlimeStats?> FeedSlime(SlimeFeeder slimeFeeder)
         {
-            Tuple<Status, int> result;
+            Tuple<Status, SlimeStats?> result;
             User? user = UserRepository.GetById(slimeFeeder.OwnerId);
             if (user != null)
             {
-                if (user.Gold < slimeFeeder.Cost) return new(Status.NOTENOUGHGOLD, -1);
-                if (user.Id != slimeFeeder.OwnerId) return new(Status.NOTOWN, -1);
+                if (user.Gold < slimeFeeder.Cost) return new(Status.NOTENOUGHGOLD, null);
+                if (user.Id != slimeFeeder.OwnerId) return new(Status.NOTOWN, null);
 
                 result = SlimeService.FeedSlime(slimeFeeder);
 
@@ -132,7 +132,7 @@ namespace Server.Services
 
                 return result;
             }
-            return new(Status.OWNERNOTFOUND, -1);
+            return new(Status.OWNERNOTFOUND, null);
         }
 
 

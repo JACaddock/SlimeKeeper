@@ -20,8 +20,8 @@ const UserPage = () => {
             .then((response) => {
                 setUserAccount(response.data);
             })
-            .catch((e) => {
-                console.log("Something went wrong: " + e)
+            .catch(() => {
+                //console.log("Something went wrong: " + e)
             })
     }
 

@@ -55,6 +55,7 @@ namespace Server.Services
             if (slimeTrainer.OwnerId != slime.OwnerId) return new(Status.NOTOWN, null);
 
             SlimeStats stats = slime.SlimeStats;
+            if (stats.Health <= 0) return new(Status.SLIMEISDEAD, stats);
             if (stats.Stamina <= 0) return new(Status.NOSTAMINA, stats);
 
             int intensity = slimeTrainer.Intensity ?? 1;
@@ -124,14 +125,16 @@ namespace Server.Services
             return new(Status.SUCCESS, UpdateStatus(slime).SlimeStats);
         }
 
-        public Tuple<Status, int> FeedSlime(SlimeFeeder slimeFeeder)
+        public Tuple<Status, SlimeStats?> FeedSlime(SlimeFeeder slimeFeeder)
         {
             Slime? slime = SlimeRepository.GetById(slimeFeeder.SlimeId);
-            if (slime == null) return new(Status.SLIMENOTFOUND, -1);
+            if (slime == null) return new(Status.SLIMENOTFOUND, null);
 
-            if (slimeFeeder.OwnerId != slime.OwnerId) return new(Status.NOTOWN, -1);
+            if (slimeFeeder.OwnerId != slime.OwnerId) return new(Status.NOTOWN, null);
 
             SlimeStats stats = slime.SlimeStats;
+            if (stats.Health <= 0) return new(Status.SLIMEISDEAD, stats);
+
             stats.Hunger = Math.Min(stats.MaxHunger, stats.Hunger + slimeFeeder.Food);
             if (stats.Hunger >= stats.MaxHunger)
             {
@@ -139,7 +142,7 @@ namespace Server.Services
             }
             slime.SlimeStats = stats;
 
-            return new(Status.SUCCESS, UpdateStatus(slime).SlimeStats.Hunger);
+            return new(Status.SUCCESS, UpdateStatus(slime).SlimeStats);
         }
 
         public Slime? UpdateSlime(SlimeEditable updatedSlime)
@@ -190,22 +193,25 @@ namespace Server.Services
 
         private Slime UpdateStatus(Slime slime)
         {
-            DateTime now = DateTime.UtcNow;
-            TimeSpan timeElapsed = now - slime.LastUpdated;
-
-            int hungerDecrease = (int)(timeElapsed.TotalMinutes / 10);
-            int staminaRegain = (int)(timeElapsed.TotalMinutes / 5);
-            int ageIncrease = (int)(timeElapsed.TotalMinutes / 60);
-
             SlimeStats slimeStats = slime.SlimeStats;
+            if (slimeStats.Health > 0)
+            {
+                DateTime now = DateTime.UtcNow;
+                TimeSpan timeElapsed = now - slime.LastUpdated;
 
-            slimeStats.Hunger = Math.Max(0, slimeStats.Hunger - hungerDecrease);
-            slimeStats.Stamina = Math.Min(slimeStats.MaxStamina, slimeStats.Stamina + staminaRegain);
-            slime.SlimeStats = slimeStats;
-            slime.Age += ageIncrease;
-            slime.LastUpdated = now;
+                int hungerDecrease = (int)(timeElapsed.TotalMinutes / 10);
+                int staminaRegain = (int)(timeElapsed.TotalMinutes / 5);
+                int ageIncrease = (int)(timeElapsed.TotalMinutes / 60);
 
-            SlimeRepository.Update(slime);
+
+                slimeStats.Hunger = Math.Max(0, slimeStats.Hunger - hungerDecrease);
+                slimeStats.Stamina = Math.Min(slimeStats.MaxStamina, slimeStats.Stamina + staminaRegain);
+                slime.SlimeStats = slimeStats;
+                slime.Age += ageIncrease;
+                slime.LastUpdated = now;
+
+                SlimeRepository.Update(slime);
+            }
             return slime;
         }
 

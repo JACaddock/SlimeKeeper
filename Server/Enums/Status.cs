@@ -8,6 +8,7 @@
         OWNERNOTFOUND,
         SLIMENOTFOUND,
         NOTENOUGHGOLD,
+        SLIMEISDEAD,
         STATATCAP
     }
 }

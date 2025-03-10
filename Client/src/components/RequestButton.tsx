@@ -15,12 +15,12 @@ const RequestButton = ({ text, isDisabled, path, request, sendResponse, classNam
     function handleRequestClick() {
         axios.post(path, request)
         .then((response) => {
-            console.log(response.status);
-            console.log(response.data);
+            //console.log(response.status);
+            //console.log(response.data);
             sendResponse(response);
         })
-        .catch((error) => {
-            console.log(error);
+        .catch(() => {
+            //console.log(error);
         })
     }
 

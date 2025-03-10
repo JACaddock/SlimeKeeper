@@ -27,11 +27,11 @@ const SlimePage = () => {
                         setUsername(responseY.data.username);
                     })
                     .catch(() => {
-                        console.log("Could not find the owner");
+                        //console.log("Could not find the owner");
                     })
             })
-            .catch((e) => {
-                console.log("Something went wrong: " + e);
+            .catch(() => {
+                //console.log("Something went wrong: " + e);
             })
     }
 

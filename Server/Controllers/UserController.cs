@@ -97,6 +97,7 @@ namespace Server.Controllers
             {
                 Status.SUCCESS => Ok(result.Item2),
                 Status.NOSTAMINA => BadRequest("Not enough stamina"),
+                Status.SLIMEISDEAD => BadRequest("Slime is dead"),
                 Status.NOTOWN => BadRequest("Slime is not owned by you"),
                 Status.OWNERNOTFOUND => NotFound("User not found"),
                 Status.SLIMENOTFOUND => NotFound("Slime not found"),
@@ -108,11 +109,12 @@ namespace Server.Controllers
         [HttpPost("Feed")]
         public IActionResult FeedSlime([FromBody] SlimeFeeder slimeFeeder)
         {
-            Tuple<Status, int> result = UserService.FeedSlime(slimeFeeder);
+            Tuple<Status, SlimeStats?> result = UserService.FeedSlime(slimeFeeder);
             return result.Item1 switch
             {
                 Status.SUCCESS => Ok(result.Item2),
                 Status.NOSTAMINA => BadRequest("Not enough stamina"),
+                Status.SLIMEISDEAD => BadRequest("Slime is dead"),
                 Status.NOTOWN => BadRequest("Slime is not owned by you"),
                 Status.OWNERNOTFOUND => NotFound("User not found"),
                 Status.SLIMENOTFOUND => NotFound("Slime not found"),

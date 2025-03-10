@@ -17,13 +17,8 @@ interface Props {
 const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats }: Props) => {
     const { hasEnoughGold, changeGold } = useAccount();
 
-    function handleTrainResponse(response: AxiosResponse) {
+    function handleRequestResponse(response: AxiosResponse) {
         setSlimeStats(response.data);
-        changeGold(-200);
-    }
-
-    function handleFeedResponse(response: AxiosResponse) {
-        setSlimeStats({ ...slimeStats, hunger: response.data })
         changeGold(-200);
     }
 
@@ -39,14 +34,14 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats }
                     (<><RequestButton
                         className="stats-button"
                         path="/api/user/train/" text="- 200G / 1 Stamina"
-                        isDisabled={!hasEnoughGold(200)}
-                        sendResponse={handleTrainResponse}
+                        isDisabled={!hasEnoughGold(200) || slimeStats.health <= 0}
+                        sendResponse={handleRequestResponse}
                         request={{
                             training: TrainingType.HEALTH, cost: 200,
                             slimeid: slimeid, ownerid: userid,
                         }}
                     />
-                        <p className="text-start">{slimeStats.healthTraining * 100}%</p>
+                        <p className="text-start">{Math.trunc(slimeStats.healthTraining * 100)}%</p>
                     </>)
                     : <></>}
             </div>
@@ -58,14 +53,14 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats }
                     (<><RequestButton
                         className="stats-button"
                         path="/api/user/train/" text="- 200G / 1 Stamina"
-                        isDisabled={!hasEnoughGold(200)}
-                        sendResponse={handleTrainResponse}
+                        isDisabled={!hasEnoughGold(200) || slimeStats.health <= 0}
+                        sendResponse={handleRequestResponse}
                         request={{
                             training: TrainingType.STAMINA, cost: 200,
                             slimeid: slimeid, ownerid: userid,
                         }}
                     />
-                        <p className="text-start">{slimeStats.staminaTraining * 100}%</p>
+                        <p className="text-start">{Math.trunc(slimeStats.staminaTraining * 100)}%</p>
                     </>)
                     : <></>}
             </div>
@@ -77,14 +72,14 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats }
                     (<><RequestButton
                         className="stats-button"
                         path="/api/user/train/" text="- 200G / 1 Stamina"
-                        isDisabled={!hasEnoughGold(200)}
-                        sendResponse={handleTrainResponse}
+                        isDisabled={!hasEnoughGold(200) || slimeStats.health <= 0}
+                        sendResponse={handleRequestResponse}
                         request={{
                             training: TrainingType.HUNGER, cost: 200,
                             slimeid: slimeid, ownerid: userid,
                         }}
                     />
-                        <p className="text-start">{slimeStats.hungerTraining * 100}%</p>
+                        <p className="text-start">{Math.trunc(slimeStats.hungerTraining * 100)}%</p>
                     </>)
                     : <></>}
             </div>
@@ -96,14 +91,14 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats }
                     (<><RequestButton
                         className="stats-button"
                         path="/api/user/train/" text="- 200G / 1 Stamina"
-                        isDisabled={!hasEnoughGold(200)}
-                        sendResponse={handleTrainResponse}
+                        isDisabled={!hasEnoughGold(200) || slimeStats.health <= 0}
+                        sendResponse={handleRequestResponse}
                         request={{
                             training: TrainingType.STRENGTH, cost: 200,
                             slimeid: slimeid, ownerid: userid,
                         }}
                     />
-                        <p className="text-start">{slimeStats.strengthTraining * 100}%</p>
+                        <p className="text-start">{Math.trunc(slimeStats.strengthTraining * 100)}%</p>
                     </>)
                     : <></>}
             </div>
@@ -115,14 +110,14 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats }
                     (<><RequestButton
                         className="stats-button"
                         path="/api/user/train/" text="- 200G / 1 Stamina"
-                        isDisabled={!hasEnoughGold(200)}
-                        sendResponse={handleTrainResponse}
+                        isDisabled={!hasEnoughGold(200) || slimeStats.health <= 0}
+                        sendResponse={handleRequestResponse}
                         request={{
                             training: TrainingType.SPEED, cost: 200,
                             slimeid: slimeid, ownerid: userid,
                         }}
                     />
-                        <p className="text-start">{slimeStats.speedTraining * 100}%</p>
+                        <p className="text-start">{Math.trunc(slimeStats.speedTraining * 100)}%</p>
                     </>)
                     : <></>}
             </div>
@@ -131,8 +126,8 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats }
                     <RequestButton
                         className="stats-button extra-padding"
                         path="/api/user/feed/" text="Feed - 200G / + 2 Hunger"
-                        isDisabled={!hasEnoughGold(200)}
-                        sendResponse={handleFeedResponse}
+                        isDisabled={!hasEnoughGold(200) || slimeStats.health <= 0}
+                        sendResponse={handleRequestResponse}
                         request={{ food: 2, cost: 200, slimeid: slimeid, ownerid: userid }}
                     />
                 </div>)

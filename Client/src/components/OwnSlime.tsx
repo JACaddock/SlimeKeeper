@@ -36,10 +36,10 @@ const OwnSlime = ({ slime, userid, setSlime }: Props) => {
                             setSlime(response.data);
                             setSlimeName(response.data.name);
                         }
-                        console.log(response)
+                        //console.log(response)
                     })
-                    .catch((e) => {
-                        console.log("Something went wrong: " + e);
+                    .catch(() => {
+                        //console.log("Something went wrong: " + e);
                     })
             }
         }
@@ -51,7 +51,7 @@ const OwnSlime = ({ slime, userid, setSlime }: Props) => {
     }
 
     function handleNameChange(event: React.ChangeEvent<HTMLInputElement>) {
-        console.log(event.target);
+        //console.log(event.target);
         setSlimeName(event.target.value);
         setNameWidth(event.target.value.length + 2);
         if (event.target.value.includes(" ")) {
@@ -93,7 +93,7 @@ const OwnSlime = ({ slime, userid, setSlime }: Props) => {
 
     return (
         <div className="flex-column">
-            {editableName}
+            {slime.slimeStats?.health ?? 1 > 0 ? editableName : <h2>{slime?.name}</h2>}
             {invalidInput ? <p style={{ color: "red", fontStyle: "italic" }}>One or more of your inputs are invalid!</p> : <></>}
             <div className="image-wrapper">
                 {parse(slime.svg)}
@@ -101,9 +101,15 @@ const OwnSlime = ({ slime, userid, setSlime }: Props) => {
             <p>{slime.name} is a {slime.age} year old {slime.colour} coloured slime with a size of {slime.size}</p>
             <p>{slime.name} is owned by <Link to={"/user/" + slime.ownerId}>you</Link> and is worth {slime.price}</p>
             <div className="flex-column salebox-container">
-                <p>{slime.isOnMarket ? slime.name + " is for sale" : slime.name + " is not for sale"}</p>
-                <input type="checkbox" id="isOnMarket" name="isOnMarket"
-                    checked={slime.isOnMarket} onChange={handleIsOnMarketChange} />
+                {slime.slimeStats?.health ?? 1 > 0 ?
+                    (<><p>{slime.isOnMarket ? slime.name + " is for sale" : slime.name + " is not for sale"}</p>
+                    <input type="checkbox" id="isOnMarket" name="isOnMarket"
+                        checked={slime.isOnMarket} onChange={handleIsOnMarketChange} /></>)
+                    :
+                    (
+                        <p>{slime.name} is dead</p>
+                    )
+                }
             </div>
         </div>
     );
