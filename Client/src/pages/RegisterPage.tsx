@@ -1,35 +1,11 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
 import InputItem from '../components/InputItem';
 import useForm from '../hooks/useForm';
-import { UserCredentials, UserUnique } from '../types/User';
+import { UserCredentials } from '../types/User';
 import { useAuth } from '../hooks/useAuth';
 
 const RegisterPage = () => {
     const { registerUser } = useAuth();
     const { handleInputUpdate, handleSubmit } = useForm();
-    const [users, setUsers] = useState([]);
-
-    useEffect(() => {
-        getAllUsers()
-    }, []);
-
-    function getAllUsers() {
-        axios.get("/api/user/")
-            .then((response) => {
-                setUsers(response.data)
-            })
-    };
-
-    const userdisplay = users.length <= 0
-        ? <p>Unable to load Users</p>
-        : <>{users.map((user: UserUnique) =>
-            <div key={user.username} className="flex">
-                <p>{user.username}</p>
-                <p>{user.email}</p>
-            </div>
-        )}
-        </> 
 
     function handleRegister(form: UserCredentials) {
         registerUser(form.email!, form.username!, form.password)
@@ -55,9 +31,6 @@ const RegisterPage = () => {
                     <button type="submit">Register</button>
                 </div>
             </form>
-            <div>
-                {userdisplay}
-            </div>
         </main>
     );
 };
