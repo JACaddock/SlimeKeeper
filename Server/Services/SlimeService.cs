@@ -56,7 +56,7 @@ namespace Server.Services
 
             SlimeStats stats = slime.SlimeStats;
             if (stats.Health <= 0) return new(Status.SLIMEISDEAD, stats);
-            if (stats.Stamina <= 0) return new(Status.NOSTAMINA, stats);
+            if (stats.Stamina < 1) return new(Status.NOSTAMINA, stats);
 
             int intensity = slimeTrainer.Intensity ?? 1;
 
