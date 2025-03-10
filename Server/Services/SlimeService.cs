@@ -119,6 +119,8 @@ namespace Server.Services
             }
             stats.Stamina -= 1;
             slime.SlimeStats = stats;
+            slime.Price = CalculatePrice(stats, (int)stats.Rarity);
+
             return new(Status.SUCCESS, UpdateStatus(slime).SlimeStats);
         }
 
@@ -131,6 +133,10 @@ namespace Server.Services
 
             SlimeStats stats = slime.SlimeStats;
             stats.Hunger = Math.Min(stats.MaxHunger, stats.Hunger + slimeFeeder.Food);
+            if (stats.Hunger >= stats.MaxHunger)
+            {
+                stats.Health = Math.Max(0, stats.Health - slimeFeeder.Food);
+            }
             slime.SlimeStats = stats;
 
             return new(Status.SUCCESS, UpdateStatus(slime).SlimeStats.Hunger);
@@ -189,12 +195,14 @@ namespace Server.Services
 
             int hungerDecrease = (int)(timeElapsed.TotalMinutes / 10);
             int staminaRegain = (int)(timeElapsed.TotalMinutes / 5);
+            int ageIncrease = (int)(timeElapsed.TotalMinutes / 60);
 
             SlimeStats slimeStats = slime.SlimeStats;
 
             slimeStats.Hunger = Math.Max(0, slimeStats.Hunger - hungerDecrease);
             slimeStats.Stamina = Math.Min(slimeStats.MaxStamina, slimeStats.Stamina + staminaRegain);
             slime.SlimeStats = slimeStats;
+            slime.Age += ageIncrease;
             slime.LastUpdated = now;
 
             SlimeRepository.Update(slime);
