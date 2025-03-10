@@ -44,9 +44,15 @@ const SlimePage = () => {
             }
                 {slime.slimeStats
                 ? (<SlimeStatsBlock 
-                        slimeStats={slime.slimeStats}
-                        ownerid={slime.ownerId} userid={user?.id} slimeid={slime.id}
-                        setSlimeStats={(slimeStats) => { setSlime({ ...slime, slimeStats: slimeStats }) }}
+                    slimeStats={slime.slimeStats}
+                    ownerid={slime.ownerId} userid={user?.id} slimeid={slime.id}
+                    setSlimeStats={(slimeStats) => {
+                        setSlime({
+                            ...slime, slimeStats: slimeStats,
+                            price: ((((100 + (slimeStats.maxHealth + slimeStats.maxHunger)) * slimeStats.strength)
+                                * slimeStats.speed) * slimeStats.maxStamina) * (slimeStats.rarity + 1)
+                        })
+                    }}
                     />)
                 : (<></>)
             }
