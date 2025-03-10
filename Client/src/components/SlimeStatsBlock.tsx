@@ -34,7 +34,7 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats }
                     (<><RequestButton
                         className="stats-button"
                         path="/api/user/train/" text="- 200G / 1 Stamina"
-                        isDisabled={!hasEnoughGold(200) || slimeStats.health <= 0}
+                        isDisabled={!hasEnoughGold(200) || slimeStats.health <= 0 || slimeStats.stamina < 1}
                         sendResponse={handleRequestResponse}
                         request={{
                             training: TrainingType.HEALTH, cost: 200,
@@ -53,7 +53,7 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats }
                     (<><RequestButton
                         className="stats-button"
                         path="/api/user/train/" text="- 200G / 1 Stamina"
-                        isDisabled={!hasEnoughGold(200) || slimeStats.health <= 0}
+                        isDisabled={!hasEnoughGold(200) || slimeStats.health <= 0 || slimeStats.stamina < 1}
                         sendResponse={handleRequestResponse}
                         request={{
                             training: TrainingType.STAMINA, cost: 200,
@@ -72,7 +72,7 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats }
                     (<><RequestButton
                         className="stats-button"
                         path="/api/user/train/" text="- 200G / 1 Stamina"
-                        isDisabled={!hasEnoughGold(200) || slimeStats.health <= 0}
+                        isDisabled={!hasEnoughGold(200) || slimeStats.health <= 0 || slimeStats.stamina < 1}
                         sendResponse={handleRequestResponse}
                         request={{
                             training: TrainingType.HUNGER, cost: 200,
@@ -91,7 +91,7 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats }
                     (<><RequestButton
                         className="stats-button"
                         path="/api/user/train/" text="- 200G / 1 Stamina"
-                        isDisabled={!hasEnoughGold(200) || slimeStats.health <= 0}
+                        isDisabled={!hasEnoughGold(200) || slimeStats.health <= 0 || slimeStats.stamina < 1}
                         sendResponse={handleRequestResponse}
                         request={{
                             training: TrainingType.STRENGTH, cost: 200,
@@ -110,7 +110,7 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats }
                     (<><RequestButton
                         className="stats-button"
                         path="/api/user/train/" text="- 200G / 1 Stamina"
-                        isDisabled={!hasEnoughGold(200) || slimeStats.health <= 0}
+                        isDisabled={!hasEnoughGold(200) || slimeStats.health <= 0 || slimeStats.stamina < 1}
                         sendResponse={handleRequestResponse}
                         request={{
                             training: TrainingType.SPEED, cost: 200,
