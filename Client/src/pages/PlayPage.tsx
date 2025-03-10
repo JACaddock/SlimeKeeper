@@ -13,7 +13,7 @@ const PlayPage = () => {
 
     function handleEarnGold() {
         if (user != null) {
-            axios.post("/api/user/earn/", { id: user.id })
+            axios.post("/api/user/earn/?id=" + user.id)
                 .then((response) => {
                     if (response.data) {
                         changeGold(1000);

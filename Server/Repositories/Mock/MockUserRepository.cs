@@ -68,7 +68,20 @@ namespace Server.Repositories.Mock
         {
             Users.Add(user);
             Console.WriteLine(user.Username);
-            return true;
+
+            try
+            {
+                User validateExists = Users[user.Id];
+                if (validateExists.Username == user.Username)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public bool Update(User user)

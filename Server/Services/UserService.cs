@@ -84,10 +84,10 @@ namespace Server.Services
             return null;
         }
 
-        public User CreateNewUser(string username, string email, string password)
+        private User CreateNewUser(string username, string email, string password)
         {
             Random r = new();
-            int rInt = r.Next(6);
+            int rInt = r.Next(1, 6);
             int id = UserRepository.GetAll().Count;
 
             return new(
@@ -142,6 +142,7 @@ namespace Server.Services
             if (user != null)
             {
                 user.Gold += 1000;
+                Console.WriteLine(user.Username + " - Gold: " + user.Gold);
                 UserRepository.Update(user);
                 return true;
             }
