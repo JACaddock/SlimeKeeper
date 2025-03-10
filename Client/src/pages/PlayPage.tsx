@@ -39,7 +39,7 @@ const PlayPage = () => {
                     )
                 })}
             </div>
-            <button onClick={handleEarnGold}>Click to Earn Gold!</button>
+            <button type="button" onClick={handleEarnGold}>Click to Earn Gold!</button>
         </main>
   );
 }

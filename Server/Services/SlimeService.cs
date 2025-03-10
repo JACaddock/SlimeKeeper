@@ -210,6 +210,11 @@ namespace Server.Services
                 slime.Age += ageIncrease;
                 slime.LastUpdated = now;
 
+                if (slimeStats.Hunger == 0)
+                {
+                    slimeStats.Health = Math.Max(0, slimeStats.Health - hungerDecrease);
+                }
+
                 SlimeRepository.Update(slime);
             }
             return slime;
