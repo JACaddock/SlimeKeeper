@@ -98,7 +98,7 @@ const OwnSlime = ({ slime, userid, setSlime }: Props) => {
             <div className="image-wrapper">
                 {parse(slime.svg)}
             </div>
-            <p>{slime.name} is a {slime.age} year old {slime.colour} coloured slime with a size of {slime.size}</p>
+            <p>{slime.name} is a {Math.trunc(slime.age)} year old {slime.colour} coloured slime with a size of {slime.size}</p>
             <p>{slime.name} is owned by <Link to={"/user/" + slime.ownerId}>you</Link> and is worth {slime.price}</p>
             <div className="flex-column salebox-container">
                 {slime.slimeStats?.health ?? 1 > 0 ?

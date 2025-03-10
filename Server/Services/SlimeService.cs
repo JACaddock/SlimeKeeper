@@ -199,9 +199,9 @@ namespace Server.Services
                 DateTime now = DateTime.UtcNow;
                 TimeSpan timeElapsed = now - slime.LastUpdated;
 
-                int hungerDecrease = (int)(timeElapsed.TotalMinutes / 10);
-                int staminaRegain = (int)(timeElapsed.TotalMinutes / 5);
-                int ageIncrease = (int)(timeElapsed.TotalMinutes / 60);
+                double hungerDecrease = (timeElapsed.TotalMinutes / 10);
+                double staminaRegain = (timeElapsed.TotalMinutes / 5);
+                double ageIncrease = (timeElapsed.TotalMinutes / 60);
 
 
                 slimeStats.Hunger = Math.Max(0, slimeStats.Hunger - hungerDecrease);
@@ -209,6 +209,7 @@ namespace Server.Services
                 slime.SlimeStats = slimeStats;
                 slime.Age += ageIncrease;
                 slime.LastUpdated = now;
+                slime.Svg = SlimeSvg.PrepareSvg(slime);
 
                 if (slimeStats.Hunger == 0)
                 {

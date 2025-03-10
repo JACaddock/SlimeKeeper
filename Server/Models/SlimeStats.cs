@@ -8,15 +8,15 @@ namespace Server.Models
         int speed, int speedCap, Rarity rarity = Rarity.COMMON)
     {
         public int Id { get; set; } = id;
-        public int Health { get; set; } = health;
+        public double Health { get; set; } = health;
         public int MaxHealth { get; set; } = health;
         public int HealthCap { get; set; } = healthCap;
         public double HealthTraining { get; set; } = 0.0;
-        public int Stamina { get; set; } = stamina;
+        public double Stamina { get; set; } = stamina;
         public int MaxStamina { get; set; } = stamina;
         public int StaminaCap { get; set; } = staminaCap;
         public double StaminaTraining { get; set; } = 0.0;
-        public int Hunger { get; set; } = hunger / 2;
+        public double Hunger { get; set; } = hunger / 2;
         public int MaxHunger { get; set; } = hunger;
         public int HungerCap { get; set; } = hungerCap;
         public double HungerTraining { get; set; } = 0.0;

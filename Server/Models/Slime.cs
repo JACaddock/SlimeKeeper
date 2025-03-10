@@ -6,7 +6,7 @@
         public string Name { get; set; } = name;
         public int Size { get; set; } = size;
         public string Color { get; set; } = color;
-        public int Age { get; set; } = 0;
+        public double Age { get; set; } = 0;
         public bool IsOnMarket { get; set; } = isonmarket;
         public int Price { get; set; } = price;
         public int? OwnerId { get; set; } = ownerid;

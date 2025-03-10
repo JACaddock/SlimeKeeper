@@ -28,7 +28,7 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats }
             <p>{getRarity(slimeStats.rarity)}</p>
             <div className={userid == ownerid ? "stats-block" : ""}>
                 <p style={slimeStats.maxHealth >= slimeStats.healthCap ? { color: "red" } : {}}>
-                    Health: {slimeStats.health} / {slimeStats.maxHealth}
+                    Health: {Math.trunc(slimeStats.health)} / {slimeStats.maxHealth}
                 </p>
                 {userid != null && userid == ownerid && slimeStats.maxHealth < slimeStats.healthCap ?
                     (<><RequestButton
@@ -47,7 +47,7 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats }
             </div>
             <div className={userid == ownerid ? "stats-block" : ""}>
                 <p style={slimeStats.maxStamina >= slimeStats.staminaCap ? { color: "red" } : {}}>
-                    Stamina: {slimeStats.stamina} / {slimeStats.maxStamina}
+                    Stamina: {Math.trunc(slimeStats.stamina)} / {slimeStats.maxStamina}
                 </p>
                 {userid != null && userid == ownerid && slimeStats.maxStamina < slimeStats.staminaCap ?
                     (<><RequestButton
@@ -66,7 +66,7 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats }
             </div>
             <div className={userid == ownerid ? "stats-block" : ""}>
                 <p style={slimeStats.maxHunger >= slimeStats.hungerCap ? { color: "red" } : {}}>
-                    Hunger: {slimeStats.hunger} / {slimeStats.maxHunger}
+                    Hunger: {Math.trunc(slimeStats.hunger)} / {slimeStats.maxHunger}
                 </p>
                 {userid != null && userid == ownerid && slimeStats.maxHunger < slimeStats.hungerCap ?
                     (<><RequestButton
