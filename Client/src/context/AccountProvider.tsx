@@ -15,13 +15,19 @@ const AccountProvider = ({ children }: { children: React.ReactNode }) => {
                     setUserAccount(response.data);
                 })
         }
-    });
+    }, [user]);
 
     const hasEnoughGold = (amount: number) => {
         if (userAccount) {
             return userAccount.gold >= amount;
         }
         return false;
+    }
+
+    const changeGold = (amount: number) => {
+        if (userAccount) {
+            setUserAccount({ ...userAccount, gold: userAccount.gold + amount });
+        }
     }
 
     const isAFriend = (id: number) => {
@@ -31,15 +37,15 @@ const AccountProvider = ({ children }: { children: React.ReactNode }) => {
         return false;
     }
 
-    const getGold = () => userAccount?.gold;
-    const isAdmin = () => userAccount?.is_admin;
-    const getSlimes = () => userAccount?.slimes;
-    const getFriends = () => userAccount?.friends;
+    const getGold = () => userAccount?.gold ?? 0;
+    const isAdmin = () => userAccount?.is_admin ?? false;
+    const getSlimes = () => userAccount?.slimes ?? [];
+    const getFriends = () => userAccount?.friends ?? [];
 
 
     return (
         <AccountContext.Provider
-            value={{ hasEnoughGold, isAFriend, getGold, isAdmin, getSlimes, getFriends }}
+            value={{ hasEnoughGold, changeGold, isAFriend, getGold, isAdmin, getSlimes, getFriends }}
         >
             {children}
         </AccountContext.Provider>

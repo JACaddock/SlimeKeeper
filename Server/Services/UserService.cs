@@ -1,4 +1,5 @@
 ﻿using Server.DTO;
+using Server.Enums;
 using Server.Models;
 using Server.Repositories;
 
@@ -95,6 +96,45 @@ namespace Server.Services
                 [.. Enumerable.Repeat(-1, rInt)]
                 );
         }
+
+
+        public Tuple<Status, SlimeStats?> TrainSlime(SlimeTrainer slimeTrainer)
+        {
+            Tuple<Status, SlimeStats?> result;
+            User? user = UserRepository.GetById(slimeTrainer.OwnerId);
+            if (user != null)
+            {
+                if (user.Gold < slimeTrainer.Cost) return new(Status.NOTENOUGHGOLD, null);
+                if (user.Id != slimeTrainer.OwnerId) return new(Status.NOTOWN, null);
+
+                result = SlimeService.TrainSlime(slimeTrainer);
+
+                if (result.Item1 == Status.SUCCESS) user.Gold -= slimeTrainer.Cost;
+
+                return result;
+            }
+            return new(Status.OWNERNOTFOUND, null);
+        }
+
+
+        public Tuple<Status, int> FeedSlime(SlimeFeeder slimeFeeder)
+        {
+            Tuple<Status, int> result;
+            User? user = UserRepository.GetById(slimeFeeder.OwnerId);
+            if (user != null)
+            {
+                if (user.Gold < slimeFeeder.Cost) return new(Status.NOTENOUGHGOLD, -1);
+                if (user.Id != slimeFeeder.OwnerId) return new(Status.NOTOWN, -1);
+
+                result = SlimeService.FeedSlime(slimeFeeder);
+
+                if (result.Item1 == Status.SUCCESS) user.Gold -= slimeFeeder.Cost;
+
+                return result;
+            }
+            return new(Status.OWNERNOTFOUND, -1);
+        }
+
 
         public bool EarnGold(int id)
         {

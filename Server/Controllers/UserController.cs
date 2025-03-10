@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Server.DTO;
+using Server.Enums;
 using Server.Models;
 using Server.Services;
 
@@ -88,6 +89,38 @@ namespace Server.Controllers
             return BadRequest("Username/Password is incorrect");
         }
 
+        [HttpPost("Train")]
+        public IActionResult TrainSlime([FromBody] SlimeTrainer slimeTrainer)
+        {
+            Tuple<Status, SlimeStats?> result = UserService.TrainSlime(slimeTrainer);
+            return result.Item1 switch
+            {
+                Status.SUCCESS => Ok(result.Item2),
+                Status.NOSTAMINA => BadRequest("Not enough stamina"),
+                Status.NOTOWN => BadRequest("Slime is not owned by you"),
+                Status.OWNERNOTFOUND => NotFound("User not found"),
+                Status.SLIMENOTFOUND => NotFound("Slime not found"),
+                _ => BadRequest("You don't have enough Gold"),
+            };
+        }
+
+
+        [HttpPost("Feed")]
+        public IActionResult FeedSlime([FromBody] SlimeFeeder slimeFeeder)
+        {
+            Tuple<Status, int> result = UserService.FeedSlime(slimeFeeder);
+            return result.Item1 switch
+            {
+                Status.SUCCESS => Ok(result.Item2),
+                Status.NOSTAMINA => BadRequest("Not enough stamina"),
+                Status.NOTOWN => BadRequest("Slime is not owned by you"),
+                Status.OWNERNOTFOUND => NotFound("User not found"),
+                Status.SLIMENOTFOUND => NotFound("Slime not found"),
+                _ => BadRequest("You don't have enough Gold"),
+            };
+        }
+
+
         [HttpPost("Earn")]
         public IActionResult EarnGold([FromQuery] int id)
         {
@@ -103,7 +136,7 @@ namespace Server.Controllers
         {
             if (UserService.PurchaseSlime(userTransaction))
             {
-                Ok("Slime purchase succeeded");
+                return Ok("Slime purchase succeeded");
             }
             return BadRequest("Slime purchase failed");            
         }

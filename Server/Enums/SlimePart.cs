@@ -1,6 +1,6 @@
 ﻿namespace Server.Enums
 {
-    enum SlimePart
+    public enum SlimePart
     {
         BODY,
         MOUTH,

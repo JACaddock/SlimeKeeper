@@ -1,13 +1,13 @@
 @media (max-width: 1450px) {
     .list-container {
-        grid-template-columns: 250px 250px 250px 250px;
+        grid-template-columns: auto auto auto auto;
         column-gap: 1em;
     }
 }
 
 @media (max-width: 1300px) {
     .market-container {
-        grid-template-columns: 50px 150px 150px 150px 150px 50px;
+        grid-template-columns: 50px auto auto auto auto 50px;
         column-gap: 1em;
     }
 
@@ -43,7 +43,7 @@
     }
 
     .market-container {
-        grid-template-columns: 50px 150px 150px 50px;
+        grid-template-columns: 50px auto auto 50px;
         column-gap: 10px;
     }
 
@@ -75,7 +75,7 @@
     }
 
     .market-container {
-        grid-template-columns: 50px 150px 50px;
+        grid-template-columns: 50px auto 50px;
     }
 
     .list-container {

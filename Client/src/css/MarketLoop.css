@@ -1,8 +1,9 @@
 .market-container {
     display: grid;
-    grid-template-columns: 75px 150px 150px 150px 150px 150px 150px 75px;
+    grid-template-columns: 75px auto auto auto auto auto auto 75px;
     column-gap: 2em;
     align-items: center;
+    width: 100%;
 }
 
 .market-item {

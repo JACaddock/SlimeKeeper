@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Server.DTO;
+using Server.Enums;
 using Server.Models;
 using Server.Services;
 
@@ -41,8 +42,10 @@ namespace Server.Controllers
             return Ok(SlimeService.AddSlime(slime));
         }*/
 
+
+
         [HttpPost("Update")]
-        public IActionResult UpdateSlime([FromBody] EditableSlime updatedSlime)
+        public IActionResult UpdateSlime([FromBody] SlimeEditable updatedSlime)
         {
             Slime? slime = SlimeService.UpdateSlime(updatedSlime);
             if (slime != null)
