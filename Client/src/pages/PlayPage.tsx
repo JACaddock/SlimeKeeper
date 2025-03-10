@@ -1,25 +1,14 @@
-import { useState, useEffect } from "react";
 import { useAuth } from "../hooks/useAuth";
-import { UserAccount } from "../types/User";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import parse from "html-react-parser";
+import { useAccount } from "../hooks/useAccount";
 
 
 const PlayPage = () => {
     const navigate = useNavigate();
-    const [userAccount, setUserAccount] = useState<UserAccount>();
+    const { changeGold, getGold, getSlimes } = useAccount();
     const { user } = useAuth();
-
-    useEffect(() => {
-        axios.get("/api/user/account/" + user?.id)
-            .then((response) => {
-                setUserAccount(response.data);
-            })
-            .catch((e) => {
-                console.log("Could not find account details: " + e);
-            })
-    }, [user]);
 
 
     function handleEarnGold() {
@@ -27,9 +16,7 @@ const PlayPage = () => {
             axios.post("/api/user/earn/", { id: user.id })
                 .then((response) => {
                     if (response.data) {
-                        if (userAccount) {
-                            setUserAccount({ ...userAccount, gold: userAccount.gold + 1000 });
-                        }
+                        changeGold(1000);
                     }
                 })
         }
@@ -38,30 +25,21 @@ const PlayPage = () => {
 
     return (
         <main>
-            {userAccount? (
-                <div>
-                    <p>You have {userAccount.gold} gold {userAccount.gold > 1000 ? ("...You should spend some!"): ("...Better save up some more...")}</p>
-                    <p>You have {userAccount.slimes.length} slimes.</p>
-                    <div className="flex">
-                        {userAccount.slimes.map((slime) => {
-                            return (
-                                <div key={slime.id}>
-                                    <div onClick={() => { navigate("/slime/" + slime.id) }} key={slime.id} className="market-item image-wrapper">
-                                        {parse(slime.svg)}
-                                    </div>
-                                    <p>{slime.name}</p>
-                                </div>
-                            )
-                        })}
-                    </div>
-                    <button onClick={handleEarnGold}>Click to Earn Gold!</button>
-                </div>
-            ):
-            (
-                <div>
-                    <p>Sorry {user?.username}, We could not find your account details :(</p>
-                </div>
-            )}
+            <p>You have {getGold()} gold {getGold() > 1000 ? ("...You should spend some!"): ("...Better save up some more...")}</p>
+            <p>You have {getSlimes().length} slimes.</p>
+            <div className="flex">
+                {getSlimes().map((slime) => {
+                    return (
+                        <div key={slime.id}>
+                            <div onClick={() => { navigate("/slime/" + slime.id) }} key={slime.id} className="market-item image-wrapper">
+                                {parse(slime.svg)}
+                            </div>
+                            <p>{slime.name}</p>
+                        </div>
+                    )
+                })}
+            </div>
+            <button onClick={handleEarnGold}>Click to Earn Gold!</button>
         </main>
   );
 }

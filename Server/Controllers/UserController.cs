@@ -136,7 +136,7 @@ namespace Server.Controllers
         {
             if (UserService.PurchaseSlime(userTransaction))
             {
-                Ok("Slime purchase succeeded");
+                return Ok("Slime purchase succeeded");
             }
             return BadRequest("Slime purchase failed");            
         }

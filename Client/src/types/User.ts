@@ -23,11 +23,12 @@ export type UserAccount = {
 
 export type UserAccountContext = {
     hasEnoughGold: (amount: number) => boolean;
+    changeGold: (amount: number) => void;
     isAFriend: (id: number) => boolean;
-    getGold: () => number | undefined;
-    isAdmin: () => boolean | undefined;
-    getSlimes: () => Slime[] | undefined;
-    getFriends: () => number[] | undefined;
+    getGold: () => number;
+    isAdmin: () => boolean;
+    getSlimes: () => Slime[];
+    getFriends: () => number[];
 };
 
 export type UserCredentials = {

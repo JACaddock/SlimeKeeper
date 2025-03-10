@@ -3,9 +3,9 @@ import { useState, useEffect } from "react";
 import { Slime, UndefinedSlime } from "../types/Slime";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.tsx";
-import { getRarity } from "../utils/RarityStringUtil.ts";
 import OtherSlime from "../components/OtherSlime.tsx";
 import OwnSlime from "../components/OwnSlime.tsx";
+import SlimeStatsBlock from "../components/SlimeStatsBlock.tsx";
 
 
 const SlimePage = () => {
@@ -38,33 +38,17 @@ const SlimePage = () => {
 
     return (
         <main>
-            {slime ?
-            (
-                <div>
-                    {isLoggedIn() && user?.username == username && user != null
-                        ? (<OwnSlime slime={slime} userid={user.id} setSlime={setSlime}  />)
-                        : (<OtherSlime slime={slime} userid={user?.id} getSlime={getSlime} username={username} />)
-                    }
-                    {slime.slimeStats
-                        ?
-                        (<div className="flex-column margin-top-2em">
-                            <p>Health: {slime.slimeStats.health} / {slime.slimeStats.maxHealth}</p>
-                            <p>Stamina: {slime.slimeStats.stamina} / {slime.slimeStats.maxStamina}</p>
-                            <p>Hunger: {slime.slimeStats.hunger} / {slime.slimeStats.maxHunger}</p>
-                            <p>Strength: {slime.slimeStats.strength} | Speed: {slime.slimeStats.speed}</p>
-                            <p>{getRarity(slime.slimeStats.rarity)}</p>
-                        </div>)
-                        :
-                        (<>
-                        </>)
-                    }
-                </div>
-            ):
-            (
-                <div>
-                    <p>Could not find this slime :(</p>
-                </div>
-            )
+            {isLoggedIn() && user?.username == username && user != null
+                ? (<OwnSlime slime={slime} userid={user.id} setSlime={setSlime}  />)
+                : (<OtherSlime slime={slime} userid={user?.id} getSlime={getSlime} username={username} />)
+            }
+                {slime.slimeStats
+                ? (<SlimeStatsBlock 
+                        slimeStats={slime.slimeStats}
+                        ownerid={slime.ownerId} userid={user?.id} slimeid={slime.id}
+                        setSlimeStats={(slimeStats) => { setSlime({ ...slime, slimeStats: slimeStats }) }}
+                    />)
+                : (<></>)
             }
         </main>
     );

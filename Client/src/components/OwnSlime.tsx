@@ -92,30 +92,20 @@ const OwnSlime = ({ slime, userid, setSlime }: Props) => {
 
 
     return (
-        <main>
-            {slime ? (
-                <div className="flex-column">
-                    {editableName}
-                    <div className="image-wrapper">
-                        {parse(slime.svg)}
-                    </div>
-                    <p>{slime.name} is a {slime.age} year old {slime.colour} coloured slime with a size of {slime.size}</p>
-                    <p>{slime.name} is owned by <Link to={"/user/" + slime.ownerId}>you</Link> and is worth {slime.price}</p>
-                    <div className="flex-column salebox-container">
-                        <p>{slime.isOnMarket ? slime.name + " is for sale" : slime.name + " is not for sale"}</p>
-                        <input type="checkbox" id="isOnMarket" name="isOnMarket"
-                            checked={slime.isOnMarket} onChange={handleIsOnMarketChange} />
-                    </div>
-                    {invalidInput ? <p style={{ color: "red", fontStyle: "italic" }}>One or more of your inputs are invalid!</p> : <></>}
-                </div>
-            ) :
-                (
-                    <div>
-                        <p>Could not find this slime :(</p>
-                    </div>
-                )
-            }
-        </main>
+        <div className="flex-column">
+            {editableName}
+            {invalidInput ? <p style={{ color: "red", fontStyle: "italic" }}>One or more of your inputs are invalid!</p> : <></>}
+            <div className="image-wrapper">
+                {parse(slime.svg)}
+            </div>
+            <p>{slime.name} is a {slime.age} year old {slime.colour} coloured slime with a size of {slime.size}</p>
+            <p>{slime.name} is owned by <Link to={"/user/" + slime.ownerId}>you</Link> and is worth {slime.price}</p>
+            <div className="flex-column salebox-container">
+                <p>{slime.isOnMarket ? slime.name + " is for sale" : slime.name + " is not for sale"}</p>
+                <input type="checkbox" id="isOnMarket" name="isOnMarket"
+                    checked={slime.isOnMarket} onChange={handleIsOnMarketChange} />
+            </div>
+        </div>
     );
 }
 

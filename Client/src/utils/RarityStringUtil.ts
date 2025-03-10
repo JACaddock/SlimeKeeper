@@ -1,4 +1,4 @@
-import { Rarity } from "../types/Slime";
+import { Rarity } from "./Enums";
 
 export function getRarity(rarity: Rarity) {
     switch (rarity) {

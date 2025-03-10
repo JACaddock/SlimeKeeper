@@ -33,35 +33,25 @@ const OtherSlime = ({ slime, username, getSlime, userid }: Props) => {
     }
 
     return (
-        <main>
-            {slime ? (
-                <div className="flex-column">
-                    <h2>{slime.name}</h2>
-                    <div className="image-wrapper">
-                        {parse(slime.svg)}
-                    </div>
-                    <p>{slime.name} is a {slime.age} year old {slime.colour} coloured slime with a size of {slime.size}</p>
-                    <p>{slime.name} is owned by user <Link to={"/user/" + slime?.ownerId}>{username}</Link> and is worth {slime.price}</p>
-                    <div className="flex-column salebox-container">
-                        <p>{slime.isOnMarket ? slime.name + " is for sale" : slime.name + " is not for sale"}</p>
-                        {userid && slime.isOnMarket ?
-                            (
-                                <button disabled={!hasEnoughGold(slime.price)} onClick={handlePurchaseSlime}>Buy</button>
-                            ) :
-                            (
-                                <></>
-                            )
-                        }
-                    </div>
-                </div>
-            ) :
-                (
-                    <div>
-                        <p>Could not find this slime :(</p>
-                    </div>
-                )
-            }
-        </main>
+        <div className="flex-column">
+            <h2>{slime.name}</h2>
+            <div className="image-wrapper">
+                {parse(slime.svg)}
+            </div>
+            <p>{slime.name} is a {slime.age} year old {slime.colour} coloured slime with a size of {slime.size}</p>
+            <p>{slime.name} is owned by user <Link to={"/user/" + slime?.ownerId}>{username}</Link> and is worth {slime.price}</p>
+            <div className="flex-column salebox-container">
+                <p>{slime.isOnMarket ? slime.name + " is for sale" : slime.name + " is not for sale"}</p>
+                {userid != undefined && slime.isOnMarket ?
+                    (
+                        <button disabled={!hasEnoughGold(slime.price)} onClick={handlePurchaseSlime}>Buy</button>
+                    ) :
+                    (
+                        <></>
+                    )
+                }
+            </div>
+        </div>
     );
 }
 

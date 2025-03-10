@@ -7,6 +7,7 @@
         NOTOWN,
         OWNERNOTFOUND,
         SLIMENOTFOUND,
-        NOTENOUGHGOLD
+        NOTENOUGHGOLD,
+        STATATCAP
     }
 }
