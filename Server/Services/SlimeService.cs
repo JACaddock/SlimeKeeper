@@ -153,7 +153,7 @@ namespace Server.Services
         {
             Random r = new();
 
-            string[] randomNames = ["Slime", "Oozy", "Blip", "Slimo", "Goop", "Glub", "Goony", "Slemon", "Slimy"];
+            string[] randomNames = ["Slime", "Oozy", "Blip", "Slimo", "Goop", "Glub", "Goomy", "Slimon", "Slimy"];
             string name = randomNames[r.Next(randomNames.Length)];
 
             int size = r.Next(0, 2);

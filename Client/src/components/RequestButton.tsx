@@ -25,7 +25,7 @@ const RequestButton = ({ text, isDisabled, path, request, sendResponse, classNam
     }
 
     return (
-        <button className={className} disabled={isDisabled} onClick={handleRequestClick}>{text}</button>
+        <button type="button" className={className} disabled={isDisabled} onClick={handleRequestClick}>{text}</button>
     )
 }
 

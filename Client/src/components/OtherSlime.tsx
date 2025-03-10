@@ -44,7 +44,7 @@ const OtherSlime = ({ slime, username, getSlime, userid }: Props) => {
                 <p>{slime.isOnMarket ? slime.name + " is for sale" : slime.name + " is not for sale"}</p>
                 {userid != undefined && slime.isOnMarket ?
                     (
-                        <button disabled={!hasEnoughGold(slime.price)} onClick={handlePurchaseSlime}>Buy</button>
+                        <button type="button" disabled={!hasEnoughGold(slime.price)} onClick={handlePurchaseSlime}>Buy</button>
                     ) :
                     (
                         <></>
