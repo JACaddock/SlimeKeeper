@@ -74,7 +74,7 @@ const MarketLoop = () => {
     }
 
     return (
-        <div>
+        <>
             {
                 slimes.length <= 0 ? (
                     <p>Currently there are no available slimes for purchase :(</p>              
@@ -91,7 +91,7 @@ const MarketLoop = () => {
                     </div>
                 )  
             }
-        </div>
+        </>
     );
 };
 
