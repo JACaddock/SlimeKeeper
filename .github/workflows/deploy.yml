@@ -4,10 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'Server/**'
-      - '.github/workflows/deploy.yml'
-
 
 env:
   DIR: Server
