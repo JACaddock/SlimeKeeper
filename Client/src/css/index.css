@@ -118,6 +118,10 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+:disabled {
+    cursor: not-allowed;
+}
+
 input {
     border-radius: 2em;
     width: 180px;
@@ -128,8 +132,7 @@ input {
 input[type="checkbox"] {
     width: 20px;
     height: 20px;
-    
-    
+    cursor: pointer;
 }
 
 .absolute-input {
