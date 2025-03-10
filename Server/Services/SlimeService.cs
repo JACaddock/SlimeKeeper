@@ -359,7 +359,7 @@ namespace Server.Services
 
         private static int CalculatePrice(SlimeStats stats, int rarityIndex)
         {
-            return ((((100 + (stats.MaxHealth + stats.MaxHunger)) * stats.Strength) * stats.Speed) * stats.Stamina) * (rarityIndex + 1);
+            return ((((100 + (stats.MaxHealth + stats.MaxHunger)) * stats.Strength) * stats.Speed) * stats.MaxStamina) * (rarityIndex + 1);
         }
 
     }
