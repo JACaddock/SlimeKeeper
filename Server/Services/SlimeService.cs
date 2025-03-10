@@ -194,7 +194,7 @@ namespace Server.Services
         private Slime UpdateStatus(Slime slime)
         {
             SlimeStats slimeStats = slime.SlimeStats;
-            if (slimeStats.Health > 0)
+            if (slimeStats.Health > 0 && !slime.IsOnMarket)
             {
                 DateTime now = DateTime.UtcNow;
                 TimeSpan timeElapsed = now - slime.LastUpdated;
