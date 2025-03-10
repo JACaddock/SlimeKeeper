@@ -121,8 +121,10 @@ namespace Server.Services
             stats.Stamina -= 1;
             slime.SlimeStats = stats;
             slime.Price = CalculatePrice(stats, (int)stats.Rarity);
+            slime.LastUpdated = DateTime.UtcNow;
+            SlimeRepository.Update(slime);
 
-            return new(Status.SUCCESS, UpdateStatus(slime).SlimeStats);
+            return new(Status.SUCCESS, slime.SlimeStats);
         }
 
         public Tuple<Status, SlimeStats?> FeedSlime(SlimeFeeder slimeFeeder)
@@ -141,8 +143,10 @@ namespace Server.Services
                 stats.Health = Math.Max(0, stats.Health - slimeFeeder.Food);
             }
             slime.SlimeStats = stats;
+            slime.LastUpdated = DateTime.UtcNow;
+            SlimeRepository.Update(slime);
 
-            return new(Status.SUCCESS, UpdateStatus(slime).SlimeStats);
+            return new(Status.SUCCESS, slime.SlimeStats);
         }
 
         public Slime? UpdateSlime(SlimeEditable updatedSlime)
