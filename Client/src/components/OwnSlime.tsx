@@ -18,6 +18,7 @@ const OwnSlime = ({ slime, userid, setSlime }: Props) => {
     const [nameWidth, setNameWidth] = useState(0);
     const [invalidInput, setInvalidInput] = useState(false);
 
+
     function handleUpdateSlime(isOnMarket: boolean | undefined = undefined) {
         if (userid == slime.ownerId && !invalidInput) {
             if (isOnMarket != undefined && isOnMarket != slime.isOnMarket || slime.name != slimeName) {
@@ -28,30 +29,23 @@ const OwnSlime = ({ slime, userid, setSlime }: Props) => {
                     ownerId: userid
                 }
 
-                console.log(editableSlime);
-
                 axios.post("/api/slime/update/", editableSlime)
                     .then((response) => {
                         if (response.data != null) {
                             setSlime(response.data);
                             setSlimeName(response.data.name);
                         }
-                        //console.log(response)
                     })
-                    .catch(() => {
-                        //console.log("Something went wrong: " + e);
-                    })
+                    .catch(() => {})
             }
         }
     }
 
     function handleIsOnMarketChange(event: React.ChangeEvent<HTMLInputElement>) {
-        console.log(event.target.checked);
         handleUpdateSlime(event.target.checked);
     }
 
     function handleNameChange(event: React.ChangeEvent<HTMLInputElement>) {
-        //console.log(event.target);
         setSlimeName(event.target.value);
         setNameWidth(event.target.value.length + 2);
         if (event.target.value.includes(" ")) {
@@ -98,7 +92,7 @@ const OwnSlime = ({ slime, userid, setSlime }: Props) => {
             <div className="image-wrapper">
                 {parse(slime.svg)}
             </div>
-            <p>{slime.name} is a {Math.trunc(slime.age)} year old {slime.colour} coloured slime with a size of {slime.size}</p>
+            <p>{slime.name} is a {slime.slimeStats? Math.trunc(slime.slimeStats.age): ""} year old {slime.colour} coloured slime with a size of {slime.size}</p>
             <p>{slime.name} is owned by <Link to={"/user/" + slime.ownerId}>you</Link> and is worth {slime.price}</p>
             <div className="flex-column salebox-container">
                 {slime.slimeStats?.health ?? 1 > 0 ?

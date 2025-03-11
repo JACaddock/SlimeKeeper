@@ -8,6 +8,7 @@ namespace Server.Models
         int speed, int speedCap, Rarity rarity = Rarity.COMMON)
     {
         public int Id { get; set; } = id;
+        public double Age { get; set; } = 0;
         public double Health { get; set; } = health;
         public int MaxHealth { get; set; } = health;
         public int HealthCap { get; set; } = healthCap;
@@ -27,5 +28,6 @@ namespace Server.Models
         public int SpeedCap { get; set; } = speedCap;
         public double SpeedTraining { get; set; } = 0.0;
         public Rarity Rarity { get; set; } = rarity;
+        public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
     }
 }

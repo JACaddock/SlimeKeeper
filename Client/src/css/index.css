@@ -184,8 +184,8 @@ input[type="checkbox"] {
     display: grid;
     margin: 3px 0;
     align-items: center;
-    grid-template-columns: 120px 140px 40px;
-    column-gap: 1em;
+    grid-template-columns: 120px 30px 40px;
+    column-gap: 5px;
     text-align: end;
 }
 
@@ -195,6 +195,45 @@ input[type="checkbox"] {
     font-size: 14px;
     padding: 0;
     text-align: center;
+}
+
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    background-color: rgba(0, 0, 0, 1);
+    color: #fff;
+    text-align: center;
+    padding: 5px 10px;
+    border-radius: 4px;
+    position: absolute;
+    z-index: 10;
+    bottom: 125%; /* Position above the button */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    white-space: nowrap;
+}
+
+.tooltip-container:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+} 
+
+
+.timer-text {
+    color: #fff;
+    text-align: center;
+    padding: 5px 10px;
+    border-radius: 4px;
+    position: absolute;
+    z-index: -1;
+    top: 50%;
+    left: 54%;
 }
 
 .text-start {

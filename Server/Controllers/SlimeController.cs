@@ -36,6 +36,17 @@ namespace Server.Controllers
             return Ok(slime);
         }
 
+        [HttpGet("Owner/{ownerid}")]
+        public IActionResult GetSlimesByOwner(int ownerid)
+        {
+            List<Slime>? slimes = SlimeService.GetSlimesByOwner(ownerid);
+            if (slimes == null)
+            {
+                return NotFound("Can't find any slimes");
+            }
+            return Ok(slimes);
+        }
+
         /*[HttpPost("Create")]
         public IActionResult CreateSlime([FromBody] Slime slime)
         {

@@ -2,6 +2,7 @@ import { Outlet } from "react-router";
 import Navbar from "./components/Navbar";
 import UserProvider from "./context/AuthProvider";
 import AccountProvider from "./context/AccountProvider";
+import TimeBasedProvider from "./context/TimeBasedProvider";
 
 
 const App = () => {
@@ -9,8 +10,10 @@ const App = () => {
         <>
             <UserProvider>
                 <AccountProvider>
-                    <Navbar />
-                    <Outlet />
+                    <TimeBasedProvider>
+                        <Navbar />
+                        <Outlet />
+                    </TimeBasedProvider>
                 </AccountProvider>
             </UserProvider>
         </>

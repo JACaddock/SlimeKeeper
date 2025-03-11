@@ -14,7 +14,6 @@ export type Slime = {
     svg: string;
     size: number;
     colour: string;
-    age: number;
     isOnMarket: boolean;
     price: number;
     ownerId: number;
@@ -38,12 +37,12 @@ export const UndefinedSlime: Slime = {
            </svg >`),
     size: 0,
     colour: "green",
-    age: 0,
     isOnMarket: false,
     price: 100,
     ownerId: -1,
     slimeStats: {
         id: -1,
+        age: 0,
         health: 10,
         maxHealth: 10,
         healthCap: 20,
@@ -62,6 +61,7 @@ export const UndefinedSlime: Slime = {
         speed: 1,
         speedCap: 2,
         speedTraining: 0,
-        rarity: Rarity.COMMON
+        rarity: Rarity.COMMON,
+        lastUpdated: "" 
     }
 }

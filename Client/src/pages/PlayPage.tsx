@@ -3,11 +3,12 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import parse from "html-react-parser";
 import { useAccount } from "../hooks/useAccount";
+import SlimeStatsBlock from "../components/SlimeStatsBlock";
 
 
 const PlayPage = () => {
     const navigate = useNavigate();
-    const { changeGold, getGold, getSlimes } = useAccount();
+    const { changeGold, getGold, updateSlime, getSlimes } = useAccount();
     const { user } = useAuth();
 
 
@@ -35,6 +36,20 @@ const PlayPage = () => {
                                 {parse(slime.svg)}
                             </div>
                             <p>{slime.name}</p>
+                            {slime.slimeStats
+                                ? (<SlimeStatsBlock
+                                    slimeStats={slime.slimeStats}
+                                    ownerid={slime.ownerId} userid={user?.id} slimeid={slime.id}
+                                    setSlimeStats={(slimeStats) => {
+                                        updateSlime(slime.id, {
+                                            ...slime, slimeStats: slimeStats,
+                                            price: ((((100 + (slimeStats.maxHealth + slimeStats.maxHunger)) * slimeStats.strength)
+                                                * slimeStats.speed) * slimeStats.maxStamina) * (slimeStats.rarity + 1)
+                                        })
+                                    }}
+                                />)
+                                : (<></>)
+                            }
                         </div>
                     )
                 })}

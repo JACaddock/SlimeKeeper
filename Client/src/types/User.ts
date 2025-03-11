@@ -27,6 +27,7 @@ export type UserAccountContext = {
     isAFriend: (id: number) => boolean;
     getGold: () => number;
     isAdmin: () => boolean;
+    updateSlime: (slimeId: number, slime: Slime) => void;
     getSlimes: () => Slime[];
     getFriends: () => number[];
 };

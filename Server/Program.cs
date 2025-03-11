@@ -1,3 +1,4 @@
+using Server.Config;
 using Server.Repositories;
 using Server.Repositories.Mock;
 using Server.Services;
@@ -9,6 +10,8 @@ builder.Services.AddSingleton<IUserRepository, MockUserRepository>();
 builder.Services.AddSingleton<ISlimeRepository, MockSlimeRepository>();
 builder.Services.AddTransient<SlimeService>();
 builder.Services.AddTransient<UserService>();
+
+builder.Services.Configure<TimeBasedSettings>(builder.Configuration.GetSection("TimeBasedSettings"));
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

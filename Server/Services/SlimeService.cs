@@ -1,4 +1,6 @@
-﻿using Server.DTO;
+﻿using Microsoft.Extensions.Options;
+using Server.Config;
+using Server.DTO;
 using Server.Enums;
 using Server.Helpers;
 using Server.Models;
@@ -6,9 +8,10 @@ using Server.Repositories;
 
 namespace Server.Services
 {
-    public class SlimeService(ISlimeRepository slimeRepository)
+    public class SlimeService(ISlimeRepository slimeRepository, IOptions<TimeBasedSettings> timeBasedSettings)
     {
         private readonly ISlimeRepository SlimeRepository = slimeRepository;
+        private readonly TimeBasedSettings TimeBasedSettings = timeBasedSettings.Value;
 
 
         public List<Slime> GetAll()
@@ -27,9 +30,20 @@ namespace Server.Services
             Slime? slime = SlimeRepository.GetById(id);
             if (slime != null)
             {
-                UpdateStatus(slime);
+                return UpdateStatus(slime);
             }
             return slime;
+        }
+
+        public List<Slime> GetSlimesByOwner(int ownerid)
+        {
+            List<Slime> slimes = SlimeRepository.GetByOwner(ownerid);
+            for (int i = 0; i < slimes.Count; i++)
+            {
+                Slime slime = slimes[i];
+                slimes[i] = UpdateStatus(slime);
+            }
+            return slimes;
         }
 
         public List<Slime> GetSlimesByOwner(User owner)
@@ -54,6 +68,7 @@ namespace Server.Services
 
             if (slimeTrainer.OwnerId != slime.OwnerId) return new(Status.NOTOWN, null);
 
+            slime = UpdateStatus(slime);
             SlimeStats stats = slime.SlimeStats;
             if (stats.Health <= 0) return new(Status.SLIMEISDEAD, stats);
             if (stats.Stamina < 1) return new(Status.NOSTAMINA, stats);
@@ -119,9 +134,9 @@ namespace Server.Services
                     break;
             }
             stats.Stamina -= 1;
+            stats.LastUpdated = DateTime.UtcNow;
             slime.SlimeStats = stats;
             slime.Price = CalculatePrice(stats, (int)stats.Rarity);
-            slime.LastUpdated = DateTime.UtcNow;
             SlimeRepository.Update(slime);
 
             return new(Status.SUCCESS, slime.SlimeStats);
@@ -142,8 +157,8 @@ namespace Server.Services
             {
                 stats.Health = Math.Max(0, stats.Health - slimeFeeder.Food);
             }
+            stats.LastUpdated = DateTime.UtcNow;
             slime.SlimeStats = stats;
-            slime.LastUpdated = DateTime.UtcNow;
             SlimeRepository.Update(slime);
 
             return new(Status.SUCCESS, slime.SlimeStats);
@@ -201,24 +216,25 @@ namespace Server.Services
             if (slimeStats.Health > 0 && !slime.IsOnMarket)
             {
                 DateTime now = DateTime.UtcNow;
-                TimeSpan timeElapsed = now - slime.LastUpdated;
+                TimeSpan timeElapsed = now - slimeStats.LastUpdated;
 
-                double hungerDecrease = (timeElapsed.TotalMinutes / 10);
-                double staminaRegain = (timeElapsed.TotalMinutes / 5);
-                double ageIncrease = (timeElapsed.TotalMinutes / 60);
+                double hungerDecrease = (timeElapsed.TotalMinutes / TimeBasedSettings.HungerDepletionIntervalMinutes);
+                double staminaRegain = (timeElapsed.TotalMinutes / TimeBasedSettings.StaminaRegenIntervalMinutes);
+                double ageIncrease = (timeElapsed.TotalMinutes / TimeBasedSettings.AgeIncreaseIntervalMinutes);
 
 
                 slimeStats.Hunger = Math.Max(0, slimeStats.Hunger - hungerDecrease);
                 slimeStats.Stamina = Math.Min(slimeStats.MaxStamina, slimeStats.Stamina + staminaRegain);
-                slime.SlimeStats = slimeStats;
-                slime.Age += ageIncrease;
-                slime.LastUpdated = now;
-                slime.Svg = SlimeSvg.PrepareSvg(slime);
+                slimeStats.Age += ageIncrease;
 
                 if (slimeStats.Hunger == 0)
                 {
                     slimeStats.Health = Math.Max(0, slimeStats.Health - hungerDecrease);
                 }
+
+                slimeStats.LastUpdated = now;
+                slime.SlimeStats = slimeStats;
+                slime.Svg = SlimeSvg.PrepareSvg(slime);
 
                 SlimeRepository.Update(slime);
             }

@@ -6,6 +6,7 @@ import { useAuth } from "../hooks/useAuth.tsx";
 import OtherSlime from "../components/OtherSlime.tsx";
 import OwnSlime from "../components/OwnSlime.tsx";
 import SlimeStatsBlock from "../components/SlimeStatsBlock.tsx";
+import { useAccount } from "../hooks/useAccount.tsx";
 
 
 const SlimePage = () => {
@@ -13,10 +14,18 @@ const SlimePage = () => {
     const [slime, setSlime] = useState<Slime>(UndefinedSlime);
     const [username, setUsername] = useState("");
     const { user, isLoggedIn } = useAuth();
+    const { updateSlime } = useAccount();
+
 
     useEffect(() => {
         getSlime(id);
     }, [id])
+
+
+    function updateAndSetSline(newSlime: Slime) {
+        updateSlime(newSlime.id, newSlime);
+        setSlime(newSlime);
+    }
 
     function getSlime(id: string | undefined) {
         axios.get("/api/slime/" + id)
@@ -39,7 +48,7 @@ const SlimePage = () => {
     return (
         <main>
             {isLoggedIn() && user?.username == username && user != null
-                ? (<OwnSlime slime={slime} userid={user.id} setSlime={setSlime}  />)
+                ? (<OwnSlime slime={slime} userid={user.id} setSlime={updateAndSetSline} />)
                 : (<OtherSlime slime={slime} userid={user?.id} getSlime={getSlime} username={username} />)
             }
                 {slime.slimeStats

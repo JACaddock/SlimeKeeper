@@ -12,7 +12,7 @@ namespace Server.Helpers
                     style='background: transparent; background-color: transparent; color-scheme: light dark;'
                     version='1.1' width='100px' height='100px'";
 
-            if (slime.Age > 1)
+            if (slime.SlimeStats.Age > 1)
             {
                 workingSvg += "viewBox='-0.5 -0.5 31 21'>";
                 workingSvg += PrepareAdultSvg(slime);

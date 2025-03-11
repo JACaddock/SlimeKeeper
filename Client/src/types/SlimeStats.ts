@@ -2,6 +2,7 @@ import { Rarity, TrainingType } from "../utils/Enums";
 
 export type SlimeStats = {
     id: number;
+    age: number;
     health: number;
     maxHealth: number;
     healthCap: number;
@@ -21,6 +22,7 @@ export type SlimeStats = {
     speedCap: number;
     speedTraining: number;
     rarity: Rarity;
+    lastUpdated: string;
 };
 
 export type SlimeFeeder = {
