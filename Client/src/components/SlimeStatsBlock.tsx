@@ -23,13 +23,13 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats }
         handleTimerComplete: updateTimeBasedStats,
         timeBasedType: TimeBasedType.STAMINA,
         timePercent: 1 - (slimeStats.stamina - Math.trunc(slimeStats.stamina)),
-        constraint: slimeStats.stamina < slimeStats.maxStamina
+        constraint: slimeStats.stamina < slimeStats.maxStamina && ownerid == userid
     });
     const { isReady: hungerIsReady, getFormattedTimeLeft: getHungerFormattedTimeLeft} = useTimer({
         handleTimerComplete: updateTimeBasedStats,
         timeBasedType: TimeBasedType.HUNGER,
         timePercent: (slimeStats.hunger - Math.trunc(slimeStats.hunger)),
-        constraint: slimeStats.hunger > 0
+        constraint: slimeStats.hunger > 0 && ownerid == userid
     });
     const [updatedSlimeStats, setUpdatedSlimeStats] = useState<SlimeStats>();
 
