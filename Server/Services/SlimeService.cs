@@ -218,9 +218,9 @@ namespace Server.Services
                 DateTime now = DateTime.UtcNow;
                 TimeSpan timeElapsed = now - slimeStats.LastUpdated;
 
-                double hungerDecrease = (timeElapsed.TotalMinutes / TimeBasedSettings.HungerDepletionIntervalMinutes);
-                double staminaRegain = (timeElapsed.TotalMinutes / TimeBasedSettings.StaminaRegenIntervalMinutes);
-                double ageIncrease = (timeElapsed.TotalMinutes / TimeBasedSettings.AgeIncreaseIntervalMinutes);
+                double hungerDecrease = (timeElapsed.TotalMinutes / (TimeBasedSettings.HungerDepletionIntervalHours * 60));
+                double staminaRegain = (timeElapsed.TotalMinutes / (TimeBasedSettings.StaminaRegenIntervalHours * 60));
+                double ageIncrease = (timeElapsed.TotalMinutes / (TimeBasedSettings.AgeIncreaseIntervalHours * 60));
 
 
                 slimeStats.Hunger = Math.Max(0, slimeStats.Hunger - hungerDecrease);

@@ -13,7 +13,7 @@ interface Props {
 
 
 const OtherSlime = ({ slime, username, getSlime, userid }: Props) => {
-    const { hasEnoughGold } = useAccount();
+    const { hasEnoughGold, changeGold, addSlime } = useAccount();
 
     function handlePurchaseSlime() {
         if (userid != null && slime != null) {
@@ -25,6 +25,8 @@ const OtherSlime = ({ slime, username, getSlime, userid }: Props) => {
                 .then(() => {
                     //console.log(response.status + ": Purchase Success!");
                     getSlime(String(slime.id));
+                    addSlime({ ...slime, ownerId: userid, isOnMarket: false });
+                    changeGold(-slime.price);
                 })
                 .catch(() => {
                     //console.log(error);

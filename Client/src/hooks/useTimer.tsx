@@ -12,7 +12,7 @@ interface Props {
 const useTimer = ({ handleTimerComplete, timeBasedType, timePercent, constraint }: Props) => {
     const [timeLeft, setTimeLeft] = useState<number>(timePercent);
     const handleTimerCompleteRef = useRef(handleTimerComplete);
-    const { getTimeBasedSetting } = useTimeBasedSettings();
+    const { getInterval } = useTimeBasedSettings();
     const [isReady, setIsReady] = useState(false);
 
 
@@ -27,7 +27,7 @@ const useTimer = ({ handleTimerComplete, timeBasedType, timePercent, constraint 
             return;
         }
 
-        const timeBasedSetting = getTimeBasedSetting(timeBasedType);
+        const timeBasedSetting = getInterval(timeBasedType);
         if (!timeBasedSetting) return;
 
         const timeUntilNextUpdate = Math.floor(timeBasedSetting * timePercent);
@@ -51,7 +51,7 @@ const useTimer = ({ handleTimerComplete, timeBasedType, timePercent, constraint 
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [getTimeBasedSetting, timeBasedType, timePercent, isReady, constraint]);
+    }, [getInterval, timeBasedType, timePercent, isReady, constraint]);
 
 
     const getIntTimeLeft = (): number => timeLeft;

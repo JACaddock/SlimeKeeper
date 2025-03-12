@@ -48,6 +48,14 @@ const AccountProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }
 
+    const addSlime = (slime: Slime) => {
+        if (userAccount) {
+            const slimes = userAccount.slimes;
+            slimes.push(slime);
+            setUserAccount({ ...userAccount, slimes: slimes });
+        }
+    }
+
     const getGold = () => userAccount?.gold ?? 0;
     const isAdmin = () => userAccount?.is_admin ?? false;
 
@@ -77,7 +85,7 @@ const AccountProvider = ({ children }: { children: React.ReactNode }) => {
         <AccountContext.Provider
             value={{
                 hasEnoughGold, changeGold, isAFriend, getGold, isAdmin,
-                updateSlime, getSlimes, getFriends
+                addSlime, updateSlime, getSlimes, getFriends
             }}
         >
             {children}

@@ -15,14 +15,18 @@ const TimeBasedProvider = ({ children }: { children: React.ReactNode }) => {
             }
             axios.get("/api/settings/")
                 .then((response) => {
-                    const stamina = response.data.staminaRegenIntervalMinutes * 60;
-                    const hunger = response.data.hungerDepletionIntervalMinutes * 60;
-                    const age = response.data.ageIncreaseIntervalMinutes * 60;
+                    const staminaAmount = response.data.staminaRegenAmount;
+                    const staminaInterval = response.data.staminaRegenIntervalHours * 60 * 60;
+                    const hungerAmount = response.data.hungerDepletionAmount;
+                    const hungerInterval = response.data.hungerDepletionIntervalHours * 60 * 60;
+                    const hungerMinThreshold = response.data.hungerDepletionMinThreshold;
+                    const ageInterval = response.data.ageIncreaseIntervalHours * 60 * 60;
+                    const ageAmount = response.data.ageIncreaseAmount;
 
-                    const settings = [
-                        { timeBasedType: TimeBasedType.STAMINA, timeBasedSetting: stamina },
-                        { timeBasedType: TimeBasedType.HUNGER, timeBasedSetting: hunger },
-                        { timeBasedType: TimeBasedType.AGE, timeBasedSetting: age}
+                    const settings: TimeBasedDictionary[] = [
+                        { type: TimeBasedType.STAMINA, interval: staminaInterval, amount: staminaAmount },
+                        { type: TimeBasedType.HUNGER, interval: hungerInterval, amount: hungerAmount, minThreshold: hungerMinThreshold },
+                        { type: TimeBasedType.AGE, interval: ageInterval, amount: ageAmount}
                     ];
 
                     if (settings != timeBasedSettings) {
@@ -34,13 +38,22 @@ const TimeBasedProvider = ({ children }: { children: React.ReactNode }) => {
     }, [timeBasedSettings]);
 
 
-    const getTimeBasedSetting = (type: TimeBasedType) => {
-        return timeBasedSettings.find(t => t.timeBasedType === type)?.timeBasedSetting;
+    const getInterval = (type: TimeBasedType) => {
+        return timeBasedSettings.find(t => t.type === type)?.interval;
     }
+
+    const getAmount = (type: TimeBasedType) => {
+        return timeBasedSettings.find(t => t.type === type)?.amount;
+    }
+
+    const getMinThreshold = (type: TimeBasedType) => {
+        return timeBasedSettings.find(t => t.type === type)?.minThreshold;
+    }
+
 
     return (
         <TimeBasedContext.Provider
-            value={{ getTimeBasedSetting }}
+            value={{ getInterval, getAmount, getMinThreshold }}
         >
             {children}
         </TimeBasedContext.Provider>
