@@ -73,7 +73,6 @@ namespace Server.Services
             return false;
         }
 
-
         public UserAuth? LoginUser(UserCredentials userAttempt)
         {
             User? user = UserRepository.GetByUsername(userAttempt.Username);
@@ -97,7 +96,6 @@ namespace Server.Services
                 );
         }
 
-
         public Tuple<Status, SlimeStats?> TrainSlime(SlimeTrainer slimeTrainer)
         {
             Tuple<Status, SlimeStats?> result;
@@ -116,7 +114,6 @@ namespace Server.Services
             return new(Status.OWNERNOTFOUND, null);
         }
 
-
         public Tuple<Status, SlimeStats?> FeedSlime(SlimeFeeder slimeFeeder)
         {
             Tuple<Status, SlimeStats?> result;
@@ -134,7 +131,6 @@ namespace Server.Services
             }
             return new(Status.OWNERNOTFOUND, null);
         }
-
 
         public bool EarnGold(int id)
         {
