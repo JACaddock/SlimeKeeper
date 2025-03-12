@@ -8,8 +8,6 @@ const HomePage = () => {
 
     return (
         <main>
-            
-
             {isLoggedIn() ? (
                 <div>
                     <h2>Hello {user?.username}</h2>
