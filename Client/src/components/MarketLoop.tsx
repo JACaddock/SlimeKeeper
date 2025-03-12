@@ -5,11 +5,14 @@ import ListItem from "./ListItem";
 import { Arrow } from "../assets/Arrow.tsx";
 import "../css/MarketLoop.css";
 import useDetectDevice from "../hooks/useDetectDevice";
+import { marketSlimeDefault } from "../constants/SlimeDefault.ts";
 
 
 
 const MarketLoop = () => {
-    const [slimes, setSlimes] = useState<MarketSlime[]>([]);
+    const [slimes, setSlimes] = useState<MarketSlime[]>(
+        Array.from({ length: 10 }, (_, i) => ({ ...marketSlimeDefault, id: i }))
+    );
     const [index, setIndex] = useState<number>(0);
     const { isMiniture, isMobile, isTablet } = useDetectDevice();
 
@@ -36,7 +39,7 @@ const MarketLoop = () => {
             setSlimes(response.data);
         })
         .catch(() => {
-            //console.log(error);
+            setSlimes([]);
         })
     }
 

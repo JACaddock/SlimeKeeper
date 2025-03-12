@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Slime, UndefinedSlime } from "../types/Slime";
+import { Slime } from "../types/Slime";
+import { slimeDefault } from "../constants/SlimeDefault.ts";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.tsx";
 import OtherSlime from "../components/OtherSlime.tsx";
@@ -11,7 +12,7 @@ import { useAccount } from "../hooks/useAccount.tsx";
 
 const SlimePage = () => {
     const { id } = useParams();
-    const [slime, setSlime] = useState<Slime>(UndefinedSlime);
+    const [slime, setSlime] = useState<Slime | null>(slimeDefault);
     const [username, setUsername] = useState("");
     const { user, isLoggedIn } = useAuth();
     const { updateSlime } = useAccount();
@@ -40,30 +41,33 @@ const SlimePage = () => {
                     })
             })
             .catch(() => {
-                //console.log("Something went wrong: " + e);
+                setSlime(null);
             })
     }
 
 
     return (
         <main>
-            {isLoggedIn() && user?.username == username && user != null
-                ? (<OwnSlime slime={slime} userid={user.id} setSlime={updateAndSetSline} />)
-                : (<OtherSlime slime={slime} userid={user?.id} getSlime={getSlime} username={username} />)
-            }
-                {slime.slimeStats
-                ? (<SlimeStatsBlock 
-                    slimeStats={slime.slimeStats}
-                    ownerid={slime.ownerId} userid={user?.id} slimeid={slime.id}
-                    setSlimeStats={(slimeStats) => {
-                        setSlime({
-                            ...slime, slimeStats: slimeStats,
-                            price: ((((100 + (slimeStats.maxHealth + slimeStats.maxHunger)) * slimeStats.strength)
-                                * slimeStats.speed) * slimeStats.maxStamina) * (slimeStats.rarity + 1)
-                        })
-                    }}
-                    />)
-                : (<></>)
+            {slime ? (<>
+                {isLoggedIn() && user?.username == username && user != null
+                    ? (<OwnSlime slime={slime} userid={user.id} setSlime={updateAndSetSline} />)
+                    : (<OtherSlime slime={slime} userid={user?.id} getSlime={getSlime} username={username} />)
+                }
+                    {slime.slimeStats
+                    ? (<SlimeStatsBlock
+                        slimeStats={slime.slimeStats} isOnMarket={slime.isOnMarket}
+                        ownerid={slime.ownerId} userid={user?.id} slimeid={slime.id}
+                        setSlimeStats={(slimeStats) => {
+                            setSlime({
+                                ...slime, slimeStats: slimeStats,
+                                price: ((((100 + (slimeStats.maxHealth + slimeStats.maxHunger)) * slimeStats.strength)
+                                    * slimeStats.speed) * slimeStats.maxStamina) * (slimeStats.rarity + 1)
+                            })
+                        }}
+                        />)
+                    : (<></>)}
+                </>):
+                <p>Could not find this slime...</p>
             }
         </main>
     );
