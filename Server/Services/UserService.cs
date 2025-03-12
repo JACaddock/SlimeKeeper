@@ -138,7 +138,6 @@ namespace Server.Services
             if (user != null)
             {
                 user.Gold += 1000;
-                Console.WriteLine(user.Username + " - Gold: " + user.Gold);
                 UserRepository.Update(user);
                 return true;
             }

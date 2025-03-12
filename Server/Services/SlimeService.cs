@@ -90,7 +90,7 @@ namespace Server.Services
                     break;
                 case TrainingType.STAMINA:
                     if (stats.MaxStamina >= stats.StaminaCap) return new(Status.STATATCAP, stats);
-                    stats.StaminaTraining += (0.1 * intensity);
+                    stats.StaminaTraining = Math.Round(stats.StaminaTraining + (0.1 * intensity), 1);
                     if (stats.StaminaTraining >= 1.0)
                     {
                         int staminaIncrease = (int)(stats.StaminaTraining);
