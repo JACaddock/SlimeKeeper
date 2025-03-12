@@ -31,6 +31,7 @@ const useTimer = ({ handleTimerComplete, timeBasedType, timePercent, constraint 
         if (!timeBasedSetting) return;
 
         const timeUntilNextUpdate = Math.floor(timeBasedSetting * timePercent);
+        
 
         // Update countdown every second
         const interval = setInterval(() => {

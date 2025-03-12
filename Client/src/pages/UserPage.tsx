@@ -4,11 +4,12 @@ import { UserAccount } from "../types/User";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import UserItem from "../components/UserItem";
+import { userAccountDefault } from "../constants/UserDefaults";
 
 
 const UserPage = () => {
     const { id } = useParams();
-    const [userAccount, setUserAccount] = useState<UserAccount>();
+    const [userAccount, setUserAccount] = useState<UserAccount | null>(userAccountDefault);
     const { user } = useAuth();
 
     useEffect(() => {
@@ -21,7 +22,7 @@ const UserPage = () => {
                 setUserAccount(response.data);
             })
             .catch(() => {
-                //console.log("Something went wrong: " + e)
+                setUserAccount(null);
             })
     }
 

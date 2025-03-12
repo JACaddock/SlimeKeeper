@@ -15,21 +15,23 @@ interface Props {
     ownerid: number;
     slimeid: number;
     setSlimeStats: (slimeStats: SlimeStats) => void;
+    isOnMarket: boolean;
 }
 
-const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats }: Props) => {
+const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats, isOnMarket }: Props) => {
+    const isLocked = () => { return ownerid != userid || isOnMarket };  
     const { hasEnoughGold, changeGold } = useAccount();
     const { isReady: staminaIsReady, getFormattedTimeLeft: getStaminaFormattedTimeLeft } = useTimer({
         handleTimerComplete: updateTimeBasedStats,
         timeBasedType: TimeBasedType.STAMINA,
         timePercent: 1 - (slimeStats.stamina - Math.trunc(slimeStats.stamina)),
-        constraint: slimeStats.stamina < slimeStats.maxStamina && ownerid == userid
+        constraint: slimeStats.stamina < slimeStats.maxStamina && !isLocked()
     });
     const { isReady: hungerIsReady, getFormattedTimeLeft: getHungerFormattedTimeLeft} = useTimer({
         handleTimerComplete: updateTimeBasedStats,
         timeBasedType: TimeBasedType.HUNGER,
         timePercent: (slimeStats.hunger - Math.trunc(slimeStats.hunger)),
-        constraint: slimeStats.hunger > 0 && ownerid == userid
+        constraint: slimeStats.hunger > 0 && !isLocked()
     });
     const [updatedSlimeStats, setUpdatedSlimeStats] = useState<SlimeStats>();
 
@@ -81,11 +83,11 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats }
     return (
         <div className="flex-column margin-top-2em">
             <p>{getRarity(slimeStats.rarity)}</p>
-            <div className={userid == ownerid ? "stats-block" : ""}>
+            <div className={!isLocked() ? "stats-block" : ""}>
                 <p style={slimeStats.maxHealth >= slimeStats.healthCap ? { color: "red" } : {}}>
                     Health: {Math.trunc(slimeStats.health)} / {slimeStats.maxHealth}
                 </p>
-                {userid != null && userid == ownerid && slimeStats.maxHealth < slimeStats.healthCap ?
+                {userid && !isLocked() && slimeStats.maxHealth < slimeStats.healthCap ?
                     (<><RequestButton
                         className="stats-button"
                         path="/api/user/train/" tooltip={"Train Health\n Cost: 200G & -1 Stamina\n Effect: +200% Health Growth"}
@@ -100,7 +102,7 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats }
                     </>)
                     : <></>}
             </div>
-            <div className={userid == ownerid ? "stats-block" : ""}>
+            <div className={!isLocked() ? "stats-block" : ""}>
                 <div className="tooltip-container">
                     <p style={slimeStats.maxStamina >= slimeStats.staminaCap ? { color: "red" } : {}}>
                         Stamina: {Math.trunc(slimeStats.stamina)} / {slimeStats.maxStamina}
@@ -109,7 +111,7 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats }
                             <p className="timer-text">[{getStaminaFormattedTimeLeft()}]</p> : <></>
                         }
                 </div>
-                {userid != null && userid == ownerid && slimeStats.maxStamina < slimeStats.staminaCap ?
+                {userid != null && !isLocked() && slimeStats.maxStamina < slimeStats.staminaCap ?
                     (<><RequestButton
                         className="stats-button"
                         path="/api/user/train/" tooltip={"Train Stamina\n Cost: 200G & -1 Stamina\n Effect: +10% Stamina Growth"}
@@ -124,7 +126,7 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats }
                     </>)
                     : <></>}
             </div>
-            <div className={userid == ownerid ? "stats-block" : ""}>
+            <div className={!isLocked() ? "stats-block" : ""}>
                 <div className="tooltip-container">
                     <p style={slimeStats.maxHunger >= slimeStats.hungerCap ? { color: "red" } : {}}>
                         Hunger: {Math.ceil(slimeStats.hunger)} / {slimeStats.maxHunger}</p>
@@ -132,7 +134,7 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats }
                             <p className="timer-text">[{getHungerFormattedTimeLeft()}]</p> : <></>
                         }
                 </div>
-                {userid != null && userid == ownerid && slimeStats.maxHunger < slimeStats.hungerCap ?
+                {userid != null && !isLocked() && slimeStats.maxHunger < slimeStats.hungerCap ?
                     (<><RequestButton
                         className="stats-button"
                         path="/api/user/train/" tooltip={"Train Hunger\n Cost: 200G & -1 Stamina\n Effect: +200% Hunger Growth"}
@@ -147,11 +149,11 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats }
                     </>)
                     : <></>}
             </div>
-            <div className={userid == ownerid ? "stats-block" : ""}>
+            <div className={!isLocked() ? "stats-block" : ""}>
                 <p style={slimeStats.strength >= slimeStats.strengthCap ? { color: "red" } : {}}>
                     Strength: {slimeStats.strength}
                 </p>
-                {userid != null && userid == ownerid && slimeStats.strength < slimeStats.strengthCap ?
+                {userid != null && !isLocked() && slimeStats.strength < slimeStats.strengthCap ?
                     (<><RequestButton
                         className="stats-button"
                         path="/api/user/train/" tooltip={"Train Strength\n Cost: 200G & -1 Stamina\n Effect: +20% Strength Growth"}
@@ -166,11 +168,11 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats }
                     </>)
                     : <></>}
             </div>
-            <div className={userid == ownerid ? "stats-block" : ""}>
+            <div className={!isLocked() ? "stats-block" : ""}>
                 <p style={slimeStats.speed >= slimeStats.speedCap ? { color: "red" } : {}}>
                     Speed: {slimeStats.speed}
                 </p>
-                {userid != null && userid == ownerid && slimeStats.speed < slimeStats.speedCap ?
+                {userid != null && !isLocked() && slimeStats.speed < slimeStats.speedCap ?
                     (<><RequestButton
                         className="stats-button"
                         path="/api/user/train/" tooltip={"Train Speed\n Cost: 200G & -1 Stamina\n Effect: +20% Speed Growth"}
@@ -185,7 +187,7 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats }
                     </>)
                     : <></>}
             </div>
-            {userid != null && userid == ownerid ?
+            {userid != null && !isLocked() ?
                 (<div>
                     <RequestButton
                         className="stats-button extra-padding" text={"Feed"}

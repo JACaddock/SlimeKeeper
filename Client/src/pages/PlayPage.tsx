@@ -38,7 +38,7 @@ const PlayPage = () => {
                             <p>{slime.name}</p>
                             {slime.slimeStats
                                 ? (<SlimeStatsBlock
-                                    slimeStats={slime.slimeStats}
+                                    slimeStats={slime.slimeStats} isOnMarket={slime.isOnMarket}
                                     ownerid={slime.ownerId} userid={user?.id} slimeid={slime.id}
                                     setSlimeStats={(slimeStats) => {
                                         updateSlime(slime.id, {
