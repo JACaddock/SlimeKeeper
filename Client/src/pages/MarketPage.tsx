@@ -6,7 +6,7 @@ import { marketSlimeDefault } from "../constants/SlimeDefault";
 
 function MarketPage() {
     const [slimes, setSlimes] = useState<MarketSlime[]>(
-        Array.from({ length: 10 }, (_, i) => ({ ...marketSlimeDefault, id: i }))
+        Array.from({ length: 5 }, (_, i) => ({ ...marketSlimeDefault, id: i }))
     );
 
     useEffect(() => {

@@ -6,7 +6,7 @@ import ListItem from "../components/ListItem";
 
 const UsersPage = () => {
     const [userAccounts, setUserAccounts] = useState<UserAccount[]>(
-        Array.from({ length: 10 }, (_, i) => ({ ...userAccountDefault, id: i }))
+        Array.from({ length: 5 }, (_, i) => ({ ...userAccountDefault, id: i }))
     );
 
     useEffect(() => {
