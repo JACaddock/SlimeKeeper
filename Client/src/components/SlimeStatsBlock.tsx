@@ -87,7 +87,7 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats, 
                 <p style={slimeStats.maxHealth >= slimeStats.healthCap ? { color: "red" } : {}}>
                     Health: {Math.trunc(slimeStats.health)} / {slimeStats.maxHealth}
                 </p>
-                {userid && !isLocked() && slimeStats.maxHealth < slimeStats.healthCap ?
+                {userid != null && !isLocked() && slimeStats.maxHealth < slimeStats.healthCap ?
                     (<><RequestButton
                         className="stats-button"
                         path="/api/user/train/" tooltip={"Train Health\n Cost: 200G & -1 Stamina\n Effect: +200% Health Growth"}
