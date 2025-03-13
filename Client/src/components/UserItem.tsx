@@ -1,15 +1,15 @@
-import { useNavigate } from "react-router-dom";
+import useObjectClick from "../hooks/useObjectClick";
 import { UserAccount } from "../types/User"
 import parse from "html-react-parser";
 
 type UserItemType = {
-    userAccount: UserAccount | undefined;
+    userAccount: UserAccount;
     pronouns: string;
 }
 
 
 const UserItem = ({ userAccount, pronouns }: UserItemType) => {
-    const navigate = useNavigate();
+    const { handleObjectClicked } = useObjectClick();
 
     return (
       <div>
@@ -23,7 +23,9 @@ const UserItem = ({ userAccount, pronouns }: UserItemType) => {
                     {userAccount.slimes.map((slime) => {
                         return (
                             <div key={slime.id}>
-                                <div onClick={() => { navigate("/slime/" + slime.id) }} key={slime.id} className="market-item image-wrapper">
+                                <div onClick={() => { handleObjectClicked(slime, "/slime/", "currentSlime") }}
+                                    key={slime.id} className="market-item image-wrapper"
+                                >
                                     {slime.svg != "" ? parse(slime.svg) : <></>}
                                 </div>
                                 <p>{slime.name}</p>

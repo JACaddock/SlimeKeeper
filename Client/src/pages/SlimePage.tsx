@@ -12,8 +12,14 @@ import { useAccount } from "../hooks/useAccount.tsx";
 
 const SlimePage = () => {
     const { id } = useParams();
-    const [slime, setSlime] = useState<Slime | null>(slimeDefault);
-    const [username, setUsername] = useState("");
+    const [slime, setSlime] = useState<Slime | null>(() => {
+        const currentSlime = localStorage.getItem("currentSlime");
+        if (currentSlime && JSON.parse(currentSlime).id == id) {
+            return JSON.parse(currentSlime);
+        }
+        else return slimeDefault;
+    });
+    const [username, setUsername] = useState(slime?.ownerName?? "");
     const { user, isLoggedIn } = useAuth();
     const { updateSlime } = useAccount();
 
@@ -30,19 +36,15 @@ const SlimePage = () => {
 
     function getSlime(id: string | undefined) {
         axios.get("/api/slime/" + id)
-            .then((responseX) => {
-                setSlime(responseX.data);
-                axios.get("/api/user/" + responseX.data.ownerId)
-                    .then((responseY) => {
-                        setUsername(responseY.data.username);
-                    })
-                    .catch(() => {
-                        //console.log("Could not find the owner");
-                    })
-            })
-            .catch(() => {
-                setSlime(null);
-            })
+        .then((response) => {
+            setSlime(response.data);
+            setUsername(response.data.ownerName)
+            localStorage.setItem("currentSlime", JSON.stringify(response.data));
+        })
+        .catch(() => {
+            setSlime(null);
+            localStorage.removeItem("currentSlime");
+        })
     }
 
 

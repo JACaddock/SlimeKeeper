@@ -31,6 +31,7 @@ export type UserAccountContext = {
     updateSlime: (slimeId: number, slime: Slime) => void;
     getSlimes: () => Slime[];
     getFriends: () => number[];
+    userAccount: UserAccount | undefined;
 };
 
 export type UserCredentials = {

@@ -166,7 +166,7 @@ namespace Server.Services
                             UserRepository.Update(buyer);
                             UserRepository.Update(seller);
 
-                            SlimeService.UpdateSlime(new(slime.Id, slime.Name, false, buyer.Id));
+                            SlimeService.UpdateSlime(new(slime.Id, slime.Name, false, buyer.Id, buyer.Username));
 
                             return true;
                         }

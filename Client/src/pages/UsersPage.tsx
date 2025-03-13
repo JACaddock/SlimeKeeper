@@ -3,11 +3,13 @@ import { UserAccount } from "../types/User";
 import { userAccountDefault } from "../constants/UserDefaults";
 import axios from "axios";
 import ListItem from "../components/ListItem";
+import useObjectClick from "../hooks/useObjectClick";
 
 const UsersPage = () => {
     const [userAccounts, setUserAccounts] = useState<UserAccount[]>(
         Array.from({ length: 5 }, (_, i) => ({ ...userAccountDefault, id: i }))
     );
+    const { handleObjectClicked } = useObjectClick();
 
     useEffect(() => {
         axios.get("/api/user/account")
@@ -29,8 +31,8 @@ const UsersPage = () => {
                         .map((userAccount) => 
                             <ListItem
                                 key={userAccount.id} id={userAccount.id}
-                            path="/user/" name={userAccount.username}
-                            body={userAccount.gold + "G | " + userAccount.slimes.length + " Slimes | " + userAccount.friends.length + " Friends"}
+                                name={userAccount.username} handleItemClick={() => { handleObjectClicked(userAccount, "/user/", "currentUser") }}
+                                body={userAccount.gold + "G | " + userAccount.slimes.length + " Slimes | " + userAccount.friends.length + " Friends"}
                             />
                     )}
                 </div>)

@@ -152,6 +152,15 @@ input[type="checkbox"] {
     margin-bottom: 10px;
 }
 
+.span-link {
+    color: #646cff;
+    cursor: pointer;
+}
+
+.span-link:hover {
+    color: blue;
+}
+
 .width-70 {
     width: 70%;
 }
