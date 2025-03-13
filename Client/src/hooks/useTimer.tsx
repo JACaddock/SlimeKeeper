@@ -59,7 +59,9 @@ const useTimer = ({ handleTimerComplete, timeBasedType, timePercent, constraint 
     const getFormattedTimeLeft = (): string => {
         const minutes = Math.floor(timeLeft / 60);
         const seconds = timeLeft % 60;
-        return `${String(minutes).padStart(2, "0")}:${String(Math.trunc(seconds)).padStart(2, "0")}`;
+        const formattedMinutes = `${String(minutes).padStart(1, "0")}:`;
+        const formattedSeconds = `${String(Math.trunc(seconds)).padStart(2, "0")}`
+        return formattedMinutes + formattedSeconds;
     };
 
     return { getIntTimeLeft, getFormattedTimeLeft, isReady };

@@ -21,13 +21,13 @@ interface Props {
 const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats, isOnMarket }: Props) => {
     const isLocked = () => { return ownerid != userid || isOnMarket };  
     const { hasEnoughGold, changeGold } = useAccount();
-    const { isReady: staminaIsReady, getFormattedTimeLeft: getStaminaFormattedTimeLeft } = useTimer({
+    const { isReady: staminaIsReady, getFormattedTimeLeft: getStaminaFormattedTimeLeft, getIntTimeLeft: getStaminaIntTimeLeft } = useTimer({
         handleTimerComplete: updateTimeBasedStats,
         timeBasedType: TimeBasedType.STAMINA,
         timePercent: 1 - (slimeStats.stamina - Math.trunc(slimeStats.stamina)),
         constraint: slimeStats.stamina < slimeStats.maxStamina && !isLocked()
     });
-    const { isReady: hungerIsReady, getFormattedTimeLeft: getHungerFormattedTimeLeft} = useTimer({
+    const { isReady: hungerIsReady, getFormattedTimeLeft: getHungerFormattedTimeLeft, getIntTimeLeft: getHungerIntTimeLeft } = useTimer({
         handleTimerComplete: updateTimeBasedStats,
         timeBasedType: TimeBasedType.HUNGER,
         timePercent: (slimeStats.hunger - Math.trunc(slimeStats.hunger)),
@@ -107,8 +107,8 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats, 
                     <p style={slimeStats.maxStamina >= slimeStats.staminaCap ? { color: "red" } : {}}>
                         Stamina: {Math.trunc(slimeStats.stamina)} / {slimeStats.maxStamina}
                     </p>
-                    {staminaIsReady ?
-                            <p className="timer-text">[{getStaminaFormattedTimeLeft()}]</p> : <></>
+                    {staminaIsReady && getStaminaIntTimeLeft() < 120 ?
+                            <p className="timer-text">{getStaminaFormattedTimeLeft()}</p> : <></>
                         }
                 </div>
                 {userid != null && !isLocked() && slimeStats.maxStamina < slimeStats.staminaCap ?
@@ -130,8 +130,8 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats, 
                 <div className="tooltip-container">
                     <p style={slimeStats.maxHunger >= slimeStats.hungerCap ? { color: "red" } : {}}>
                         Hunger: {Math.ceil(slimeStats.hunger)} / {slimeStats.maxHunger}</p>
-                    {hungerIsReady ?
-                            <p className="timer-text">[{getHungerFormattedTimeLeft()}]</p> : <></>
+                    {hungerIsReady && getHungerIntTimeLeft() < 120 ?
+                            <p className="timer-text">{getHungerFormattedTimeLeft()}</p> : <></>
                         }
                 </div>
                 {userid != null && !isLocked() && slimeStats.maxHunger < slimeStats.hungerCap ?
