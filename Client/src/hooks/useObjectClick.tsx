@@ -9,7 +9,6 @@ const useObjectClick = () => {
     function handleObjectClicked(object: Slime | UserAccount | MarketSlime, path: string, storage: string) {
         const formerStorage = localStorage.getItem(storage);
         if (!formerStorage || (formerStorage && JSON.parse(formerStorage).id != object.id)) {
-            console.log(object);
             localStorage.setItem(storage, JSON.stringify(object));
         } 
         navigate(path + object.id);

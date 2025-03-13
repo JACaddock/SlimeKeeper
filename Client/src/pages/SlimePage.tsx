@@ -40,6 +40,15 @@ const SlimePage = () => {
             setSlime(response.data);
             setUsername(response.data.ownerName)
             localStorage.setItem("currentSlime", JSON.stringify(response.data));
+            const ownerId = response.data.ownerId;
+            const storedUser = localStorage.getItem("currentUser");
+            if (!storedUser || (storedUser && JSON.parse(storedUser).id != ownerId)) {
+                axios.get("/api/user/account/" + ownerId)
+                .then((response) => {
+                    localStorage.setItem("currentUser", JSON.stringify(response.data))
+                })
+                .catch(() => {})
+            }
         })
         .catch(() => {
             setSlime(null);
