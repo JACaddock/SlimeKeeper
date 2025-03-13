@@ -5,7 +5,7 @@ const slimes = Array.from({ length: 3 }, (_, i) => ({ ...slimeDefault, id: i }))
 
 export const userDefault: User = {
     id: 0,
-    username: "...",
+    username: "....................",
     email: "",
     is_verified: false,
     first_name: "",
@@ -17,7 +17,7 @@ export const userDefault: User = {
 
 export const userAccountDefault: UserAccount = {
     id: 0,
-    username: "...",
+    username: "....................",
     gold: 0,
     slimes: slimes,
     friends: [],

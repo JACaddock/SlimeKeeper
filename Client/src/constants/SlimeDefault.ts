@@ -3,7 +3,7 @@ import { Rarity } from "../utils/Enums";
 
 export const slimeDefault: Slime = {
     id: -1,
-    name: "Slime",
+    name: "....................",
     svg: (`<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100px" height="100px" viewBox="-10 -5 31 21" >
                 <circle id="body" cx = "5" cy="5" r="5" fill="#30aa49" stroke="#000000" stroke- width="0.2" > </circle>
                 <circle id="iris1" cx="3" cy="4" r="1" fill="#000000" stroke="none"></circle >
@@ -14,6 +14,7 @@ export const slimeDefault: Slime = {
     isOnMarket: true,
     price: 300,
     ownerId: -1,
+    ownerName: "....................",
     slimeStats: {
         id: -1,
         age: 0,
@@ -48,5 +49,7 @@ export const marketSlimeDefault: MarketSlime = {
                 <circle id="iris1" cx="3" cy="4" r="1" fill="#000000" stroke="none"></circle >
                 <circle id="iris2" cx = "7" cy = "4" r = "1" fill = "#000000" stroke = "none" ></circle>
            </svg >`),
-    price: 300
+    price: 300,
+    ownerId: -1,
+    ownerName: "...................."
 }

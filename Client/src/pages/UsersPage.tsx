@@ -7,7 +7,7 @@ import useObjectClick from "../hooks/useObjectClick";
 
 const UsersPage = () => {
     const [userAccounts, setUserAccounts] = useState<UserAccount[]>(
-        Array.from({ length: 5 }, (_, i) => ({ ...userAccountDefault, id: i }))
+        Array.from({ length: 30 }, (_, i) => ({ ...userAccountDefault, id: i }))
     );
     const { handleObjectClicked } = useObjectClick();
 
@@ -28,10 +28,10 @@ const UsersPage = () => {
             {userAccounts ?
                 (<div className="list-container">
                     {userAccounts
-                        .map((userAccount) => 
+                        .map((userAccount, index) => 
                             <ListItem
-                                key={userAccount.id} id={userAccount.id}
-                                name={userAccount.username} handleItemClick={() => { handleObjectClicked(userAccount, "/user/", "currentUser") }}
+                                key={index} index={index} name={userAccount.username} 
+                                handleItemClick={() => { handleObjectClicked(userAccount, "/user/", "currentUser") }}
                                 body={userAccount.gold + "G | " + userAccount.slimes.length + " Slimes | " + userAccount.friends.length + " Friends"}
                             />
                     )}
