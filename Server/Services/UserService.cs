@@ -1,4 +1,5 @@
-﻿using Server.DTO;
+﻿using Microsoft.AspNetCore.Identity;
+using Server.DTO;
 using Server.Enums;
 using Server.Models;
 using Server.Repositories;
@@ -9,6 +10,7 @@ namespace Server.Services
     {
         private IUserRepository UserRepository { get; set; } = userRepository;
         private SlimeService SlimeService { get; set; } = slimeService;
+        private PasswordHasher<User> PasswordHasher { get; set; } = new();
 
 
         public List<UserUnique> GetUsers()
@@ -76,9 +78,13 @@ namespace Server.Services
         public UserAuth? LoginUser(UserCredentials userAttempt)
         {
             User? user = UserRepository.GetByUsername(userAttempt.Username);
-            if (user?.Username == userAttempt.Username && user?.Password == userAttempt.Password)
+            if (user != null && user.Username == userAttempt.Username)
             {
-                return new(new(user.Id, user.Username, user.Email), GenerateToken(user.Id, user.Username));
+                PasswordVerificationResult result = PasswordHasher.VerifyHashedPassword(user, user.Password, userAttempt.Password);
+                if (result != PasswordVerificationResult.Failed)
+                {
+                    return new(new(user.Id, user.Username, user.Email), GenerateToken(user.Id, user.Username));
+                }
             }
             return null;
         }
@@ -89,11 +95,16 @@ namespace Server.Services
             int rInt = r.Next(1, 6);
             int id = UserRepository.GetAll().Count;
 
-            return new(
+            User user = new(
                 id,
                 username, email, password,
                 [.. Enumerable.Repeat(-1, rInt)]
                 );
+
+            string hashedPassword = PasswordHasher.HashPassword(user, password);
+            user.Password = hashedPassword;
+
+            return user;
         }
 
         public Tuple<Status, SlimeStats?> TrainSlime(SlimeTrainer slimeTrainer)
