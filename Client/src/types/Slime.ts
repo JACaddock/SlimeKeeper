@@ -9,6 +9,7 @@ export type Slime = {
     isOnMarket: boolean;
     price: number;
     ownerId: number;
+    ownerName: string;
     slimeStats: SlimeStats | undefined;
 };
 
@@ -17,12 +18,15 @@ export type MarketSlime = {
     name: string;
     svg: string;
     price: number;
+    ownerId: number;
+    ownerName: string;
 };
 
 
-export type EditableSlime = {
+export type SlimeEditable = {
     id: number;
     name: string;
     isOnMarket: boolean;
     ownerId: number;
+    ownerName: string;
 }

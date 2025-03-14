@@ -1,8 +1,8 @@
 import axios from "axios";
 import { Slime } from "../types/Slime";
 import parse from "html-react-parser";
-import { Link } from "react-router-dom";
 import { useAccount } from "../hooks/useAccount.tsx";
+import useObjectClick from "../hooks/useObjectClick.tsx";
 
 interface Props {
     slime: Slime;
@@ -14,6 +14,7 @@ interface Props {
 
 const OtherSlime = ({ slime, username, getSlime, userid }: Props) => {
     const { hasEnoughGold, changeGold, addSlime } = useAccount();
+    const { handleObjectClicked } = useObjectClick();
 
     function handlePurchaseSlime() {
         if (userid != null && slime != null) {
@@ -22,15 +23,15 @@ const OtherSlime = ({ slime, username, getSlime, userid }: Props) => {
                 sellerid: slime.ownerId,
                 slimeid: slime.id
             })
-                .then(() => {
-                    //console.log(response.status + ": Purchase Success!");
-                    getSlime(String(slime.id));
-                    addSlime({ ...slime, ownerId: userid, isOnMarket: false });
-                    changeGold(-slime.price);
-                })
-                .catch(() => {
-                    //console.log(error);
-                })
+            .then(() => {
+                //console.log(response.status + ": Purchase Success!");
+                getSlime(String(slime.id));
+                addSlime({ ...slime, ownerId: userid, isOnMarket: false });
+                changeGold(-slime.price);
+            })
+            .catch(() => {
+                //console.log(error);
+            })
         }
     }
 
@@ -41,7 +42,14 @@ const OtherSlime = ({ slime, username, getSlime, userid }: Props) => {
                 {parse(slime.svg)}
             </div>
             <p>{slime.name} is a {slime.slimeStats ? Math.trunc(slime.slimeStats.age) : ""} year old {slime.colour} coloured slime with a size of {slime.size}</p>
-            <p>{slime.name} is owned by user <Link to={"/user/" + slime?.ownerId}>{username}</Link> and is worth {slime.price}</p>
+            <p>{slime.name} is owned by user <span className="span-link" onClick={() => {
+                handleObjectClicked({
+                    id: slime.ownerId,
+                    username: slime.ownerName,
+                    is_admin: false, gold: 0,
+                    slimes: [slime], friends: []
+                }, "/user/", "currentUser")
+            }}>{username}</span> and is worth {slime.price}</p>
             <div className="flex-column salebox-container">
                 {slime.slimeStats?.health ?? 1 > 0 ?
                     (<><p>{slime.isOnMarket ? slime.name + " is for sale" : slime.name + " is not for sale"}</p>

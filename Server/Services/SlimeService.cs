@@ -53,7 +53,7 @@ namespace Server.Services
             {
                 for (int i = 0; i < owner.OwnedSlimes.Count; i++)
                 {
-                    Slime slime = CreateRandomSlime(owner.Id);
+                    Slime slime = CreateRandomSlime(owner.Id, owner.Username);
                     owner.OwnedSlimes[i] = slime.Id;
                     slimes.Add(slime);
                 }
@@ -172,12 +172,13 @@ namespace Server.Services
             slime.Name = updatedSlime.Name;
             slime.IsOnMarket = updatedSlime.IsOnMarket;
             slime.OwnerId = updatedSlime.OwnerId;
+            slime.OwnerName = updatedSlime.OwnerName;
 
             return UpdateStatus(slime);
         }
 
 
-        public Slime CreateRandomSlime(int? ownerId = null)
+        public Slime CreateRandomSlime(int? ownerId = null, string? ownerName = null)
         {
             Random r = new();
 
@@ -197,7 +198,8 @@ namespace Server.Services
             SlimeStats stats = GenerateStats(id, rarity);
 
             Slime slime = new(id, name, size, color, isonmarket,
-                              CalculatePrice(stats, rarityIndex), ownerId, stats
+                              CalculatePrice(stats, rarityIndex), 
+                              ownerId, ownerName, stats
             );
 
             slime.Svg = SlimeSvg.PrepareSvg(slime);

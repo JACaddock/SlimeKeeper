@@ -6,42 +6,42 @@ import { Arrow } from "../assets/Arrow.tsx";
 import "../css/MarketLoop.css";
 import useDetectDevice from "../hooks/useDetectDevice";
 import { marketSlimeDefault } from "../constants/SlimeDefault.ts";
+import useObjectClick from "../hooks/useObjectClick.tsx";
 
 
 
 const MarketLoop = () => {
     const [slimes, setSlimes] = useState<MarketSlime[]>(
-        Array.from({ length: 10 }, (_, i) => ({ ...marketSlimeDefault, id: i }))
+        Array.from({ length: 30 }, (_, i) => ({ ...marketSlimeDefault, id: i }))
     );
+    const { handleObjectClicked } = useObjectClick();
     const [index, setIndex] = useState<number>(0);
     const { isMiniture, isMobile, isTablet } = useDetectDevice();
 
-
     useEffect(() => {
-        getMarketSlimes();
+        axios.get('/api/slime/market/')
+            .then((response) => {
+                const updatedSlimes = response.data;
+                setSlimes(updatedSlimes);
+            })
+            .catch(() => {
+                setSlimes([]);
+            });
     }, [index]);
+
 
     const marketslimes = slimes.length <= 0
         ? <p>Unable to load Market Loop</p>
-        : <>{getVisibleSlimes(isMiniture ? 1: isMobile ? 2: isTablet ? 4: 6).map((slime) =>
+        : <>{getVisibleSlimes(isMiniture ? 1 : isMobile ? 2 : isTablet ? 4 : 6)
+            .map((slime, index) =>
             <ListItem
-                key={slime.id} id={slime.id}
-                path="/slime/" name={slime.name}
+                key={index} index={index} name={slime.name}
+                handleItemClick={() => { handleObjectClicked(slime, "/slime/", "currentSlime") }}
                 body={slime.price + "G"}
                 svg={slime.svg}
             />
           )}
           </>
-
-    function getMarketSlimes() {
-        axios.get('/api/slime/market/')
-        .then((response) => {
-            setSlimes(response.data);
-        })
-        .catch(() => {
-            setSlimes([]);
-        })
-    }
 
     function getVisibleSlimes(max: number = 6) {
         if (index + max <= slimes.length) {

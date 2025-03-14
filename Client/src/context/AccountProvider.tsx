@@ -85,7 +85,7 @@ const AccountProvider = ({ children }: { children: React.ReactNode }) => {
         <AccountContext.Provider
             value={{
                 hasEnoughGold, changeGold, isAFriend, getGold, isAdmin,
-                addSlime, updateSlime, getSlimes, getFriends
+                addSlime, updateSlime, getSlimes, getFriends, userAccount
             }}
         >
             {children}

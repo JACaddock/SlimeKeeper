@@ -12,6 +12,22 @@
     border: 3px solid black;
     padding: 10px;
     overflow: hidden;
+    opacity: 1;
+    transition: opacity 1s ease-in;
+}
+
+@keyframes fading {
+    25%, 75% {
+        opacity: 1;
+    }
+
+    50%, 100% {
+        opacity: 0;
+    }
+}
+
+.fading {
+    animation: fading 1s ease-in-out;
 }
 
 .market-item:hover {

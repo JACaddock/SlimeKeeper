@@ -5,11 +5,21 @@ import { useParams } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import UserItem from "../components/UserItem";
 import { userAccountDefault } from "../constants/UserDefaults";
+import { useAccount } from "../hooks/useAccount";
 
 
 const UserPage = () => {
     const { id } = useParams();
-    const [userAccount, setUserAccount] = useState<UserAccount | null>(userAccountDefault);
+    const { userAccount: ownUserAccount } = useAccount();
+    const [userAccount, setUserAccount] = useState<UserAccount | null>(() => {
+        if (ownUserAccount && id && ownUserAccount.id == parseInt(id)) return ownUserAccount;
+
+        const currentUser = localStorage.getItem("currentUser");
+        if(currentUser && JSON.parse(currentUser).id == id) {
+            return JSON.parse(currentUser);
+        }
+        else return userAccountDefault;
+    });
     const { user } = useAuth();
 
     useEffect(() => {
@@ -20,9 +30,11 @@ const UserPage = () => {
         axios.get("/api/user/account/" + id)
             .then((response) => {
                 setUserAccount(response.data);
+                localStorage.setItem("currentUser", JSON.stringify(response.data));
             })
             .catch(() => {
                 setUserAccount(null);
+                localStorage.removeItem("currentUser");
             })
     }
 

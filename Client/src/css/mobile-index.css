@@ -1,18 +1,18 @@
 @media (max-width: 1450px) {
     .list-container {
-        grid-template-columns: auto auto auto auto;
+        grid-template-columns: repeat(4, minmax(200px, 1fr));
         column-gap: 1em;
     }
 }
 
 @media (max-width: 1300px) {
     .market-container {
-        grid-template-columns: 50px auto auto auto auto 50px;
+        grid-template-columns: 50px repeat(4,minmax(auto, 1fr)) 50px;
         column-gap: 1em;
     }
 
     .list-container {
-        grid-template-columns: auto auto auto;
+        grid-template-columns: repeat(3, minmax(200px, 1fr));
         column-gap: 1em;
     }
 }
@@ -48,7 +48,7 @@
     }
 
     .list-container {
-        grid-template-columns: auto auto;
+        grid-template-columns: repeat(2, minmax(200px, 1fr));
         column-gap: 10px;
     }
 
@@ -79,6 +79,6 @@
     }
 
     .list-container {
-        grid-template-columns: auto;
+        grid-template-columns: repeat(1, minmax(200px, 1fr));
     }
 }
