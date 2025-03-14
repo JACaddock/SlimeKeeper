@@ -1,23 +1,35 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Server.Models
 {
-    [method: SetsRequiredMembers]
-    public class User(int id, string username, string email, string password, List<int> ownedSlimes)
+    public class User
     {
+        public User() { }
+
+        [SetsRequiredMembers]
+        public User(int id, string username, string email, string password, List<int> ownedSlimes)
+        {
+            Id = id;
+            Username = username;
+            Email = email;
+            Password = password;
+            OwnedSlimes = ownedSlimes;
+        }
+
         // Personal details
-        public int Id { get; set; } = id;
-        public required string Username { get; set; } = username;
-        public required string Email { get; set; } = email;
+        [Key] public int Id { get; set; }
+        public required string Username { get; set; } 
+        public required string Email { get; set; } 
         public bool IsVerified { get; set; } = false;
-        public required string Password { get; set; } = password;
+        public required string Password { get; set; } 
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public bool IsAdmin { get; set; } = false;
 
         // Account details
         public int Gold { get; set; } = 200;
-        public List<int> OwnedSlimes { get; set; } = ownedSlimes;
+        public List<int> OwnedSlimes { get; set; } = [];
         public int[] Friends { get; set; } = [];
         public DateTime LastClaimedDaily { get; set; } = DateTime.UtcNow;
     }

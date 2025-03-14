@@ -1,42 +1,48 @@
-﻿using Server.Models;
+﻿using Server.Data;
+using Server.Models;
 
 namespace Server.Repositories.RDS
 {
-    public class RDSSlimeRepository : ISlimeRepository
+    public class RDSSlimeRepository(AppDbContext dbContext) : ISlimeRepository
     {
-        public bool Add(Slime slime)
+        private AppDbContext DbContext { get; set; } = dbContext;
+
+        public Slime? GetById(int id)
         {
-            throw new NotImplementedException();
+            return DbContext.Slimes.Find(id);
         }
 
-        public bool Delete(Slime slime)
+        public List<Slime> GetByOwner(int ownerId)
         {
-            throw new NotImplementedException();
+            return [.. DbContext.Slimes.Where(s => s.OwnerId == ownerId)];
         }
 
         public List<Slime> GetAll()
         {
-            throw new NotImplementedException();
+            return [.. DbContext.Slimes];
         }
 
         public List<Slime> GetAllMarket()
         {
-            throw new NotImplementedException();
+            return [.. DbContext.Slimes.Where(s => s.IsOnMarket)];
         }
 
-        public Slime? GetById(int id)
+        public bool Add(Slime slime)
         {
-            throw new NotImplementedException();
-        }
-
-        public List<Slime> GetByOwner(int id)
-        {
-            throw new NotImplementedException();
+            DbContext.Slimes.Add(slime);
+            return DbContext.SaveChanges() > 0;
         }
 
         public bool Update(Slime slime)
         {
-            throw new NotImplementedException();
+            DbContext.Slimes.Update(slime);
+            return DbContext.SaveChanges() > 0;
+        }
+
+        public bool Delete(Slime slime)
+        {
+            DbContext.Slimes.Remove(slime);
+            return DbContext.SaveChanges() > 0;
         }
     }
 }
