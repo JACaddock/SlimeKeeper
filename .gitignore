@@ -364,4 +364,4 @@ FodyWeavers.xsd
 
 Migrations/
 
-appsettings.Development.json
+/Server/appsettings.Development.json
