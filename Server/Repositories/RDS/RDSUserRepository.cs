@@ -1,48 +1,53 @@
-﻿using Server.DTO;
+﻿using Server.Config;
+using Server.DTO;
 using Server.Models;
 
 namespace Server.Repositories.RDS
 {
-    public class RDSUserRepository : IUserRepository
+    public class RDSUserRepository(AppDbContext dbContext) : IUserRepository
     {
+        private AppDbContext DbContext { set; get; } = dbContext;
+
         public bool Add(User user)
         {
-            throw new NotImplementedException();
+            DbContext.Add(user);
+            return true;
         }
 
         public bool Delete(User user)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public List<User> GetAll()
         {
-            throw new NotImplementedException();
+            return [];
         }
 
         public List<UserUnique> GetAllUnique()
         {
-            throw new NotImplementedException();
+            return [];
         }
 
         public User? GetByEmail(string email)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public User? GetById(int id)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public User? GetByUsername(string username)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public bool Update(User user)
         {
-            throw new NotImplementedException();
+            DbContext.Update(user);
+            return true;
         }
     }
 }
