@@ -24,8 +24,8 @@ function MarketPage() {
 
     return (
         <main>
-            <h2>Users</h2>
-            {slimes ?
+            <h2>Market</h2>
+            {slimes.length > 0 ?
                 (<div className="list-container">
                     {slimes
                         .map((slime, index) =>
@@ -38,7 +38,7 @@ function MarketPage() {
                     )}
                 </div>)
                 :
-                (<p>Could not find any users</p>)
+                <p>Currently there are no available slimes for purchase :(</p>
             }
         </main>
     );

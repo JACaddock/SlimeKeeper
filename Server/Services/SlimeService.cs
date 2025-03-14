@@ -25,9 +25,9 @@ namespace Server.Services
         }
 
 
-        public Slime? GetSlimeById(int id)
+        public SlimeDTO? GetSlimeById(int id)
         {
-            Slime? slime = SlimeRepository.GetById(id);
+            SlimeDTO? slime = SlimeRepository.GetById(id);
             if (slime != null)
             {
                 return UpdateStatus(slime);
@@ -35,27 +35,28 @@ namespace Server.Services
             return slime;
         }
 
-        public List<Slime> GetSlimesByOwner(int ownerid)
+        public List<SlimeDTO> GetSlimesByOwner(int ownerid)
         {
-            List<Slime> slimes = SlimeRepository.GetByOwner(ownerid);
+            List<SlimeDTO> slimes = SlimeRepository.GetByOwner(ownerid);
             for (int i = 0; i < slimes.Count; i++)
             {
-                Slime slime = slimes[i];
+                SlimeDTO slime = slimes[i];
                 slimes[i] = UpdateStatus(slime);
             }
             return slimes;
         }
 
-        public List<Slime> GetSlimesByOwner(User owner)
+        public List<SlimeDTO> GetSlimesByOwner(User owner)
         {
-            List<Slime> slimes = SlimeRepository.GetByOwner(owner.Id);
+            List<SlimeDTO> slimes = SlimeRepository.GetByOwner(owner.Id);
             if (slimes.Count == 0 && owner.OwnedSlimes.Count > 0)
             {
                 for (int i = 0; i < owner.OwnedSlimes.Count; i++)
                 {
-                    Slime slime = CreateRandomSlime(owner.Id, owner.Username);
-                    owner.OwnedSlimes[i] = slime.Id;
-                    slimes.Add(slime);
+                    Slime slime = CreateRandomSlime(owner.Id);
+                    SlimeDTO slimeDTO = new(slime.Id, slime.Name, slime.Size, slime.Color, slime.IsOnMarket, slime.Price, 
+                        slime.OwnerId, owner.Username, slime.SlimeStats, slime.Svg);
+                    slimes.Add(slimeDTO);
                 }
             }
             return slimes;
@@ -63,13 +64,19 @@ namespace Server.Services
 
         public Tuple<Status, SlimeStats?> TrainSlime(SlimeTrainer slimeTrainer)
         {
-            Slime? slime = SlimeRepository.GetById(slimeTrainer.SlimeId);
-            if (slime == null) return new(Status.SLIMENOTFOUND, null);
+            SlimeDTO? slimeDTO = SlimeRepository.GetById(slimeTrainer.SlimeId);
+            if (slimeDTO == null) return new(Status.SLIMENOTFOUND, null);
 
-            if (slimeTrainer.OwnerId != slime.OwnerId) return new(Status.NOTOWN, null);
+            if (slimeTrainer.OwnerId != slimeDTO.OwnerId) return new(Status.NOTOWN, null);
 
-            slime = UpdateStatus(slime);
-            SlimeStats stats = slime.SlimeStats;
+            slimeDTO = UpdateStatus(slimeDTO);
+            SlimeStats stats = slimeDTO.SlimeStats;
+            Slime slime = new(slimeDTO.Name, slimeDTO.Size, slimeDTO.Color, slimeDTO.Price, slimeDTO.OwnerId, slimeDTO.SlimeStats)
+            {
+                Id = slimeDTO.Id,
+                IsOnMarket = slimeDTO.IsOnMarket
+            };
+
             if (stats.Health <= 0) return new(Status.SLIMEISDEAD, stats);
             if (stats.Stamina < 1) return new(Status.NOSTAMINA, stats);
 
@@ -144,7 +151,7 @@ namespace Server.Services
 
         public Tuple<Status, SlimeStats?> FeedSlime(SlimeFeeder slimeFeeder)
         {
-            Slime? slime = SlimeRepository.GetById(slimeFeeder.SlimeId);
+            SlimeDTO? slime = SlimeRepository.GetById(slimeFeeder.SlimeId);
             if (slime == null) return new(Status.SLIMENOTFOUND, null);
 
             if (slimeFeeder.OwnerId != slime.OwnerId) return new(Status.NOTOWN, null);
@@ -159,26 +166,33 @@ namespace Server.Services
             }
             stats.LastUpdated = DateTime.UtcNow;
             slime.SlimeStats = stats;
-            SlimeRepository.Update(slime);
+
+            Slime s = new(slime.Name, slime.Size, slime.Color, slime.Price, slime.OwnerId, slime.SlimeStats)
+            {
+                Id = slime.Id,
+                IsOnMarket = slime.IsOnMarket
+            };
+            SlimeRepository.Update(s);
 
             return new(Status.SUCCESS, slime.SlimeStats);
         }
 
-        public Slime? UpdateSlime(SlimeEditable updatedSlime)
+        public SlimeDTO? UpdateSlime(SlimeEditable updatedSlime)
         {
-            Slime? slime = SlimeRepository.GetById(updatedSlime.Id);
+            SlimeDTO? slime = SlimeRepository.GetById(updatedSlime.Id);
             if (slime == null) return null;
+
+            Console.WriteLine(slime.IsOnMarket + " " + updatedSlime.IsOnMarket);
 
             slime.Name = updatedSlime.Name;
             slime.IsOnMarket = updatedSlime.IsOnMarket;
             slime.OwnerId = updatedSlime.OwnerId;
-            slime.OwnerName = updatedSlime.OwnerName;
 
             return UpdateStatus(slime);
         }
 
 
-        public Slime CreateRandomSlime(int? ownerId = null, string? ownerName = null)
+        public Slime CreateRandomSlime(int? ownerId = null)
         {
             Random r = new();
 
@@ -191,15 +205,11 @@ namespace Server.Services
             string[] colors = ["#30aa49", "#006e51", "#92b6d5"];
             string color = colors[rarityIndex];
 
-            bool isonmarket = ownerId <= 3 && ownerId > 0;
+            SlimeStats stats = GenerateStats(rarity);
 
-            int id = SlimeRepository.GetAll().Count;
-
-            SlimeStats stats = GenerateStats(id, rarity);
-
-            Slime slime = new(id, name, size, color, isonmarket,
+            Slime slime = new(name, size, color,
                               CalculatePrice(stats, rarityIndex), 
-                              ownerId, ownerName, stats
+                              ownerId, stats
             );
 
             slime.Svg = SlimeSvg.PrepareSvg(slime);
@@ -212,7 +222,7 @@ namespace Server.Services
         //public Slime CreateGeneticSlime(List<Slime> slimes) { }
 
 
-        private Slime UpdateStatus(Slime slime)
+        private SlimeDTO UpdateStatus(SlimeDTO slime)
         {
             SlimeStats slimeStats = slime.SlimeStats;
             if (slimeStats.Health > 0 && !slime.IsOnMarket)
@@ -236,14 +246,22 @@ namespace Server.Services
 
                 slimeStats.LastUpdated = now;
                 slime.SlimeStats = slimeStats;
-                slime.Svg = SlimeSvg.PrepareSvg(slime);
 
-                SlimeRepository.Update(slime);
+                slime.Svg = SlimeSvg.PrepareSvg(slime);
             }
+
+            Slime s = new(slime.Name, slime.Size, slime.Color, slime.Price, slime.OwnerId, slime.SlimeStats)
+            {
+                Id = slime.Id,
+                IsOnMarket = slime.IsOnMarket,
+                Svg = slime.Svg
+            };
+
+            SlimeRepository.Update(s);
             return slime;
         }
 
-        private static SlimeStats GenerateStats(int id, Rarity rarity = Rarity.COMMON)
+        private static SlimeStats GenerateStats(Rarity rarity = Rarity.COMMON)
         {
             StatRolls healthRolls = new();
             StatRolls staminaRolls = new();
@@ -376,7 +394,6 @@ namespace Server.Services
             int speed = speedRolls.CalculateStat(speedRoll);
 
             return new(
-                id,
                 health,
                 health + healthCapAdditive,
                 stamina,

@@ -16,6 +16,12 @@
     transition: opacity 1s ease-in;
 }
 
+.market-item svg {
+    min-width: 100px;
+    min-height: 100px;
+}
+
+
 @keyframes fading {
     25%, 75% {
         opacity: 1;

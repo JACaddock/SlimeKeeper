@@ -28,7 +28,7 @@ namespace Server.Controllers
         [HttpGet("{id}")]
         public IActionResult GetSlimeById(int id)
         {
-            Slime? slime = SlimeService.GetSlimeById(id);
+            SlimeDTO? slime = SlimeService.GetSlimeById(id);
             if (slime == null)
             {
                 return NotFound("Slime not found");
@@ -39,7 +39,7 @@ namespace Server.Controllers
         [HttpGet("Owner/{ownerid}")]
         public IActionResult GetSlimesByOwner(int ownerid)
         {
-            List<Slime>? slimes = SlimeService.GetSlimesByOwner(ownerid);
+            List<SlimeDTO>? slimes = SlimeService.GetSlimesByOwner(ownerid);
             if (slimes == null)
             {
                 return NotFound("Can't find any slimes");
@@ -58,7 +58,7 @@ namespace Server.Controllers
         [HttpPost("Update")]
         public IActionResult UpdateSlime([FromBody] SlimeEditable updatedSlime)
         {
-            Slime? slime = SlimeService.UpdateSlime(updatedSlime);
+            SlimeDTO? slime = SlimeService.UpdateSlime(updatedSlime);
             if (slime != null)
             {
                 return Ok(slime);   

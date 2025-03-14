@@ -25,7 +25,7 @@ const UsersPage = () => {
     return (
         <main>
             <h2>Users</h2>
-            {userAccounts ?
+            {userAccounts.length > 0 ?
                 (<div className="list-container">
                     {userAccounts
                         .map((userAccount, index) => 
@@ -37,7 +37,7 @@ const UsersPage = () => {
                     )}
                 </div>)
                 :
-                (<p>Could not find any users</p>)
+                <p>Could not find any users</p>
             }
         </main>
     );

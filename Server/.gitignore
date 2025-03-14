@@ -5,6 +5,8 @@ project.lock.json
 *.pyc
 nupkg/
 
+appsettings.Development.json
+
 # Visual Studio Code
 .vscode/
 
@@ -83,3 +85,5 @@ bld/
 msbuild.log
 msbuild.err
 msbuild.wrn
+
+Migrations/
