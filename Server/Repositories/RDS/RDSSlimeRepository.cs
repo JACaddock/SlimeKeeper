@@ -1,4 +1,6 @@
-﻿using Server.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Server.Data;
+using Server.DTO;
 using Server.Models;
 
 namespace Server.Repositories.RDS
@@ -7,14 +9,30 @@ namespace Server.Repositories.RDS
     {
         private AppDbContext DbContext { get; set; } = dbContext;
 
-        public Slime? GetById(int id)
+        public SlimeDTO? GetById(int id)
         {
-            return DbContext.Slimes.Find(id);
+            var slime = DbContext.Slimes
+                .Where(s => s.Id == id)
+                .Select(s => new SlimeDTO(
+                    s.Id, s.Name, s.Size, s.Color, s.IsOnMarket, s.Price, s.OwnerId, 
+                    s.Owner != null ? s.Owner.Username : "???", s.SlimeStats, s.Svg
+                    )
+                )
+                .FirstOrDefault();
+
+            return slime;
         }
 
-        public List<Slime> GetByOwner(int ownerId)
+        public List<SlimeDTO> GetByOwner(int ownerId)
         {
-            return [.. DbContext.Slimes.Where(s => s.OwnerId == ownerId)];
+            return [.. DbContext.Slimes
+                .Where(s => s.OwnerId == ownerId)
+                .Select(s => new SlimeDTO(
+                    s.Id, s.Name, s.Size, s.Color, s.IsOnMarket, s.Price, s.OwnerId,
+                    s.Owner != null ? s.Owner.Username : "???", s.SlimeStats, s.Svg
+                    )
+                )
+             ];
         }
 
         public List<Slime> GetAll()
@@ -35,7 +53,18 @@ namespace Server.Repositories.RDS
 
         public bool Update(Slime slime)
         {
-            DbContext.Slimes.Update(slime);
+            var existingSlime = DbContext.Slimes.FirstOrDefault(s => s.Id == slime.Id);
+            if (existingSlime == null) return false;
+
+            Console.WriteLine("DB IsOnMarket: " + existingSlime.IsOnMarket + " | New IsOnMarket: " + slime.IsOnMarket);
+
+            existingSlime.Name = slime.Name;
+            existingSlime.IsOnMarket = slime.IsOnMarket;
+            existingSlime.SlimeStats = slime.SlimeStats;
+            existingSlime.Svg = slime.Svg?? existingSlime.Svg;
+            existingSlime.OwnerId = slime.OwnerId;
+            existingSlime.Price = slime.Price;
+
             return DbContext.SaveChanges() > 0;
         }
 

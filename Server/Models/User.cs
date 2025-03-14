@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Server.Models
@@ -8,13 +9,11 @@ namespace Server.Models
         public User() { }
 
         [SetsRequiredMembers]
-        public User(int id, string username, string email, string password, List<int> ownedSlimes)
+        public User(string username, string email, string password)
         {
-            Id = id;
             Username = username;
             Email = email;
             Password = password;
-            OwnedSlimes = ownedSlimes;
         }
 
         // Personal details
@@ -29,8 +28,8 @@ namespace Server.Models
 
         // Account details
         public int Gold { get; set; } = 200;
-        public List<int> OwnedSlimes { get; set; } = [];
-        public int[] Friends { get; set; } = [];
+        public virtual List<Slime> OwnedSlimes { get; set; } = [];
+        [ForeignKey("User")] public int[] Friends { get; set; } = [];
         public DateTime LastClaimedDaily { get; set; } = DateTime.UtcNow;
     }
 }

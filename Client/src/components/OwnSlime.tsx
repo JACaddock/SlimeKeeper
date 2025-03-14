@@ -92,7 +92,7 @@ const OwnSlime = ({ slime, userid, setSlime }: Props) => {
             {slime.slimeStats?.health ?? 1 > 0 ? editableName : <h2>{slime?.name}</h2>}
             {invalidInput ? <p style={{ color: "red", fontStyle: "italic" }}>One or more of your inputs are invalid!</p> : <></>}
             <div className="image-wrapper">
-                {parse(slime.svg)}
+                {parse(slime.svg?? "")}
             </div>
             <p>{slime.name} is a {slime.slimeStats ? Math.trunc(slime.slimeStats.age) : ""} year old {slime.colour} coloured slime with a size of {slime.size}</p>
             <p>{slime.name} is owned by <span className="span-link" onClick={() => {

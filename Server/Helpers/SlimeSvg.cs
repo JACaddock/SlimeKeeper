@@ -1,4 +1,5 @@
-﻿using Server.Enums;
+﻿using Server.DTO;
+using Server.Enums;
 using Server.Models;
 
 namespace Server.Helpers
@@ -7,71 +8,81 @@ namespace Server.Helpers
     {
         public static string PrepareSvg(Slime slime)
         {
+            return StartSvgCreation(slime.SlimeStats.Age, slime.Size, slime.Color);
+        }
+
+        public static string PrepareSvg(SlimeDTO slimeDTO)
+        {
+            return StartSvgCreation(slimeDTO.SlimeStats.Age, slimeDTO.Size, slimeDTO.Color);
+        }
+
+        public static string StartSvgCreation(double age, int size, string color)
+        {
             string workingSvg = @"
                 <svg xmlns='http://www.w3.org/2000/svg' 
                     style='background: transparent; background-color: transparent; color-scheme: light dark;'
                     version='1.1' width='100px' height='100px'";
 
-            if (slime.SlimeStats.Age > 1)
+            if (age > 1)
             {
                 workingSvg += "viewBox='-0.5 -0.5 31 21'>";
-                workingSvg += PrepareAdultSvg(slime);
+                workingSvg += PrepareAdultSvg(size, color);
             }
             else
             {
                 workingSvg += "viewBox='-10 -5 31 21'>";
-                workingSvg += PrepareChildSvg(slime);
+                workingSvg += PrepareChildSvg(size, color);
             }
 
             workingSvg += "</svg>";
             return workingSvg;
         }
 
-        private static string PrepareAdultSvg(Slime slime)
+        private static string PrepareAdultSvg(int size, string color)
         {
             string workingSvg = "";
 
             // Body
             workingSvg += "<ellipse id='body' cx='15' cy='10' "
-                       + CalculatePartSize(SlimePart.BODY, slime.Size)
-                       + " fill='" + slime.Color
+                       + CalculatePartSize(SlimePart.BODY, size)
+                       + " fill='" + color
                        + "' stroke='#000000' stroke-width='0.2' />";
 
             // Mouth
             workingSvg += "<path id='mouth' "
-                       + CalculatePartSize(SlimePart.MOUTH, slime.Size)
+                       + CalculatePartSize(SlimePart.MOUTH, size)
                        + " fill='#ff8000' stroke='#000000' stroke-width='0.5' transform='rotate(90,15,15)' />";
 
             // Left Eye
             workingSvg += "<circle id='eye1' "
-                       + CalculatePartSize(SlimePart.EYE1, slime.Size)
+                       + CalculatePartSize(SlimePart.EYE1, size)
                        + " fill='#ffffff' stroke='#000000' stroke-width='0.5' />";
             // Left Iris
             workingSvg += "<circle id='iris1' "
-                       + CalculatePartSize(SlimePart.IRIS1, slime.Size)
+                       + CalculatePartSize(SlimePart.IRIS1, size)
                        + " fill='#000000' stroke='none' />";
 
             // Right Eye
             workingSvg += "<circle id='eye2' "
-                       + CalculatePartSize(SlimePart.EYE2, slime.Size)
+                       + CalculatePartSize(SlimePart.EYE2, size)
                        + " fill='#ffffff' stroke='#000000' stroke-width='0.5' />";
 
             // Right Iris
             workingSvg += "<circle id='iris2' "
-                       + CalculatePartSize(SlimePart.IRIS2, slime.Size)
+                       + CalculatePartSize(SlimePart.IRIS2, size)
                        + " fill ='#000000' stroke='none' />";
 
             return workingSvg;
         }
 
-        private static string PrepareChildSvg(Slime slime)
+        private static string PrepareChildSvg(int size, string color)
         {
             string workingSvg = "";
 
             // Body
             workingSvg += "<circle id='body' "
-                       + CalculatePartSize(SlimePart.CHILDBODY, slime.Size)
-                       + " fill='" + slime.Color
+                       + CalculatePartSize(SlimePart.CHILDBODY, size)
+                       + " fill='" + color
                        + "' stroke='#000000' stroke-width='0.2' />";
 
             // Left Iris

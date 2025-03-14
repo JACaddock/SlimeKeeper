@@ -26,7 +26,7 @@ const UserItem = ({ userAccount, pronouns }: UserItemType) => {
                                 <div onClick={() => { handleObjectClicked(slime, "/slime/", "currentSlime") }}
                                     key={slime.id} className="market-item image-wrapper"
                                 >
-                                    {slime.svg != "" ? parse(slime.svg) : <></>}
+                                    {parse(slime.svg ?? "")}
                                 </div>
                                 <p>{slime.name}</p>
                             </div>

@@ -1,6 +1,8 @@
-﻿using Server.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Server.Data;
 using Server.DTO;
 using Server.Models;
+using System.Drawing;
 
 namespace Server.Repositories.RDS
 {
@@ -10,12 +12,14 @@ namespace Server.Repositories.RDS
 
         public User? GetById(int id)
         {
-            return DbContext.Users.Find(id);
+            return DbContext.Users
+                .Include(u => u.OwnedSlimes)
+                .FirstOrDefault(u => u.Id == id);
         }
 
         public List<User> GetAll()
         {
-            return [.. DbContext.Users];
+            return [.. DbContext.Users.Include(u => u.OwnedSlimes)];
         }
 
         public List<UserUnique> GetAllUnique()
@@ -25,7 +29,9 @@ namespace Server.Repositories.RDS
 
         public User? GetByUsername(string username)
         {
-            return DbContext.Users.FirstOrDefault(u => u.Username == username);
+            return DbContext.Users
+                .Include(u => u.OwnedSlimes)
+                .FirstOrDefault(u => u.Username == username);
         }
 
         public User? GetByEmail(string email)
@@ -41,7 +47,17 @@ namespace Server.Repositories.RDS
 
         public bool Update(User user)
         {
-            DbContext.Users.Update(user);
+            var existingUser = DbContext.Users.FirstOrDefault(u => u.Id == user.Id);
+            if (existingUser == null) return false;
+
+            existingUser.FirstName = user.FirstName;
+            existingUser.LastName = user.LastName;
+            existingUser.IsAdmin = user.IsAdmin;
+            existingUser.IsVerified = user.IsVerified;
+            existingUser.Gold = user.Gold;
+            existingUser.LastClaimedDaily = user.LastClaimedDaily;
+            existingUser.Friends = user.Friends;
+
             return DbContext.SaveChanges() > 0;
         }
 

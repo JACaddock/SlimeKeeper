@@ -7,11 +7,10 @@ namespace Server.Models
     {
         public SlimeStats() { }
 
-        public SlimeStats(int id, int health, int healthCap, int stamina, int staminaCap,
+        public SlimeStats(int health, int healthCap, int stamina, int staminaCap,
                         int hunger, int hungerCap, int strength, int strengthCap,
                         int speed, int speedCap, Rarity rarity = Rarity.COMMON)
         {
-            Id = id;
             Health = health;
             MaxHealth = health;
             HealthCap = healthCap;

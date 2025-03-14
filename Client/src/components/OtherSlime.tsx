@@ -39,7 +39,7 @@ const OtherSlime = ({ slime, username, getSlime, userid }: Props) => {
         <div className="flex-column">
             <h2>{slime.name}</h2>
             <div className="image-wrapper">
-                {parse(slime.svg)}
+                {parse(slime.svg ?? "")}
             </div>
             <p>{slime.name} is a {slime.slimeStats ? Math.trunc(slime.slimeStats.age) : ""} year old {slime.colour} coloured slime with a size of {slime.size}</p>
             <p>{slime.name} is owned by user <span className="span-link" onClick={() => {

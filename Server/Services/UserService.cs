@@ -28,7 +28,7 @@ namespace Server.Services
             User? user = UserRepository.GetById(id);
             if (user != null)
             {
-                List<Slime> slimes = SlimeService.GetSlimesByOwner(user);
+                List<SlimeDTO> slimes = SlimeService.GetSlimesByOwner(user);
                 return new(id, user.Username, user.IsAdmin, user.Gold, slimes, user.Friends);
             }
             return null;
@@ -40,7 +40,7 @@ namespace Server.Services
             List<User> users = UserRepository.GetAll();
             foreach (var user in users)
             {
-                List<Slime> slimes = SlimeService.GetSlimesByOwner(user);
+                List<SlimeDTO> slimes = SlimeService.GetSlimesByOwner(user);
                 userAccounts.Add(new(user.Id, user.Username, user.IsAdmin, user.Gold, slimes, user.Friends));
             }
             return userAccounts;
@@ -51,14 +51,13 @@ namespace Server.Services
             if (!CheckIfUserExists(userAttempt.Username, userAttempt.Email))
             {
                 User user = CreateNewUser(userAttempt.Username, userAttempt.Email, userAttempt.Password);
+                UserRepository.Add(user);
 
-                for (int i = 0; i < user.OwnedSlimes.Count; i++)
+                for (int i = 0; i < 3; i++)
                 {
-                    Slime slime = SlimeService.CreateRandomSlime(user.Id);
-                    user.OwnedSlimes[i] = slime.Id;
+                    SlimeService.CreateRandomSlime(user.Id);
                 }
 
-                UserRepository.Add(user);
                 return new(new(user.Id, user.Username, user.Email), GenerateToken(user.Id, user.Username));
             }
             return null;
@@ -91,15 +90,7 @@ namespace Server.Services
 
         private User CreateNewUser(string username, string email, string password)
         {
-            Random r = new();
-            int rInt = r.Next(1, 6);
-            int id = UserRepository.GetAll().Count;
-
-            User user = new(
-                id,
-                username, email, password,
-                [.. Enumerable.Repeat(-1, rInt)]
-                );
+            User user = new(username, email, password);
 
             string hashedPassword = PasswordHasher.HashPassword(user, password);
             user.Password = hashedPassword;
@@ -118,7 +109,11 @@ namespace Server.Services
 
                 result = SlimeService.TrainSlime(slimeTrainer);
 
-                if (result.Item1 == Status.SUCCESS) user.Gold -= slimeTrainer.Cost;
+                if (result.Item1 == Status.SUCCESS)
+                {
+                    user.Gold -= slimeTrainer.Cost;
+                    UserRepository.Update(user);
+                }
 
                 return result;
             }
@@ -136,7 +131,11 @@ namespace Server.Services
 
                 result = SlimeService.FeedSlime(slimeFeeder);
 
-                if (result.Item1 == Status.SUCCESS) user.Gold -= slimeFeeder.Cost;
+                if (result.Item1 == Status.SUCCESS) 
+                {
+                    user.Gold -= slimeFeeder.Cost;
+                    UserRepository.Update(user);
+                }
 
                 return result;
             }
@@ -163,14 +162,12 @@ namespace Server.Services
             {
                 for(int i = 0; i < seller.OwnedSlimes.Count; i++)
                 {
-                    int slimeid = seller.OwnedSlimes[i];
+                    int slimeid = seller.OwnedSlimes[i].Id;
                     if (slimeid == userTransaction.SlimeId)
                     {
-                        Slime? slime = SlimeService.GetSlimeById(slimeid);
+                        SlimeDTO? slime = SlimeService.GetSlimeById(slimeid);
                         if (slime != null && buyer.Gold >= slime.Price && slime.IsOnMarket)
                         {
-                            buyer.OwnedSlimes.Add(slimeid);
-                            seller.OwnedSlimes.Remove(slimeid);
                             buyer.Gold -= slime.Price;
                             seller.Gold += slime.Price;
 
