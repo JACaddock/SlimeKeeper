@@ -40,14 +40,8 @@
   <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
-
-  <ItemGroup>
-    <EditorConfigFiles Remove="C:\Users\James\Documents\GitHub\SlimeKeeper\Server\.editorconfig" />
-  </ItemGroup>
-
   <ItemGroup>
     <None Include="appsettings.Production.json" />
-    <None Include="C:\Users\James\Documents\GitHub\SlimeKeeper\Server\.editorconfig" />
   </ItemGroup>
 
 </Project>
