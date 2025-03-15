@@ -1,4 +1,3 @@
-import useDetectDevice from "../hooks/useDetectDevice";
 import useObjectClick from "../hooks/useObjectClick";
 import { UserAccount } from "../types/User"
 import ListItem from "./ListItem";
@@ -11,7 +10,6 @@ type UserItemType = {
 
 const UserItem = ({ userAccount, pronouns }: UserItemType) => {
     const { handleObjectClicked } = useObjectClick();
-    const { isMobile, isTablet } = useDetectDevice();
 
     const userSlimes = userAccount.slimes.filter((slime) => !slime.isOnMarket);
     const marketSlimes = userAccount.slimes.filter((slime) => slime.isOnMarket);

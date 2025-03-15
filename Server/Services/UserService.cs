@@ -98,6 +98,26 @@ namespace Server.Services
             return user;
         }
 
+
+        public UserAccount SpliceSlime(UserAccount userAccount)
+        {
+            User? user = UserRepository.GetById(userAccount.Id);
+            if (user != null)
+            {
+                SlimeDTO slime = SlimeService.SpliceSlime(userAccount.Slimes, userAccount.Id);
+                List<int> oldSlimeIds = [.. userAccount.Slimes.Select(s => s.Id)];
+                userAccount.Slimes = [.. 
+                    user.OwnedSlimes
+                    .Where(s => !oldSlimeIds.Contains(s.Id))
+                    .Select(s => new SlimeDTO(
+                            s.Id, s.Name, s.Size, s.Color, s.IsOnMarket, s.Price, s.OwnerId, 
+                            s.Owner != null ? s.Owner.Username : "???", s.SlimeStats, s.Svg
+                        )), 
+                    slime];
+            }
+            return userAccount;
+        }
+
         public Tuple<Status, SlimeStats?> TrainSlime(SlimeTrainer slimeTrainer)
         {
             Tuple<Status, SlimeStats?> result;

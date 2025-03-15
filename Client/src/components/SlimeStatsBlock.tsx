@@ -44,7 +44,7 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats, 
     }, [updatedSlimeStats, setSlimeStats])
 
     function handleRequestResponse(request: SlimeFeeder | SlimeTrainer, response: AxiosResponse) {
-        //console.log(request);
+        console.log(request);
         //console.log(response.data);
         setSlimeStats(response.data);
         changeGold(-200);

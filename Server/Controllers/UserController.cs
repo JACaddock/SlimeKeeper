@@ -89,6 +89,17 @@ namespace Server.Controllers
             return BadRequest("Username/Password is incorrect");
         }
 
+        [HttpPost("Splice")]
+        public IActionResult SpliceSlime([FromBody] UserAccount userAccount)
+        {
+            UserAccount newUserAccount = UserService.SpliceSlime(userAccount);
+            if (newUserAccount != userAccount)
+            {
+                return Ok(newUserAccount);
+            }
+            return BadRequest("Could not splice slime...");
+        }
+
         [HttpPost("Train")]
         public IActionResult TrainSlime([FromBody] SlimeTrainer slimeTrainer)
         {

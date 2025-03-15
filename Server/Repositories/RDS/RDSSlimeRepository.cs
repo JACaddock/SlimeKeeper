@@ -73,5 +73,13 @@ namespace Server.Repositories.RDS
             DbContext.Slimes.Remove(slime);
             return DbContext.SaveChanges() > 0;
         }
+
+        public bool DeleteMany(List<int> slimeIds)
+        {
+            DbContext.Slimes
+                .Where(s => slimeIds.Contains(s.Id))
+                .ExecuteDelete();
+            return DbContext.SaveChanges() > 0;
+        }
     }
 }
