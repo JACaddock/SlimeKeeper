@@ -92,8 +92,8 @@ namespace Server.Controllers
         [HttpPost("Splice")]
         public IActionResult SpliceSlime([FromBody] UserAccount userAccount)
         {
-            UserAccount newUserAccount = UserService.SpliceSlime(userAccount);
-            if (newUserAccount != userAccount)
+            UserAccount? newUserAccount = UserService.SpliceSlime(userAccount);
+            if (newUserAccount != null)
             {
                 return Ok(newUserAccount);
             }

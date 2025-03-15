@@ -1,18 +1,20 @@
 import { useAuth } from "../hooks/useAuth";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import parse from "html-react-parser";
 import { useAccount } from "../hooks/useAccount";
 import SlimeStatsBlock from "../components/SlimeStatsBlock";
 import { useEffect, useState } from "react";
 import SplicingMenu from "../components/SplicingMenu";
+import { Slime } from "../types/Slime";
 
 
 const PlayPage = () => {
     const navigate = useNavigate();
-    const { changeGold, getGold, updateSlime, getSlimes } = useAccount();
+    const { getGold, updateSlime, getSlimes } = useAccount();
     const { user } = useAuth();
     const [loaded, setLoaded] = useState(false);
+    const [isSplicing, setIsSplicing] = useState(false);
+    const [slimesToSplice, setSlimesToSplice] = useState<Slime[]>([]);
 
     useEffect(() => {
         if (!loaded) {
@@ -21,15 +23,21 @@ const PlayPage = () => {
         }
     }, [getSlimes, loaded])
 
-    function handleEarnGold() {
-        if (user != null) {
-            axios.post("/api/user/earn/?id=" + user.id)
-                .then((response) => {
-                    if (response.data) {
-                        changeGold(1000);
-                    }
-                })
+    function addSlimeToSplice(slime: Slime) {
+        if (!slimesToSplice.includes(slime)) {
+            setSlimesToSplice([...slimesToSplice, slime])
         }
+    }
+
+    function removeSlimeToSplice(slime: Slime) {
+        if (slimesToSplice.includes(slime)) {
+            setSlimesToSplice([...slimesToSplice.filter(s => s != slime)])
+        }
+    }
+
+    function toggleSpliceMenu(bool: boolean) {
+        setIsSplicing(bool)
+        if (!bool) setSlimesToSplice([]);
     }
 
 
@@ -40,11 +48,16 @@ const PlayPage = () => {
                 {getSlimes().map((slime) => {
                     return (
                         <div key={slime.id}>
-                            <div onClick={() => { navigate("/slime/" + slime.id) }} key={slime.id} className="market-item image-wrapper">
+                            <div onClick={() => {
+                                if (!isSplicing) navigate("/slime/" + slime.id);
+                                else addSlimeToSplice(slime);
+                            }} 
+                                key={slime.id} className="market-item image-wrapper"
+                            >
                                 {parse(slime.svg)}
                             </div>
                             <p>{slime.name}</p>
-                            {slime.slimeStats
+                            {!isSplicing && slime.slimeStats
                                 ? (<SlimeStatsBlock
                                     slimeStats={slime.slimeStats} isOnMarket={slime.isOnMarket}
                                     ownerid={slime.ownerId} userid={user?.id} slimeid={slime.id}
@@ -62,8 +75,7 @@ const PlayPage = () => {
                     )
                 })}
             </div>
-            <button type="button" onClick={handleEarnGold}>Click to Earn Gold!</button>
-            <SplicingMenu />
+            <SplicingMenu setIsSplicing={toggleSpliceMenu} slimes={slimesToSplice} removeSlime={removeSlimeToSplice} />
         </main>
   );
 }

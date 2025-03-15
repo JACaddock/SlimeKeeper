@@ -7,7 +7,7 @@ export type User = {
     is_verified: boolean;
     first_name: string;
     last_name: string;
-    is_admin: boolean;
+    isAdmin: boolean;
     gold: number;
     slimes: Slime[];
 };
@@ -15,7 +15,7 @@ export type User = {
 export type UserAccount = {
     id: number;
     username: string;
-    is_admin: boolean;
+    isAdmin: boolean;
     gold: number;
     slimes: Slime[];
     friends: number[];
@@ -32,6 +32,7 @@ export type UserAccountContext = {
     getSlimes: (forceGet?: boolean, wantMarket?: boolean) => Slime[];
     getFriends: () => number[];
     userAccount: UserAccount | undefined;
+    handleSubmitSplice: (slimes: Slime[]) => void;
 };
 
 export type UserCredentials = {

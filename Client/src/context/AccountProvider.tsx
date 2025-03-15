@@ -56,8 +56,10 @@ const AccountProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }
 
+    const getId = () => userAccount?.id ?? -1;
+    const getUsername = () => userAccount?.username ?? "???";
     const getGold = () => userAccount?.gold ?? 0;
-    const isAdmin = () => userAccount?.is_admin ?? false;
+    const isAdmin = () => userAccount?.isAdmin ?? false;
 
     const getSlimes = (forceGet: boolean = false, wantMarket: boolean = false) => {
         if (userAccount?.slimes) {
@@ -83,11 +85,32 @@ const AccountProvider = ({ children }: { children: React.ReactNode }) => {
     const getFriends = () => userAccount?.friends ?? [];
 
 
+    function handleSubmitSplice(slimes: Slime[]) {
+        const userAccountRequest: UserAccount = {
+            id: getId(),
+            username: getUsername(),
+            isAdmin: isAdmin(),
+            gold: getGold(),
+            slimes: slimes,
+            friends: getFriends()
+        }
+
+        axios.post("/api/user/splice", userAccountRequest)
+        .then((response) => {
+            console.log(response.data);
+            setUserAccount(response.data);
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    }
+
+
     return (
         <AccountContext.Provider
             value={{
-                hasEnoughGold, changeGold, isAFriend, getGold, isAdmin,
-                addSlime, updateSlime, getSlimes, getFriends, userAccount
+                hasEnoughGold, changeGold, isAFriend, handleSubmitSplice, getGold,
+                isAdmin, addSlime, updateSlime, getSlimes, getFriends, userAccount
             }}
         >
             {children}

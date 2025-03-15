@@ -41,12 +41,12 @@ const OtherSlime = ({ slime, username, getSlime, userid }: Props) => {
             <div className="image-wrapper">
                 {parse(slime.svg ?? "")}
             </div>
-            <p>{slime.name} is a {slime.slimeStats ? Math.trunc(slime.slimeStats.age) : ""} year old {slime.colour} coloured slime with a size of {slime.size}</p>
+            <p>{slime.name} is a {slime.slimeStats ? Math.trunc(slime.slimeStats.age) : ""} year old slime with a size of {slime.size}</p>
             <p>{slime.name} is owned by user <span className="span-link" onClick={() => {
                 handleObjectClicked({
                     id: slime.ownerId,
                     username: slime.ownerName,
-                    is_admin: false, gold: 0,
+                    isAdmin: false, gold: 0,
                     slimes: [slime], friends: []
                 }, "/user/", "currentUser")
             }}>{username}</span> and is worth {slime.price}</p>
