@@ -6,11 +6,12 @@ import SlimeStatsBlock from "../components/SlimeStatsBlock";
 import { useEffect, useState } from "react";
 import SplicingMenu from "../components/SplicingMenu";
 import { Slime } from "../types/Slime";
+import axios from "axios";
 
 
 const PlayPage = () => {
     const navigate = useNavigate();
-    const { getGold, updateSlime, getSlimes } = useAccount();
+    const { getGold, updateSlime, getSlimes, changeGold } = useAccount();
     const { user } = useAuth();
     const [loaded, setLoaded] = useState(false);
     const [isSplicing, setIsSplicing] = useState(false);
@@ -40,6 +41,16 @@ const PlayPage = () => {
         if (!bool) setSlimesToSplice([]);
     }
 
+    function handleEarnGold() {
+        if (user != null) {
+            axios.post("/api/user/earn/?id=" + user.id)
+                .then((response) => {
+                    if (response.data) {
+                        changeGold(1000);
+                    }
+                })
+        }
+    }
 
     return (
         <main>
@@ -76,6 +87,9 @@ const PlayPage = () => {
                 })}
             </div>
             <SplicingMenu setIsSplicing={toggleSpliceMenu} slimes={slimesToSplice} removeSlime={removeSlimeToSplice} />
+            <div>
+                <button type="button" onClick={handleEarnGold}>Click to Earn Gold!</button>
+            </div>
         </main>
   );
 }
