@@ -6,34 +6,26 @@
     width: 100%;
 }
 
+.market-flex {
+    display: flex;
+    justify-content: center;   
+}
+
+.market-flex .market-item {
+    width: 100%;
+}
+
 .market-item {
     -webkit-user-select: none;
     user-select: none;
     border: 3px solid black;
     padding: 10px;
     overflow: hidden;
-    opacity: 1;
-    transition: opacity 1s ease-in;
 }
 
 .market-item svg {
     min-width: 100px;
     min-height: 100px;
-}
-
-
-@keyframes fading {
-    25%, 75% {
-        opacity: 1;
-    }
-
-    50%, 100% {
-        opacity: 0;
-    }
-}
-
-.fading {
-    animation: fading 1s ease-in-out;
 }
 
 .market-item:hover {
