@@ -15,6 +15,7 @@ const MarketLoop = () => {
     const [index, setIndex] = useState<number>(0);
     const { isMiniture, isMobile, isTablet } = useDetectDevice();
     const [loaded, setLoaded] = useState(false);
+    const [visibleSlimeCount, setVisibleSlimeCount] = useState(6);
 
     useEffect(() => {
         axios.get('/api/slime/market/')
@@ -44,6 +45,8 @@ const MarketLoop = () => {
           </>
 
     function getVisibleSlimes(max: number = 6) {
+        if (visibleSlimeCount != max) setVisibleSlimeCount(max);
+
         if (index + max <= slimes.length) {
             return slimes.slice(index, index + max)
         }
@@ -85,12 +88,12 @@ const MarketLoop = () => {
                     <p>Currently there are no available slimes for purchase :(</p>              
                 ) :
                     (
-                    <div className="market-container">
-                        <button className="market-button market-button-left" title="Left Arrow" onClick={decreaseIndex}>
+                    <div className={"market-container " + (slimes.length < visibleSlimeCount + 2 ? "market-flex" : "")}>
+                        <button hidden={slimes.length < visibleSlimeCount + 2} className="market-button market-button-left" title="Left Arrow" onClick={decreaseIndex}>
                             <Arrow className="arrow left-arrow" />
                         </button>
                         { marketslimes }
-                        <button className="market-button" title="Right Arrow" onClick={increaseIndex}>
+                        <button hidden={slimes.length < visibleSlimeCount + 2} className="market-button" title="Right Arrow" onClick={increaseIndex}>
                             <Arrow className="arrow" />
                         </button>
                     </div>

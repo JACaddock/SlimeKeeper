@@ -6,6 +6,15 @@
     width: 100%;
 }
 
+.market-flex {
+    display: flex;
+    justify-content: center;   
+}
+
+.market-flex .market-item {
+    width: 100%;
+}
+
 .market-item {
     -webkit-user-select: none;
     user-select: none;
