@@ -27,7 +27,6 @@ const PlayPage = () => {
     return (
         <main>
             <p>You have {getGold()} gold {getGold() > 1000 ? ("...You should spend some!"): ("...Better save up some more...")}</p>
-            <p>You have {getSlimes().length} slimes.</p>
             <div className="flex">
                 {getSlimes().map((slime) => {
                     return (

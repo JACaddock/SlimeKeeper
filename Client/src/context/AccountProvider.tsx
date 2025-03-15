@@ -59,19 +59,21 @@ const AccountProvider = ({ children }: { children: React.ReactNode }) => {
     const getGold = () => userAccount?.gold ?? 0;
     const isAdmin = () => userAccount?.is_admin ?? false;
 
-    const getSlimes = () => {
+    const getSlimes = (wantMarket: boolean = false) => {
         if (userAccount?.slimes) {
             if (!lastUpdatedSlimes) {
                 axios.get("/api/slime/owner/" + userAccount.id)
                 .then((response) => {
                     setLastUpdatedSlimes(new Date());
                     setUserAccount({ ...userAccount, slimes: response.data });
+                    if (!wantMarket) return response.data.filter((s: Slime) => !s.isOnMarket);
                     return response.data;
                 })
                 .catch((error) => {
                     console.log("Failure: " + error);
                 })
             }
+            if (!wantMarket) return userAccount.slimes.filter(s => !s.isOnMarket);
             return userAccount.slimes;
         }
         return [];
