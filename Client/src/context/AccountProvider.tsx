@@ -40,7 +40,7 @@ const AccountProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     const updateSlime = (slimeId: number, slime: Slime) => {
-        if (userAccount) {
+        if (userAccount && slime.ownerId == userAccount.id) {
             const slimes = userAccount.slimes;
             const index = slimes.findIndex(s => s.id === slimeId);
             slimes[index] = slime;
@@ -59,9 +59,9 @@ const AccountProvider = ({ children }: { children: React.ReactNode }) => {
     const getGold = () => userAccount?.gold ?? 0;
     const isAdmin = () => userAccount?.is_admin ?? false;
 
-    const getSlimes = (wantMarket: boolean = false) => {
+    const getSlimes = (forceGet: boolean = false, wantMarket: boolean = false) => {
         if (userAccount?.slimes) {
-            if (!lastUpdatedSlimes) {
+            if (!lastUpdatedSlimes || forceGet) {
                 axios.get("/api/slime/owner/" + userAccount.id)
                 .then((response) => {
                     setLastUpdatedSlimes(new Date());

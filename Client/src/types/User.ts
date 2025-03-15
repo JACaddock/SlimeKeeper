@@ -29,7 +29,7 @@ export type UserAccountContext = {
     isAdmin: () => boolean;
     addSlime: (slime: Slime) => void;
     updateSlime: (slimeId: number, slime: Slime) => void;
-    getSlimes: (wantMarket?: boolean) => Slime[];
+    getSlimes: (forceGet?: boolean, wantMarket?: boolean) => Slime[];
     getFriends: () => number[];
     userAccount: UserAccount | undefined;
 };

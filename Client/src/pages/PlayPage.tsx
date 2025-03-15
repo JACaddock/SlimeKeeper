@@ -4,13 +4,21 @@ import { useNavigate } from "react-router-dom";
 import parse from "html-react-parser";
 import { useAccount } from "../hooks/useAccount";
 import SlimeStatsBlock from "../components/SlimeStatsBlock";
+import { useEffect, useState } from "react";
 
 
 const PlayPage = () => {
     const navigate = useNavigate();
     const { changeGold, getGold, updateSlime, getSlimes } = useAccount();
     const { user } = useAuth();
+    const [loaded, setLoaded] = useState(false);
 
+    useEffect(() => {
+        if (!loaded) {
+            getSlimes(true);
+            setLoaded(true);
+        }
+    }, [getSlimes, loaded])
 
     function handleEarnGold() {
         if (user != null) {
