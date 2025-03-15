@@ -12,7 +12,7 @@ export const userDefault: User = {
     last_name: "",
     gold: 0,
     slimes: slimes,
-    is_admin: false
+    isAdmin: false
 }
 
 export const userAccountDefault: UserAccount = {
@@ -21,5 +21,5 @@ export const userAccountDefault: UserAccount = {
     gold: 0,
     slimes: slimes,
     friends: [],
-    is_admin: false
+    isAdmin: false
 }

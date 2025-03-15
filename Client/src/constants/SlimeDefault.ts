@@ -10,7 +10,7 @@ export const slimeDefault: Slime = {
                 <circle id="iris2" cx = "7" cy = "4" r = "1" fill = "#000000" stroke = "none" ></circle>
            </svg >`),
     size: 0,
-    colour: "green",
+    color: "green",
     isOnMarket: true,
     price: 300,
     ownerId: -1,
