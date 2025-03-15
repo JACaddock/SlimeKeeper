@@ -40,7 +40,7 @@ const AccountProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     const updateSlime = (slimeId: number, slime: Slime) => {
-        if (userAccount) {
+        if (userAccount && slime.ownerId == userAccount.id) {
             const slimes = userAccount.slimes;
             const index = slimes.findIndex(s => s.id === slimeId);
             slimes[index] = slime;
@@ -56,22 +56,26 @@ const AccountProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }
 
+    const getId = () => userAccount?.id ?? -1;
+    const getUsername = () => userAccount?.username ?? "???";
     const getGold = () => userAccount?.gold ?? 0;
-    const isAdmin = () => userAccount?.is_admin ?? false;
+    const isAdmin = () => userAccount?.isAdmin ?? false;
 
-    const getSlimes = () => {
+    const getSlimes = (forceGet: boolean = false, wantMarket: boolean = false) => {
         if (userAccount?.slimes) {
-            if (!lastUpdatedSlimes) {
+            if (!lastUpdatedSlimes || forceGet) {
                 axios.get("/api/slime/owner/" + userAccount.id)
                 .then((response) => {
                     setLastUpdatedSlimes(new Date());
                     setUserAccount({ ...userAccount, slimes: response.data });
+                    if (!wantMarket) return response.data.filter((s: Slime) => !s.isOnMarket);
                     return response.data;
                 })
                 .catch((error) => {
                     console.log("Failure: " + error);
                 })
             }
+            if (!wantMarket) return userAccount.slimes.filter(s => !s.isOnMarket);
             return userAccount.slimes;
         }
         return [];
@@ -81,11 +85,36 @@ const AccountProvider = ({ children }: { children: React.ReactNode }) => {
     const getFriends = () => userAccount?.friends ?? [];
 
 
+    const handleSubmitSplice = async (slimes: Slime[]): Promise<Slime> => {
+        const userAccountRequest: UserAccount = {
+            id: getId(),
+            username: getUsername(),
+            isAdmin: isAdmin(),
+            gold: getGold(),
+            slimes: slimes,
+            friends: getFriends()
+        }
+
+        try {
+            const response = await axios.post("/api/user/splice", userAccountRequest)
+            console.log(response.data);
+            setUserAccount(response.data);
+
+            const newSlime = response.data.slimes[response.data.slimes.length - 1];
+            return newSlime;
+
+        } catch (error) {
+            console.error("Error in handleSubmitSplice:", error);
+            throw error;
+        }
+    }
+
+
     return (
         <AccountContext.Provider
             value={{
-                hasEnoughGold, changeGold, isAFriend, getGold, isAdmin,
-                addSlime, updateSlime, getSlimes, getFriends, userAccount
+                hasEnoughGold, changeGold, isAFriend, handleSubmitSplice, getGold,
+                isAdmin, addSlime, updateSlime, getSlimes, getFriends, userAccount
             }}
         >
             {children}

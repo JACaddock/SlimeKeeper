@@ -19,7 +19,7 @@ interface Props {
 }
 
 const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats, isOnMarket }: Props) => {
-    const isLocked = () => { return ownerid != userid || isOnMarket };  
+    const isLocked = () => { return ownerid != userid || isOnMarket };
     const { hasEnoughGold, changeGold } = useAccount();
     const { isReady: staminaIsReady, getFormattedTimeLeft: getStaminaFormattedTimeLeft, getIntTimeLeft: getStaminaIntTimeLeft } = useTimer({
         handleTimerComplete: updateTimeBasedStats,
@@ -45,7 +45,7 @@ const SlimeStatsBlock = ({ slimeStats, userid, ownerid, slimeid, setSlimeStats, 
 
     function handleRequestResponse(request: SlimeFeeder | SlimeTrainer, response: AxiosResponse) {
         console.log(request);
-        console.log(response.data);
+        //console.log(response.data);
         setSlimeStats(response.data);
         changeGold(-200);
     }

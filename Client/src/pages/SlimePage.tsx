@@ -29,7 +29,7 @@ const SlimePage = () => {
     }, [id])
 
 
-    function updateAndSetSline(newSlime: Slime) {
+    function updateAndSetSlime(newSlime: Slime) {
         updateSlime(newSlime.id, newSlime);
         setSlime(newSlime);
     }
@@ -61,7 +61,7 @@ const SlimePage = () => {
         <main>
             {slime ? (<>
                 {isLoggedIn() && user?.username == username && user != null
-                    ? (<OwnSlime slime={slime} userid={user.id} setSlime={updateAndSetSline} />)
+                    ? (<OwnSlime slime={slime} userid={user.id} setSlime={updateAndSetSlime} />)
                     : (<OtherSlime slime={slime} userid={user?.id} getSlime={getSlime} username={username} />)
                 }
                     {slime.slimeStats
@@ -69,7 +69,7 @@ const SlimePage = () => {
                         slimeStats={slime.slimeStats} isOnMarket={slime.isOnMarket}
                         ownerid={slime.ownerId} userid={user?.id} slimeid={slime.id}
                         setSlimeStats={(slimeStats) => {
-                            setSlime({
+                            updateAndSetSlime({
                                 ...slime, slimeStats: slimeStats,
                                 price: ((((100 + (slimeStats.maxHealth + slimeStats.maxHunger)) * slimeStats.strength)
                                     * slimeStats.speed) * slimeStats.maxStamina) * (slimeStats.rarity + 1)

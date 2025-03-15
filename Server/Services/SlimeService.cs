@@ -62,6 +62,22 @@ namespace Server.Services
             return slimes;
         }
 
+        public SlimeDTO SpliceSlime(List<SlimeDTO> slimeDTOs, int ownerId) 
+        {
+            List<Slime> slimes = [.. slimeDTOs
+                .Select(s => new Slime(s.Name, s.Size, s.Color, s.Price, s.OwnerId, s.SlimeStats)
+                { 
+                    IsOnMarket = s.IsOnMarket,
+                    Id = s.Id,
+                })
+            ];
+
+            Slime s = CreateGeneticSlime(slimes, ownerId);
+
+            return new(s.Id, s.Name, s.Size, s.Color, s.IsOnMarket, s.Price, 
+                s.OwnerId, s.Owner != null ? s.Owner.Username : "???", s.SlimeStats, s.Svg);
+        }
+
         public Tuple<Status, SlimeStats?> TrainSlime(SlimeTrainer slimeTrainer)
         {
             SlimeDTO? slimeDTO = SlimeRepository.GetById(slimeTrainer.SlimeId);
@@ -196,14 +212,12 @@ namespace Server.Services
         {
             Random r = new();
 
-            string[] randomNames = ["Slime", "Oozy", "Blip", "Slimo", "Goop", "Glub", "Goomy", "Slimon", "Slimy"];
-            string name = randomNames[r.Next(randomNames.Length)];
+            string name = SlimeDefaults.Names[r.Next(SlimeDefaults.Names.Length)];
 
             int size = r.Next(0, 2);
             int rarityIndex = r.Next(0, 3);
             Rarity rarity = (Rarity)rarityIndex;
-            string[] colors = ["#30aa49", "#006e51", "#92b6d5"];
-            string color = colors[rarityIndex];
+            string color = SlimeDefaults.Colors[rarityIndex];
 
             SlimeStats stats = GenerateStats(rarity);
 
@@ -219,7 +233,34 @@ namespace Server.Services
         }
 
 
-        //public Slime CreateGeneticSlime(List<Slime> slimes) { }
+        public Slime CreateGeneticSlime(List<Slime> slimes, int? ownerId = null)
+        {
+            Random r = new();
+            List<Slime> sortedSlimes = [ ..slimes.OrderByDescending(s => s.SlimeStats.Rarity)];
+            int size = slimes.Count;
+            Rarity rarity = sortedSlimes[0].SlimeStats.Rarity - sortedSlimes[1].SlimeStats.Rarity == 0
+                ? sortedSlimes[0].SlimeStats.Rarity + 1
+                : sortedSlimes[0].SlimeStats.Rarity;
+
+
+
+            SlimeStats stats = GenerateStats(rarity);
+
+            int rarityIndex = (int)rarity;
+            string color = SlimeDefaults.Colors[rarityIndex];
+            string name = SlimeDefaults.Names[r.Next(SlimeDefaults.Names.Length)];
+
+            Slime slime = new(name, size, color,
+                              CalculatePrice(stats, rarityIndex),
+                              ownerId, stats
+            );
+
+            slime.Svg = SlimeSvg.PrepareSvg(slime);
+
+            SlimeRepository.DeleteMany([ ..slimes.Select(s => s.Id)]);
+            SlimeRepository.Add(slime);
+            return slime;
+        }
 
 
         private SlimeDTO UpdateStatus(SlimeDTO slime)

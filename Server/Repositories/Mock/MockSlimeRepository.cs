@@ -63,5 +63,21 @@ namespace Server.Repositories.Mock
         {
             return Slimes.Remove(slime);
         }
+
+        public bool DeleteMany(List<int> slimeIds)
+        {
+            try
+            {
+                foreach (var id in slimeIds)
+                {
+                    Slimes.RemoveAt(id);
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }

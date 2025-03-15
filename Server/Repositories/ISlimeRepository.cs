@@ -12,5 +12,6 @@ namespace Server.Repositories
         bool Add(Slime slime);
         bool Update(Slime slime);
         bool Delete(Slime slime);
+        bool DeleteMany(List<int> slimeIds);
     }
 }

@@ -47,13 +47,6 @@ namespace Server.Controllers
             return Ok(slimes);
         }
 
-        /*[HttpPost("Create")]
-        public IActionResult CreateSlime([FromBody] Slime slime)
-        {
-            return Ok(SlimeService.AddSlime(slime));
-        }*/
-
-
 
         [HttpPost("Update")]
         public IActionResult UpdateSlime([FromBody] SlimeEditable updatedSlime)

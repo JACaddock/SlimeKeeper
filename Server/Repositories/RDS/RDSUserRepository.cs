@@ -2,7 +2,6 @@
 using Server.Data;
 using Server.DTO;
 using Server.Models;
-using System.Drawing;
 
 namespace Server.Repositories.RDS
 {
@@ -14,6 +13,7 @@ namespace Server.Repositories.RDS
         {
             return DbContext.Users
                 .Include(u => u.OwnedSlimes)
+                    .ThenInclude(s => s.SlimeStats)
                 .FirstOrDefault(u => u.Id == id);
         }
 

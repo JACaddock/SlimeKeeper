@@ -56,8 +56,6 @@ namespace Server.Repositories.RDS
             var existingSlime = DbContext.Slimes.FirstOrDefault(s => s.Id == slime.Id);
             if (existingSlime == null) return false;
 
-            Console.WriteLine("DB IsOnMarket: " + existingSlime.IsOnMarket + " | New IsOnMarket: " + slime.IsOnMarket);
-
             existingSlime.Name = slime.Name;
             existingSlime.IsOnMarket = slime.IsOnMarket;
             existingSlime.SlimeStats = slime.SlimeStats;
@@ -71,6 +69,14 @@ namespace Server.Repositories.RDS
         public bool Delete(Slime slime)
         {
             DbContext.Slimes.Remove(slime);
+            return DbContext.SaveChanges() > 0;
+        }
+
+        public bool DeleteMany(List<int> slimeIds)
+        {
+            DbContext.Slimes
+                .Where(s => slimeIds.Contains(s.Id))
+                .ExecuteDelete();
             return DbContext.SaveChanges() > 0;
         }
     }

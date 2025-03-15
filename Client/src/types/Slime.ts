@@ -5,7 +5,7 @@ export type Slime = {
     name: string;
     svg: string;
     size: number;
-    colour: string;
+    color: string;
     isOnMarket: boolean;
     price: number;
     ownerId: number;
