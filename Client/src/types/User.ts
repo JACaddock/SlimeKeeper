@@ -32,7 +32,7 @@ export type UserAccountContext = {
     getSlimes: (forceGet?: boolean, wantMarket?: boolean) => Slime[];
     getFriends: () => number[];
     userAccount: UserAccount | undefined;
-    handleSubmitSplice: (slimes: Slime[]) => void;
+    handleSubmitSplice: (slimes: Slime[]) => Promise<Slime>;
 };
 
 export type UserCredentials = {

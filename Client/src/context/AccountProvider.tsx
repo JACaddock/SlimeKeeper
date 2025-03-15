@@ -85,7 +85,7 @@ const AccountProvider = ({ children }: { children: React.ReactNode }) => {
     const getFriends = () => userAccount?.friends ?? [];
 
 
-    function handleSubmitSplice(slimes: Slime[]) {
+    const handleSubmitSplice = async (slimes: Slime[]): Promise<Slime> => {
         const userAccountRequest: UserAccount = {
             id: getId(),
             username: getUsername(),
@@ -95,14 +95,18 @@ const AccountProvider = ({ children }: { children: React.ReactNode }) => {
             friends: getFriends()
         }
 
-        axios.post("/api/user/splice", userAccountRequest)
-        .then((response) => {
+        try {
+            const response = await axios.post("/api/user/splice", userAccountRequest)
             console.log(response.data);
             setUserAccount(response.data);
-        })
-        .catch((error) => {
-            console.log(error);
-        })
+
+            const newSlime = response.data.slimes[response.data.slimes.length - 1];
+            return newSlime;
+
+        } catch (error) {
+            console.error("Error in handleSubmitSplice:", error);
+            throw error;
+        }
     }
 
 
