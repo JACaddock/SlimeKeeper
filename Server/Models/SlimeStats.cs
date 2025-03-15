@@ -25,7 +25,6 @@ namespace Server.Models
             Speed = speed;
             SpeedCap = speedCap;
             Rarity = rarity;
-
         }
 
         [Key] public int Id { get; set; }

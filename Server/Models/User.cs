@@ -16,7 +16,6 @@ namespace Server.Models
             Password = password;
         }
 
-        // Personal details
         [Key] public int Id { get; set; }
         public required string Username { get; set; } 
         public required string Email { get; set; } 
@@ -25,8 +24,6 @@ namespace Server.Models
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public bool IsAdmin { get; set; } = false;
-
-        // Account details
         public int Gold { get; set; } = 200;
         public virtual List<Slime> OwnedSlimes { get; set; } = [];
         [ForeignKey("User")] public int[] Friends { get; set; } = [];
