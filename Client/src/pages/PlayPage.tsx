@@ -5,6 +5,7 @@ import parse from "html-react-parser";
 import { useAccount } from "../hooks/useAccount";
 import SlimeStatsBlock from "../components/SlimeStatsBlock";
 import { useEffect, useState } from "react";
+import SplicingMenu from "../components/SplicingMenu";
 
 
 const PlayPage = () => {
@@ -62,6 +63,7 @@ const PlayPage = () => {
                 })}
             </div>
             <button type="button" onClick={handleEarnGold}>Click to Earn Gold!</button>
+            <SplicingMenu />
         </main>
   );
 }
